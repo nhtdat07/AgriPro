@@ -11,6 +11,9 @@ A system to manage inventory, orders, and sales for agricultural supply agencies
 
 ## Technology Stack
 
+### Frontend
+TBU
+
 ### Backend
 - **Node.js**: JavaScript runtime environment.
 - **Express.js**: Web framework for building RESTful APIs.
