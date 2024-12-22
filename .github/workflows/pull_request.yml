@@ -1,0 +1,61 @@
+name: CI for Pull Requests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend-tests:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: |
+          cd backend
+          npm install
+
+      # Step 4: Run tests
+      - name: Run Backend Tests
+        run: |
+          cd backend
+          npm test
+
+  frontend-tests:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      # Step 4: Run tests
+      - name: Run Frontend Tests
+        run: |
+          cd frontend
+          npm test
