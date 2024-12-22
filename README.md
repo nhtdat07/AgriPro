@@ -7,12 +7,13 @@ A system to manage inventory, orders, and sales for agricultural supply agencies
 - **Sales Invoices**: Track sales made to customers, including total payments and quantities sold.
 - **Notifications**: Inform users about updates or important events.
 - **Configurations**: Customize settings for each agency.
-- **User Management**: Handle suppliers, customers, and user agencies.
+- **User Management**: Handle user agencies information.
 
 ## Technology Stack
 
 ### Frontend
-TBU
+- **React**: For building a dynamic and responsive user interface.
+- **Tailwind CSS**: For fast and modern styling.
 
 ### Backend
 - **Node.js**: JavaScript runtime environment.
