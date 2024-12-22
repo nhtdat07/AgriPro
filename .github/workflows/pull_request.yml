@@ -10,6 +10,17 @@ jobs:
     name: Backend Tests
     runs-on: ubuntu-latest
 
+    # Set up PostgreSQL service
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+
     steps:
       # Step 1: Checkout the code
       - name: Checkout Code
@@ -29,6 +40,8 @@ jobs:
 
       # Step 4: Run tests
       - name: Run Backend Tests
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
           cd backend
           npm test
