@@ -29,7 +29,7 @@ paths:
                   example: "abc@gmail.com"
                 password:
                   type: string
-                  example: "aflkbajvnf34njk"
+                  example: "aflkbajvnf34njka"
       responses:
         "200":
           description: Successfully authenticated
@@ -74,7 +74,7 @@ paths:
                   example: "0123456789"
                 password:
                   type: string
-                  example: "aflkbajvnf34njk"
+                  example: "aflkbajvnf34njka"
               required:
                 - agencyName
                 - ownerName
