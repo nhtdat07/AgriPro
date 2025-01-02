@@ -22,3 +22,6 @@ A system to manage inventory, orders, and sales for agricultural supply agencies
 
 ## ER Diagram
 ![ER Diagram](docs/DB_diagram.png)
+
+## API Documentation
+![API documentation](docs/API_doc.yaml)

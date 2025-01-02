@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: AgriPro API
+  description: API for agricultural supply agencies management.
+  version: 1.0.0
+servers:
+  - url: https://api.agripro.com/v1
+    description: AgriPro server
+tags:
+  - name: Authentication
+    description: Endpoints related to authentication
+
+paths:
+  /auth/sign-in:
+    post:
+      tags:
+        - Authentication
+      summary: Sign in to AgriPro system
+      description: Authenticates the user and returns a JSON Web Token (JWT) for authorized access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "abc@gmail.com"
+                password:
+                  type: string
+                  example: "aflkbajvnf34njk"
+      responses:
+        "200":
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for authorization
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        "401":
+          description: Unauthorized - Invalid username or password
+        "400":
+          description: Bad Request - Missing or invalid parameters
+
+  /auth/sign-up:
+    post:
+      tags:
+        - Authentication
+      summary: Create a new user account
+      description: Register a new user by providing a username, password, and email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agencyName:
+                  type: string
+                  example: "Đại lý A1"
+                ownerName:
+                  type: string
+                  example: "Nguyễn Văn A"
+                email:
+                  type: string
+                  example: "abc@gmail.com"
+                phone:
+                  type: string
+                  example: "0123456789"
+                password:
+                  type: string
+                  example: "aflkbajvnf34njk"
+              required:
+                - agencyName
+                - ownerName
+                - email
+                - password
+      responses:
+        "201":
+          description: Account successfully created
+        "400":
+          description: Invalid input (e.g., weak password or invalid email format)
+        "409":
+          description: Conflict - Username or email already exists
