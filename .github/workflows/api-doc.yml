@@ -3,7 +3,7 @@ name: Generate API Documentation
 on:
   push:
     paths:
-      - "openapi.yaml"
+      - "docs/openapi.yaml"
 
 jobs:
   build:
@@ -22,12 +22,12 @@ jobs:
         run: npm install -g redoc-cli
 
       - name: Generate API Documentation
-        run: redoc-cli bundle openapi.yaml -o api-doc.html
+        run: redoc-cli bundle docs/openapi.yaml -o docs/api-doc.html
 
       - name: Commit changes
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add api-doc.html
+          git add docs/api-doc.html
           git commit -m "Update API documentation"
           git push
