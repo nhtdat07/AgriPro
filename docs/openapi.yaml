@@ -9,6 +9,24 @@ servers:
 tags:
   - name: Authentication
     description: Endpoints related to authentication
+  - name: Inventory
+    description: Endpoints related to inventory
+  - name: Purchasing
+    description: Endpoints related to purchasing
+  - name: Products
+    description: Endpoints related to product information
+  - name: Suppliers
+    description: Endpoints related to suppliers
+  - name: Selling
+    description: Endpoints related to selling
+  - name: Customers
+    description: Endpoints related to customers
+  - name: Notifications
+    description: Endpoints related to notifications
+  - name: Statistics & Reports
+    description: Endpoints related to statistics and reports
+  - name: Profile & Settings
+    description: Endpoints related to profile and settings
 
 paths:
   /auth/sign-in:
@@ -17,6 +35,7 @@ paths:
         - Authentication
       summary: Sign in to AgriPro system
       description: Authenticates the user and returns a JSON Web Token (JWT) for authorized access.
+      operationId: SignIn
       requestBody:
         required: true
         content:
@@ -53,6 +72,7 @@ paths:
         - Authentication
       summary: Create a new user account
       description: Register a new user by providing a username, password, and email.
+      operationId: SignUp
       requestBody:
         required: true
         content:
@@ -87,3 +107,2127 @@ paths:
           description: Invalid input (e.g., weak password or invalid email format)
         "409":
           description: Conflict - Username or email already exists
+
+  /inventory:
+    get:
+      tags:
+        - Inventory
+      summary: Retrieve/Search for items in the inventory
+      description: Retrieves a list of inventory items, with optional search and filtering capabilities.
+      operationId: GetListInventory
+      parameters:
+        - name: productId
+          in: query
+          description: Product ID for searching if not empty
+          required: false
+          schema:
+            type: string
+          example: "PR0001"
+        - name: importDate
+          in: query
+          description: The imported date of the products, used for searching if not empty
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-01-04"
+        - name: expiredDate
+          in: query
+          description: The expired date of the products, used for searching if not empty
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-12-04"
+        - name: isAboutToExpire
+          in: query
+          description: The flag for whether the products are about to expire, used for searching
+          required: false
+          schema:
+            type: boolean
+          example: false
+        - name: isAboutToBeOutOfStock
+          in: query
+          description: The flag for whether the products are about to be out of stock, used for searching
+          required: false
+          schema:
+            type: boolean
+          example: false
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: A list of inventory items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inventory:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productId:
+                          type: string
+                          description: Product ID
+                          example: "PR0001"
+                        productName:
+                          type: string
+                          description: Product name
+                          example: "Thuốc trừ rệp sáp CONFIDOR 200SL"
+                        quantity:
+                          type: integer
+                          description: Number of product items
+                          example: 38
+                        importDate:
+                          type: string
+                          format: date
+                          description: Imported date of product
+                          example: "2025-01-04"
+                        expiredDate:
+                          type: string
+                          format: date
+                          description: Expired date of product
+                          example: "2025-12-04"
+                        inPrice:
+                          type: integer
+                          description: Price of product when imported
+                          example: 185000
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+
+  /purchase-orders:
+    get:
+      tags:
+        - Purchasing
+      summary: Retrieve/Search for purchase orders
+      description: Retrieve a list of purchase orders with optional search and filtering capabilities.
+      operationId: GetListPurchaseOrders
+      parameters:
+        - name: purchaseOrderId
+          in: query
+          description: Purchase order ID, used for searching if not empty
+          required: false
+          schema:
+            type: string
+          example: "PO0001"
+        - name: recordedDate
+          in: query
+          description: Recorded date of purchase orders, used for searching if not empty
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-01-04"
+        - name: supplierId
+          in: query
+          description: Supplier ID, used for searching if not empty
+          required: false
+          schema:
+            type: string
+          example: "SU0001"
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: A list of purchase orders matching the search criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchaseOrders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        purchaseOrderId:
+                          type: string
+                          description: Purchase order ID
+                          example: "PO0001"
+                        recordedTimestamp:
+                          type: string
+                          format: date-time
+                          description: Recorded timestamp of purchase order
+                          example: "2024-12-30T10:00:00Z"
+                        supplierName:
+                          type: string
+                          description: Supplier of purchase order
+                          example: "Công ty TNHH TM Tân Thành"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+    post:
+      tags:
+        - Purchasing
+      summary: Record a new purchase order
+      description: Add a new purchase order with supplier details, items, and total cost.
+      operationId: AddPurchaseOrder
+      requestBody:
+        description: Data for new purchase order
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                supplierId:
+                  type: string
+                  description: Supplier ID
+                  example: "SU0001"
+                products:
+                  type: array
+                  description: List of items in purchase order
+                  items:
+                    type: object
+                    properties:
+                      productId:
+                        type: string
+                        description: Product ID
+                        example: "PR0001"
+                      expiredDate:
+                        type: string
+                        format: date
+                        description: Expired date of product
+                        example: "2025-12-04"
+                      quantity:
+                        type: integer
+                        description: Number of imported items
+                        example: 20
+                      inPrice:
+                        type: integer
+                        description: Product price when imported
+                        example: 9000
+                    required:
+                      - productId
+                      - expiredDate
+                      - quantity
+                      - inPrice
+              required:
+                - supplierId
+                - products
+      responses:
+        "201":
+          description: Purchase order created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchaseOrderId:
+                    type: string
+                    description: ID of recorded purchase order
+                    example: "PO0001"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+
+  /purchase-orders/{id}:
+    get:
+      tags:
+        - Purchasing
+      summary: Get a specific purchase order
+      description: Retrieve the details of a specific purchase order by its unique ID.
+      operationId: GetPurchaseOrderDetails
+      parameters:
+        - name: purchaseOrderId
+          in: path
+          description: The unique ID of the purchase order to retrieve
+          required: true
+          schema:
+            type: string
+          example: "PO0001"
+      responses:
+        "200":
+          description: Details of the specified purchase order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PurchaseOrderDetails"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "404":
+          description: Purchase order not found.
+        "500":
+          description: Internal server error.
+
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Retrieve/Search for products
+      description: Retrieves a list of products, optionally filtered by category, name, or other criteria.
+      operationId: GetListProducts
+      parameters:
+        - name: productId
+          in: query
+          description: Product ID, used for searching if not empty
+          required: false
+          schema:
+            type: string
+          example: "PR0001"
+        - name: category
+          in: query
+          description: Product category, used for searching if not empty
+          required: false
+          schema:
+            $ref: "#/components/schemas/ProductCategory"
+        - name: usage
+          in: query
+          description: Product usage, used for 'like' searching if not empty
+          required: false
+          schema:
+            type: string
+          example: "diệt cỏ"
+        - name: limit
+          in: query
+          description: The number of products to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching products from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Successfully retrieved the list of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productId:
+                          type: string
+                          description: Product ID
+                          example: "PR0001"
+                        productName:
+                          type: string
+                          description: Product name
+                          example: "Thuốc trừ rệp sáp CONFIDOR 200SL"
+                        imagePath:
+                          type: string
+                          description: Path to product's image
+                          example: "/products/PR0001"
+                        category:
+                          $ref: "#/components/schemas/ProductCategory"
+                        outPrice:
+                          type: integer
+                          description: Price of product to be sold
+                          example: 199000
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+    post:
+      tags:
+        - Products
+      summary: Add a new product information
+      description: Add information of a new product to the system.
+      operationId: AddProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productName:
+                  type: string
+                  description: Product name
+                  example: "Thuốc trừ rệp sáp CONFIDOR 200SL"
+                brand:
+                  type: string
+                  description: Brand of product
+                  example: "CONFIDOR"
+                category:
+                  $ref: "#/components/schemas/ProductCategory"
+                productionPlace:
+                  type: string
+                  description: Place of production
+                  example: "Công ty TNHH Ngân Anh"
+                outPrice:
+                  type: integer
+                  description: Price of product to be sold
+                  example: 17000
+                usage:
+                  type: string
+                  description: Product usage
+                  example: "Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào."
+                guideline:
+                  type: string
+                  description: Guideline to use the product
+                  example: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
+                imagePath:
+                  type: string
+                  description: Path to the product's image
+                  example: "/products/PR0001"
+              required:
+                - productName
+                - category
+                - productionPlace
+                - brand
+                - outPrice
+                - usage
+                - guideline
+      responses:
+        "201":
+          description: Product added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: string
+                    description: ID of created product
+                    example: "PR0001"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+
+  /products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Get product details
+      description: Retrieves detailed information about a specific product.
+      operationId: GetProductDetails
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: ID of product to retrieve
+          schema:
+            type: string
+          example: "PR0001"
+      responses:
+        "200":
+          description: Product details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDetails"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Product not found.
+        "500":
+          description: Internal server error.
+    patch:
+      tags:
+        - Products
+      summary: Edit product details
+      description: Updates the details of an existing product owned by the agency.
+      operationId: EditProductDetails
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: ID of product to update
+          schema:
+            type: string
+          example: "PR0001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productName:
+                  type: string
+                  description: Product name
+                  example: "Thuốc trừ rệp sáp CONFIDOR 200SL"
+                brand:
+                  type: string
+                  description: Brand of product
+                  example: "CONFIDOR"
+                category:
+                  $ref: "#/components/schemas/ProductCategory"
+                productionPlace:
+                  type: string
+                  description: Place of production
+                  example: "Công ty TNHH Ngân Anh"
+                outPrice:
+                  type: integer
+                  description: Price of product to be sold
+                  example: 17000
+                usage:
+                  type: string
+                  description: Product usage
+                  example: "Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào."
+                guideline:
+                  type: string
+                  description: Guideline to use the product
+                  example: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
+                imagePath:
+                  type: string
+                  description: Path to the product's image
+                  example: "/products/PR0001"
+      responses:
+        "200":
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: string
+                    description: ID of the updated product
+                    example: "PR0001"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Product not found.
+        "500":
+          description: Internal server error.
+    delete:
+      tags:
+        - Products
+      summary: Delete product information
+      description: Deletes information of a specific product.
+      operationId: DeleteProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: ID of product to retrieve
+          schema:
+            type: string
+          example: "PR0001"
+      responses:
+        "200":
+          description: Product deleted successfully.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Product not found.
+        "500":
+          description: Internal server error.
+
+  /suppliers:
+    get:
+      tags:
+        - Suppliers
+      summary: Retrieve/Search for suppliers
+      description: Retrieves a list of suppliers, optionally filtered by criteria.
+      operationId: GetListSuppliers
+      parameters:
+        - name: supplierName
+          in: query
+          required: false
+          description: Supplier name, used for 'like' searching if not empty
+          schema:
+            type: string
+          example: "Công ty TNHH TM Tân Thành"
+        - name: address
+          in: query
+          required: false
+          description: Supplier address, used for 'like' searching if not empty
+          schema:
+            type: string
+          example: "Tiền Giang"
+        - name: phoneNumber
+          in: query
+          required: false
+          description: Phone number of supplier, used for 'like' searching if not empty
+          schema:
+            type: string
+            format: number
+          example: "0123456789"
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of suppliers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suppliers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SupplierDetails"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+    post:
+      tags:
+        - Suppliers
+      summary: Add a new supplier
+      description: Add information of a new supplier to the system.
+      operationId: AddSupplier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                supplierName:
+                  type: string
+                  description: Supplier name
+                  example: "Công ty TNHH TM Tân Thành"
+                address:
+                  type: string
+                  description: Address of supplier
+                  example: "Mỹ Tho, Tiền Giang"
+                phoneNumber:
+                  type: string
+                  format: number
+                  description: Phone number of supplier
+                  example: "0123456789"
+                email:
+                  type: string
+                  format: email
+                  description: Email of supplier
+                  example: "abc@gmail.com"
+              required:
+                - supplierName
+                - address
+                - phoneNumber
+      responses:
+        "201":
+          description: Supplier created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchaseOrderId:
+                    type: string
+                    description: ID of created supplier
+                    example: "SU0001"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+
+  /suppliers/{id}:
+    get:
+      tags:
+        - Suppliers
+      summary: Get supplier details
+      description: Retrieves detailed information about a specific supplier.
+      operationId: GetSupplierDetails
+      parameters:
+        - name: supplierId
+          in: path
+          required: true
+          description: ID of supplier to retrieve
+          schema:
+            type: string
+          example: "SU0001"
+      responses:
+        "200":
+          description: Supplier details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierDetails"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Supplier not found.
+        "500":
+          description: Internal server error.
+    patch:
+      tags:
+        - Suppliers
+      summary: Edit supplier details
+      description: Updates the details of an existing supplier.
+      operationId: EditSupplierDetails
+      parameters:
+        - name: supplierId
+          in: path
+          required: true
+          description: ID of supplier to update
+          schema:
+            type: string
+          example: "SU0001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                supplierName:
+                  type: string
+                  description: Supplier name
+                  example: "Công ty TNHH TM Tân Thành"
+                address:
+                  type: string
+                  description: Address of supplier
+                  example: "Mỹ Tho, Tiền Giang"
+                phoneNumber:
+                  type: string
+                  format: number
+                  description: Phone number of supplier
+                  example: "0123456789"
+                email:
+                  type: string
+                  format: email
+                  description: Email of supplier
+                  example: "abc@gmail.com"
+      responses:
+        "200":
+          description: Supplier updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  supplierId:
+                    type: string
+                    description: ID of the updated supplier
+                    example: "SU0001"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Supplier not found.
+        "500":
+          description: Internal server error.
+    delete:
+      tags:
+        - Suppliers
+      summary: Delete a supplier
+      description: Deletes information of a specific supplier.
+      operationId: DeleteSupplier
+      parameters:
+        - name: supplierId
+          in: path
+          required: true
+          description: ID of supplier to delete
+          schema:
+            type: string
+          example: "SU0001"
+      responses:
+        "200":
+          description: Supplier deleted successfully.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Supplier not found.
+        "500":
+          description: Internal server error.
+
+  /sales-invoices:
+    get:
+      tags:
+        - Selling
+      summary: Retrieve/Search for sales invoices
+      description: Retrieve a list of sales invoices with optional search and filtering capabilities.
+      operationId: GetListSalesInvoices
+      parameters:
+        - name: salesInvoicesId
+          in: query
+          description: Sales invoice ID, used for searching if not empty
+          required: false
+          schema:
+            type: string
+          example: "SI0001"
+        - name: recordedDate
+          in: query
+          description: Recorded date of sales invoices, used for searching if not empty
+          required: false
+          schema:
+            type: string
+            format: date
+          example: "2025-01-04"
+        - name: customerId
+          in: query
+          description: Customer ID, used for searching if not empty
+          required: false
+          schema:
+            type: string
+          example: "CU0001"
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: A list of sales invoices matching the search criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  salesInvoices:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        salesInvoiceId:
+                          type: string
+                          description: Sales invoice ID
+                          example: "SI0001"
+                        recordedTimestamp:
+                          type: string
+                          format: date-time
+                          description: Recorded timestamp of sales invoice
+                          example: "2024-12-30T10:00:00Z"
+                        customerName:
+                          type: string
+                          description: Customer of sales invoice
+                          example: "Nguyễn Văn A"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+    post:
+      tags:
+        - Selling
+      summary: Record a new sales invoice
+      description: Add a new sales invoice with customer details, items, and total cost.
+      operationId: AddPurchaseOrder
+      requestBody:
+        description: Data for new sales invoice
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                  description: Customer ID
+                  example: "CU0001"
+                products:
+                  type: array
+                  description: List of items in sales invoice
+                  items:
+                    type: object
+                    properties:
+                      productId:
+                        type: string
+                        description: Product ID
+                        example: "PR0001"
+                      quantity:
+                        type: integer
+                        description: Number of imported items
+                        example: 20
+                      outPrice:
+                        type: integer
+                        description: Product price when sold
+                        example: 9000
+                    required:
+                      - productId
+                      - quantity
+                      - outPrice
+              required:
+                - customerId
+                - products
+      responses:
+        "201":
+          description: Sales invoice created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  salesInvoiceId:
+                    type: string
+                    description: ID of recorded sales invoice
+                    example: "SI0001"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+
+  /sales-invoices/{id}:
+    get:
+      tags:
+        - Selling
+      summary: Get a specific sales invoice
+      description: Retrieve the details of a specific sales invoice by its unique ID.
+      operationId: GetSalesInvoiceDetails
+      parameters:
+        - name: salesInvoiceId
+          in: path
+          description: The unique ID of the sales invoice to retrieve
+          required: true
+          schema:
+            type: string
+          example: "SI0001"
+      responses:
+        "200":
+          description: Details of the specified sales invoice
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SalesInvoiceDetails"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "404":
+          description: Purchase order not found.
+        "500":
+          description: Internal server error.
+
+  /customers:
+    get:
+      tags:
+        - Customers
+      summary: Retrieve/Search for customers
+      description: Retrieves a list of customers, optionally filtered by criteria.
+      operationId: GetListCustomers
+      parameters:
+        - name: customerName
+          in: query
+          required: false
+          description: Customer name, used for 'like' searching if not empty
+          schema:
+            type: string
+          example: "Nguyễn Văn A"
+        - name: address
+          in: query
+          required: false
+          description: Customer address, used for 'like' searching if not empty
+          schema:
+            type: string
+          example: "Tiền Giang"
+        - name: phoneNumber
+          in: query
+          required: false
+          description: Phone number of customer, used for 'like' searching if not empty
+          schema:
+            type: string
+            format: number
+          example: "0123456789"
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of customers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suppliers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CustomerDetails"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+    post:
+      tags:
+        - Customers
+      summary: Add a new customer
+      description: Add information of a new customer to the system.
+      operationId: AddCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerName:
+                  type: string
+                  description: Customer name
+                  example: "Nguyễn Văn A"
+                address:
+                  type: string
+                  description: Address of customer
+                  example: "Mỹ Tho, Tiền Giang"
+                phoneNumber:
+                  type: string
+                  format: number
+                  description: Phone number of customer
+                  example: "0123456789"
+                email:
+                  type: string
+                  format: email
+                  description: Email of customer
+                  example: "abc@gmail.com"
+              required:
+                - customerName
+                - address
+                - phoneNumber
+      responses:
+        "201":
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchaseOrderId:
+                    type: string
+                    description: ID of created customer
+                    example: "CU0001"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+
+  /customers/{id}:
+    get:
+      tags:
+        - Customers
+      summary: Get customer details
+      description: Retrieves detailed information about a specific customer.
+      operationId: GetCustomerDetails
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: ID of customer to retrieve
+          schema:
+            type: string
+          example: "CU0001"
+      responses:
+        "200":
+          description: Customer details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDetails"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Customer not found.
+        "500":
+          description: Internal server error.
+    patch:
+      tags:
+        - Customers
+      summary: Edit customer details
+      description: Updates the details of an existing customer.
+      operationId: EditCustomerDetails
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: ID of customer to update
+          schema:
+            type: string
+          example: "CU0001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerName:
+                  type: string
+                  description: Customer name
+                  example: "Nguyễn Văn A"
+                address:
+                  type: string
+                  description: Address of customer
+                  example: "Mỹ Tho, Tiền Giang"
+                phoneNumber:
+                  type: string
+                  format: number
+                  description: Phone number of customer
+                  example: "0123456789"
+                email:
+                  type: string
+                  format: email
+                  description: Email of customer
+                  example: "abc@gmail.com"
+      responses:
+        "200":
+          description: Customer updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId:
+                    type: string
+                    description: ID of the updated customer
+                    example: "CU0001"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Customer not found.
+        "500":
+          description: Internal server error.
+    delete:
+      tags:
+        - Customers
+      summary: Delete a customer
+      description: Deletes information of a specific customer.
+      operationId: DeleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: ID of customer to delete
+          schema:
+            type: string
+          example: "CU0001"
+      responses:
+        "200":
+          description: Customer deleted successfully.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Customer not found.
+        "500":
+          description: Internal server error.
+
+  /notifications:
+    get:
+      tags:
+        - Notifications
+      summary: Retrieve list of notifications
+      description: Retrieves a list of notifications and a flag of whether user has some unread notifications.
+      operationId: GetListNotifications
+      parameters:
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of notifications retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notifications:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        notificationId:
+                          type: string
+                          description: Notification ID
+                          example: "NO0001"
+                        category:
+                          $ref: "#/components/schemas/NotificationCategory"
+                        timestamp:
+                          type: string
+                          format: date-time
+                          description: Timestamp when system creates notification
+                          example: "2024-12-30T10:00:00Z"
+                        isRead:
+                          type: boolean
+                          description: Whether the notification has been read
+                  hasUnreadNotification:
+                    type: boolean
+                    description: Whether there are some unread notifications
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request, invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A message explaining what went wrong.
+        "401":
+          description: Unauthorized access, invalid or missing token.
+        "500":
+          description: Internal server error.
+
+  /notifications/{id}:
+    patch:
+      tags:
+        - Notifications
+      summary: Read notification
+      description: Get details of a specific notification and mark it as read if it is unread.
+      operationId: ReadNotification
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          description: Notification ID
+          schema:
+            type: string
+          example: "NO0001"
+      responses:
+        "200":
+          description: Notification retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notificationId:
+                    type: string
+                    description: Notification ID
+                    example: "NO0001"
+                  category:
+                    $ref: "#/components/schemas/NotificationCategory"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: Timestamp when system creates notification
+                    example: "2024-12-30T10:00:00Z"
+                  content:
+                    type: string
+                    description: Notification content
+                    example: "Product PR0001 is about to be out of stock!"
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "404":
+          description: Notification not found.
+        "500":
+          description: Internal server error.
+
+  /statistics/load-screen:
+    get:
+      tags:
+        - Statistics & Reports
+      summary: Load statistics screen
+      description: Retrieve statistics information within a period of time.
+      operationId: LoadStatisticsScreen
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          description: Start date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-01-04"
+        - name: endDate
+          in: query
+          required: true
+          description: End date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-02-04"
+      responses:
+        "200":
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalBenefit:
+                    type: integer
+                    description: Total benefit of the agency in the specified time period
+                    example: 12368000
+                  purchaseOrdersAmount:
+                    type: integer
+                    description: Number of purchase orders conducted in the time period
+                    example: 4
+                  totalPurchase:
+                    type: integer
+                    description: Total money spent on purchasing
+                    example: 14249000
+                  salesInvoicesAmount:
+                    type: integer
+                    description: Number of sales invoices recorded in the time period
+                    example: 52
+                  totalSale:
+                    type: integer
+                    description: Total money retrieved from selling products in the time period
+                    example: 19625000
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+
+  /statistics/best-sellers:
+    get:
+      tags:
+        - Statistics & Reports
+      summary: Retrieve/Search for sold products
+      description: Retrieve a list of products that is sold in a specified time period.
+      operationId: GetListSoldProducts
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          description: Start date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-01-04"
+        - name: endDate
+          in: query
+          required: true
+          description: End date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-02-04"
+        - name: productId
+          in: query
+          required: false
+          description: Product ID, used for searching if not empty
+          schema:
+            type: string
+          example: "PR0001"
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of sold products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productId:
+                          type: string
+                          description: Product ID
+                          example: "PR0001"
+                        productName:
+                          type: string
+                          description: Product name
+                          example: "Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC"
+                        soldQuantity:
+                          type: integer
+                          description: Number of product items sold in the time period
+                          example: 18
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+
+  /statistics/active-customers:
+    get:
+      tags:
+        - Statistics & Reports
+      summary: Retrieve/Search for active customers
+      description: Retrieve a list of customers that bought products in a specified time period.
+      operationId: GetListActiveCustomers
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          description: Start date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-01-04"
+        - name: endDate
+          in: query
+          required: true
+          description: End date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-02-04"
+        - name: customerId
+          in: query
+          required: false
+          description: Customer ID, used for searching if not empty
+          schema:
+            type: string
+          example: "CU0001"
+        - name: limit
+          in: query
+          description: The number of items to fetch (default is 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: The offset to start fetching items from (default is 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of active customers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        customerId:
+                          type: string
+                          description: Customer ID
+                          example: "CU0001"
+                        customerName:
+                          type: string
+                          description: Customer name
+                          example: "Nguyễn Văn A"
+                        buyingAmount:
+                          type: integer
+                          description: Total money that customer spent on buying products in the time period
+                          example: 1680000
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+
+  /reports/download:
+    get:
+      tags:
+        - Statistics & Reports
+      summary: Generate a report
+      description: Generate a report with specified included fields.
+      operationId: GenerateReport
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          description: Start date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-01-04"
+        - name: endDate
+          in: query
+          required: true
+          description: End date of the time period
+          schema:
+            type: string
+            format: date
+          example: "2025-02-04"
+        - name: format
+          in: query
+          required: false
+          description: Report format
+          schema:
+            type: string
+            enum:
+              - "PDF"
+              - "DOC"
+            default: "PDF"
+        - name: includedFields
+          in: query
+          required: true
+          description: Included fields in the report
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - "TOTAL_BENEFIT"
+                - "PURCHASE_ORDERS_AMOUNT"
+                - "TOTAL_PURCHASE"
+                - "SALES_INVOICES_AMOUNT"
+                - "TOTAL_SALES"
+                - "BEST_SELLERS"
+                - "ACTIVE_CUSTOMERS"
+        - name: bestSellersQuantity
+          in: query
+          required: false
+          description: Number of best sellers; empty if includedFields does not have "BEST_SELLERS"
+          schema:
+            type: integer
+          example: 5
+        - name: bestSellersIncludeQuantity
+          in: query
+          required: false
+          description: Whether to include quantity with best sellers; empty if includedFields does not have "BEST_SELLERS"
+          schema:
+            type: boolean
+            default: true
+        - name: activeCustomersQuantity
+          in: query
+          required: false
+          description: Number of active customers; empty if includedFields does not have "ACTIVE_CUSTOMERS"
+          schema:
+            type: integer
+          example: 5
+        - name: activeCustomersIncludeAmount
+          in: query
+          required: false
+          description: Whether to include amount with active customers; empty if includedFields does not have "ACTIVE_CUSTOMERS"
+          schema:
+            type: boolean
+            default: true
+      responses:
+        "200":
+          description: File download.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+
+  /settings:
+    get:
+      tags:
+        - Profile & Settings
+      summary: Get profile and settings
+      description: Get all information of user profile and settings
+      operationId: GetProfileAndSettings
+      responses:
+        "200":
+          description: Profile and settings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userProfile:
+                    $ref: "#/components/schemas/UserProfile"
+                  settings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        category:
+                          $ref: "#/components/schemas/ConfigCategory"
+                        key:
+                          type: string
+                          description: Name of attribute
+                          example: "Font size"
+                        value:
+                          type: string
+                          description: Value of attribute
+                          example: "13"
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+    patch:
+      tags:
+        - Profile & Settings
+      summary: Update profile and configuration
+      description: Update information of user profile and/or configuration figures.
+      operationId: UpdateProfileAndSettings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userProfile:
+                  $ref: "#/components/schemas/UserProfile"
+                settings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      category:
+                        $ref: "#/components/schemas/ConfigCategory"
+                      key:
+                        type: string
+                        description: Name of attribute
+                        example: "Font size"
+                      value:
+                        type: string
+                        description: Value of attribute
+                        example: "13"
+      responses:
+        "200":
+          description: Profile and settings updated successfully
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+
+components:
+  schemas:
+    ProductCategory:
+      type: string
+      description: Product category
+      enum:
+        - "HẠT GIỐNG - CÂY TRỒNG"
+        - "PHÂN BÓN - ĐẤT TRỒNG"
+        - "THUỐC BẢO VỆ THỰC VẬT"
+        - "NÔNG CỤ"
+        - "GIA SÚC - GIA CẦM"
+    NotificationCategory:
+      type: string
+      description: Notification category
+      enum:
+        - "CẢNH BÁO HẾT HÀNG"
+        - "CẢNH BÁO HẾT HẠN"
+        - "CẢNH BÁO THIẾU THÔNG TIN"
+        - "GHI NHẬN THÀNH CÔNG"
+    ConfigCategory:
+      type: string
+      description: Configuration category
+      enum:
+        - "PRINT_FORMAT"
+        - "INVENTORY_PARAMS"
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Next offset of pagination
+          example: 20
+    PurchaseOrderDetails:
+      type: object
+      properties:
+        purchaseOrderId:
+          type: string
+          description: Purchase order ID
+          example: "PO0001"
+        supplierName:
+          type: string
+          description: Name of the supplier for purchase order
+          example: "Công ty TNHH TM Tân Thành"
+        products:
+          description: List of items in the purchase order
+          type: array
+          items:
+            type: object
+            properties:
+              productName:
+                type: string
+                description: Product name
+                example: "Thuốc trừ rệp sáp CONFIDOR 200SL"
+              expiredDate:
+                type: string
+                format: date
+                description: Expired date of product
+                example: "2025-12-04"
+              quantity:
+                type: integer
+                description: Number of product items
+                example: 40
+              inPrice:
+                type: integer
+                description: Product price when imported
+                example: 185000
+              totalPrice:
+                type: integer
+                description: Total price for the product
+                example: 7400000
+        totalPrice:
+          type: integer
+          description: Total price for the purchase order
+          example: 8050000
+    ProductDetails:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: Product ID
+          example: "PR0001"
+        productName:
+          type: string
+          description: Product name
+          example: "Thuốc trừ rệp sáp CONFIDOR 200SL"
+        brand:
+          type: string
+          description: Brand of product
+          example: "CONFIDOR"
+        category:
+          $ref: "#/components/schemas/ProductCategory"
+        productionPlace:
+          type: string
+          description: Place of production
+          example: "Công ty TNHH Ngân Anh"
+        outPrice:
+          type: integer
+          description: Price of product to be sold
+          example: 17000
+        usage:
+          type: string
+          description: Product usage
+          example: "Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào."
+        guideline:
+          type: string
+          description: Guideline to use the product
+          example: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
+        imagePath:
+          type: string
+          description: Path to the product's image
+          example: "/products/PR0001"
+        availableQuantity:
+          type: integer
+          description: Quantity of product in inventory
+          example: 20
+    SupplierDetails:
+      properties:
+        supplierId:
+          type: string
+          description: Supplier ID
+          example: "SU0001"
+        supplierName:
+          type: string
+          description: Supplier name
+          example: "Công ty TNHH TM Tân Thành"
+        address:
+          type: string
+          description: Address of supplier
+          example: "Mỹ Tho, Tiền Giang"
+        phoneNumber:
+          type: string
+          format: number
+          description: Phone number of supplier
+          example: "0123456789"
+        email:
+          type: string
+          format: email
+          description: Email of supplier
+          example: "abc@gmail.com"
+    SalesInvoiceDetails:
+      type: object
+      properties:
+        salesInvoiceId:
+          type: string
+          description: Sales invoice ID
+          example: "SI0001"
+        customerName:
+          type: string
+          description: Name of the customer for sales invoice
+          example: "Nguyễn Văn A"
+        products:
+          description: List of items in the sales invoice
+          type: array
+          items:
+            type: object
+            properties:
+              productName:
+                type: string
+                description: Product name
+                example: "Thuốc trừ rệp sáp CONFIDOR 200SL"
+              quantity:
+                type: integer
+                description: Number of product items
+                example: 40
+              outPrice:
+                type: integer
+                description: Product price when sold
+                example: 185000
+              totalPrice:
+                type: integer
+                description: Total price for the product
+                example: 7400000
+        totalPrice:
+          type: integer
+          description: Total price for the sales invoice
+          example: 8050000
+    CustomerDetails:
+      properties:
+        customerId:
+          type: string
+          description: Customer ID
+          example: "CU0001"
+        customerName:
+          type: string
+          description: Customer name
+          example: "Nguyễn Văn A"
+        address:
+          type: string
+          description: Address of customer
+          example: "Mỹ Tho, Tiền Giang"
+        phoneNumber:
+          type: string
+          format: number
+          description: Phone number of customer
+          example: "0123456789"
+        email:
+          type: string
+          format: email
+          description: Email of customer
+          example: "abc@gmail.com"
+    UserProfile:
+      type: object
+      properties:
+        agencyName:
+          type: string
+          description: Agency name
+          example: "Đại lý A1"
+        ownerName:
+          type: string
+          description: Owner name
+          example: "Nguyễn Văn A"
+        address:
+          type: string
+          description: Address of the agency
+          example: "Mỹ Tho, Tiền Giang"
+        taxCode:
+          type: string
+          format: number
+          description: Owner's tax code
+          example: "0123456789"
+        phoneNumber:
+          type: string
+          format: number
+          description: Owner's phone number
+          example: "0123456789"
+        email:
+          type: string
+          format: email
+          description: Agency email / Owner email
+          example: "abc@gmail.com"
+        profilePicturePath:
+          type: string
+          description: Path to the profile picture
+          example: "/profile/AG0001"
