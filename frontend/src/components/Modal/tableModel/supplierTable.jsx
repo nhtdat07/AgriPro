@@ -9,7 +9,7 @@ function SupplierTable({ loading, dataHeader, data, handleDelete }) {
       {data?.map((row, index) => (
         <tr
           key={index}
-          className="bg-white border md:border-b block md:table-row rounded-md shadow-md md:rounded-none md:shadow-none mb-5"
+          className="bg-white border md:border-b block md:table-row rounded-lg shadow-md md:rounded-none md:shadow-none mb-5"
         >
           <TableCell dataLabel="STT" showLabel={true}>
             <p className="font-normal text-sm text-right md:text-center text-black">{row.id}</p>

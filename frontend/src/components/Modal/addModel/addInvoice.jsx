@@ -1,90 +1,120 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function AddInvoice(...props) {
-    const [showModal, setShowModal] = React.useState(false);
-    console.log(props)
+import trashBin from "../../../assets/images/delete.png";
+import plus from "../../../assets/images/plus.png";
+
+export default function AddIvoice() {
+    const [showModal, setShowModal] = useState(false);
+    const [products, setProducts] = useState([{ id: 1, name: "", expiry: "", quantity:"", price:"", total:"" }]);
+
+    const codeData = { code: "BH0000000346" };
+
+    const addProduct = () => {
+        setProducts([...products, { id: products.length + 1, name: "", expiry: "", quantity:"", price:"", total:"" }]);
+    };
+
+    const removeProduct = (id) => {
+        setProducts(products.filter(product => product.id !== id));
+    };
+
+    const handleInputChange = (id, field, value) => {
+        setProducts(products.map(product => 
+            product.id === id 
+                ? { ...product, [field]: value, total: field === "quantity" || field === "price" ? (field === "quantity" ? value * product.price : product.quantity * value) : product.total }
+                : product
+        ));
+    };
+
+    const totalAmount = products.reduce((sum, product) => sum + product.total, 0);
+
     return (
         <>
-            <div className="rounded-md py-2 outline-none w-3/5 flex justify-end">
-                <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white font-medium px-4 py-2 inline-flex items-center rounded-md" onClick={() => setShowModal(true)}>
+            <div className="rounded-lg py-2 outline-none w-3/5 flex justify-end">
+                <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white font-medium px-4 py-2 inline-flex items-center rounded-lg" onClick={() => setShowModal(true)}>
                     <span>THÊM HÓA ĐƠN</span>
                 </button>
             </div>
             {showModal ? (
-                <>
-                    <div
-                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                    >
-                        <div className="relative w-15 my-6 mx-auto max-w-none">
-                            {/*content*/}
-                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                {/*header*/}
-                                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                                    <h3 className="text-3xl font-semibold">
-                                        Thêm tài khoản
-                                    </h3>
-                                    <button
-                                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                        onClick={() => setShowModal(false)}
-                                    >
-                                        <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                            ×
-                                        </span>
-                                    </button>
-                                </div>
-                                {/*body*/}
-                                <div className="relative p-100 flex-auto">
-                                    <form className="p-12 md:p-5">
-                                        <div className="sm:col-span-2 pb-2">
-                                            <label className="block text-sm font-semibold leading-6 text-gray-900">MSSV</label>
-                                            <div className="mt-2.5">
-                                                <input type="text" value={props[0].stu_id} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-                                        <div className="sm:col-span-2 pb-2">
-                                            <label className="block text-sm font-semibold leading-6 text-gray-900">Email</label>
-                                            <div className="mt-2.5">
-                                                <input type="text" value={props[0].email} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-                                        <div className="sm:col-span-2 pb-2">
-                                            <label className="block text-sm font-semibold leading-6 text-gray-900">Tên</label>
-                                            <div className="mt-2.5">
-                                                <input type="text" value={props[0].name} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-                                        <div className="sm:col-span-2 pb-2">
-                                            <label for="role" className="block text-sm font-semibold leading-6 text-gray-900">Phân quyền</label>
-                                            <select id="role" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                                <option selected>Chọn phân quyền cho tài khoản</option>
-                                                <option value="User">User</option>
-                                                <option value="Amin">Admin</option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                                {/*footer*/}
-                                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                                    <button
-                                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                        type="button"
-                                        onClick={() => setShowModal(false)}
-                                    >
-                                        Đóng
-                                    </button>
-                                    <button
-                                        className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                        type="button"
-                                        onClick={() => setShowModal(false)}
-                                    >
-                                        Thêm tài khoản
-                                    </button>
-                                </div>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-md w-[1200px] p-6">
+                        <h3 className="text-2xl font-semibold text-center">Thêm đơn nhập hàng mới</h3>
+                        <div className="flex gap-4">
+                            <div className="w-1/4">
+                                <label className="p-2 block text-sm font-medium text-gray-700">Mã số</label>
+                                <input type="text" className="w-full p-2 border rounded-lg" value={codeData.code} disabled />
+                            </div>
+                            <div className="w-3/4">
+                                <label className="p-2 block text-sm font-medium text-gray-700">Khách hàng</label>
+                                <select className="w-full p-2 border rounded-lg">
+                                    <option disabled selected>Khách hàng</option>
+                                    <option>Khách hàng</option>
+                                </select>
                             </div>
                         </div>
+                        <h4 className="text-lg font-semibold text-center p-2 mt-5">Danh sách sản phẩm</h4>
+                        <div className="p-2 block text-sm font-medium text-gray-700">
+                            <div className="w-full overflow-auto max-h-[200px]">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="text-center border-b">
+                                            <th className="p-2">STT</th>
+                                            <th className="p-2 w-1/2">Tên sản phẩm</th>
+                                            <th className="p-2 w-32">Số lượng</th>
+                                            <th className="p-2 w-48">Giá bán</th>
+                                            <th className="p-2 w-48">Thành tiền</th>
+                                            <th className="p-2 w-24 text-white">Xóa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {products.map((product, index) => (
+                                            <tr key={product.id}>
+                                                <td className="p-2 text-center">{index + 1}</td>
+                                                <td className="p-2">
+                                                    <select className="w-full p-2 border rounded-lg">
+                                                        <option disabled selected>Tên sản phẩm</option>
+                                                        <option>Tên sản phẩm</option>
+                                                    </select>
+                                                </td>
+                                                <td className="p-2">
+                                                    <input 
+                                                        type="number" 
+                                                        className="w-full p-2 border rounded-lg" 
+                                                        value={product.quantity} 
+                                                        onChange={(e) => handleInputChange(product.id, "quantity", Number(e.target.value))} 
+                                                    />
+                                                </td>
+                                                <td className="p-2">
+                                                    <input 
+                                                        type="number" 
+                                                        className="w-full p-2 border rounded-lg" 
+                                                        value={product.price} 
+                                                        onChange={(e) => handleInputChange(product.id, "price", Number(e.target.value))} 
+                                                    />
+                                                </td>
+                                                <td className="p-2 text-center">{(product.quantity * product.price).toLocaleString()}</td>
+                                                <td className="p-2 text-center">
+                                                    <button onClick={() => removeProduct(product.id)}>
+                                                        <img src={trashBin} alt="Delete" className="w-5 h-5" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="flex justify-start">
+                            <button className="flex items-center gap-2 px-4" onClick={addProduct}>
+                                <img src={plus} alt="Add" className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="text-lg font-semibold text-right p-2 mt-5">TỔNG CỘNG: {totalAmount.toLocaleString()}</div>
+                        <div className="flex justify-center gap-4 p-4">
+                            <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700" onClick={() => setShowModal(false)}>LƯU</button>
+                            <button className="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500" onClick={() => setShowModal(false)}>THOÁT</button>
+                        </div>
                     </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                </>
+                </div>
             ) : null}
         </>
     );

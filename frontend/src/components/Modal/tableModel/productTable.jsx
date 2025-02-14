@@ -2,9 +2,9 @@ import React from "react";
 
 function ProductCard({ row }) {
   return (
-    <div className="bg-[#efffef] border rounded-md shadow-md p-4 mb-4 flex-shrink-0 overflow-hidden flex flex-col justify-between">
+    <div className="bg-[#efffef] border rounded-lg shadow-md p-4 mb-4 flex-shrink-0 overflow-hidden flex flex-col justify-between">
       <div className="w-full h-40 flex items-center justify-center overflow-hidden">
-        <img src={row.photo} alt={row.name} className="w-full h-full object-cover rounded-md border-none" />
+        <img src={row.photo} alt={row.name} className="w-full h-full object-cover rounded-lg border-none" />
       </div>
       <div className="flex-grow mt-2">
         <p className="text-sm text-black break-words">{row.category}</p>

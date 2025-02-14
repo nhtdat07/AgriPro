@@ -4,13 +4,10 @@ import React, { useContext } from "react";
 
 import ava from "../../assets/images/avatar_white.svg";
 
-function Index({ toggle }) {
-  const avatar =
-    "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
-
+function Header({ toggle }) {
   return (
     <>
-      <header className="">
+      <header>
         <div className="shadow-sm">
           <div className="relative bg-[#1f472a] flex w-full items-center px-5 py-2.5">
             <div className="flex-1">
@@ -18,7 +15,7 @@ function Index({ toggle }) {
                 <FontAwesomeIcon icon={faBars} onClick={toggle} />
               </p>
             </div>
-            <div className="">
+            <div>
               <ul className="flex flex-row gap-4 items-center">
                 <li>
                   <span className="h-9 w-9 cursor-pointer text-white">
@@ -52,4 +49,4 @@ function Index({ toggle }) {
   );
 }
 
-export default Index;
+export default Header;

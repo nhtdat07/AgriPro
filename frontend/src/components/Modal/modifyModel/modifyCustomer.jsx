@@ -15,7 +15,7 @@ export default function ModifyCustomer(...props) {
           >
             <div className="relative w-15 my-6 mx-auto max-w-none">
               {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border-0 rounded-lg shadow-md relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-3xl font-semibold">
@@ -28,24 +28,24 @@ export default function ModifyCustomer(...props) {
                     <div className="sm:col-span-2 pb-2">
                       <label className="block text-sm font-semibold leading-6 text-gray-900">MSSV</label>
                       <div className="mt-2.5">
-                        <input type="text" value={props[0].stu_id} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                        <input type="text" value={props[0].stu_id} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-md ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                       </div>
                     </div>
                     <div className="sm:col-span-2 pb-2">
                       <label className="block text-sm font-semibold leading-6 text-gray-900">Email</label>
                       <div className="mt-2.5">
-                        <input type="text" value={props[0].email} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                        <input type="text" value={props[0].email} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-md ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                       </div>
                     </div>
                     <div className="sm:col-span-2 pb-2">
                       <label className="block text-sm font-semibold leading-6 text-gray-900">Tên</label>
                       <div className="mt-2.5">
-                        <input type="text" value={props[0].name} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                        <input type="text" value={props[0].name} className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-md ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                       </div>
                     </div>
                     <div className="sm:col-span-2 pb-2">
                       <label for="role" className="block text-sm font-semibold leading-6 text-gray-900">Phân quyền</label>
-                      <select id="role" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      <select id="role" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-md ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         <option selected>Chọn phân quyền cho tài khoản</option>
                         <option value="User">User</option>
                         <option value="Amin">Admin</option>
@@ -63,7 +63,7 @@ export default function ModifyCustomer(...props) {
                     Đóng
                   </button>
                   <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() => setShowModal(false)}
                   >

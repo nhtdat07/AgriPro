@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar/Index";
+import Header from "../../components/Navbar/header";
+import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
 
 import BestSellTable from "../../components/Modal/tableModel/bestSellTable";
@@ -11,7 +12,8 @@ import salesIcon from "../../assets/images/sales_invoice.svg";
 import searchIcon from "../../assets/images/search.svg";
 
 function StatisticReport() {
-  const [sidebarToggle] = useOutletContext();
+  const [headerToggle] = useOutletContext();
+  const [footerToggle] = useOutletContext();
   const [loading] = useState(false);
   const [activeTab, setActiveTab] = useState('sale');
 
@@ -107,85 +109,91 @@ function StatisticReport() {
   const handleDelete = () => { };
 
   return (
-    <main className="">
-      <Navbar toggle={sidebarToggle} />
-      <h2 className="pt-4 pl-4 text-2xl font-bold mb-4">Quản lý bán hàng</h2>
-
-      <div className="px-4">        
-        <div className="flex items-center gap-4 mb-4">
-          <input type="date" className="border px-2 py-1 rounded-md" />
-          <input type="date" className="border px-2 py-1 rounded-md" />
-          <button className="bg-[#2c9e4b] text-white px-4 py-2 rounded-md">ÁP DỤNG</button>
-          <button className="bg-[#2c9e4b] text-white px-4 py-2 rounded-md ml-auto">XUẤT BÁO CÁO</button>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          {summaryData.map((item, index) => (
-            <div key={index} className="bg-white p-4 rounded-md shadow-md relative">
-              <h3 className="text-xl font-bold">{item.title}</h3>
-                <>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-gray-500 pt-2">
-                      {item.title === "Nhập hàng" ? "Số đơn nhập hàng" : item.title === "Bán hàng" ? "Số hóa đơn bán hàng" : item.dateRange}
-                    </p>
-                    <p className="text-xl font-bold text-right">
-                      {item.numPurchase || item.numSale}
-                    </p>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-gray-500">
-                      {item.title === "Lợi nhuận" ? "" : "Tổng số tiền"} 
-                    </p>
-                    <p className="text-2xl font-bold text-right">{item.value}₫</p>
-                  </div>
-                </>
-
-              <img src={item.icon} alt={item.title} className="w-10 ml-auto block" />
+    <>
+      <main className="flex flex-col min-h-screen">
+        <Header toggle={headerToggle} />
+    
+        <div className="flex-grow">
+          <h2 className="pt-4 pl-4 text-2xl font-bold mb-4">Quản lý bán hàng</h2>
+    
+          <div className="px-4">        
+            <div className="flex items-center gap-4 mb-4">
+              <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
+              <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
+              <button className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg min-w-[50px]">ÁP DỤNG</button>
+              <button className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg ml-auto min-w-[50px]">XUẤT BÁO CÁO</button>
             </div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-md">
-          <h3 className="text-xl font-bold mb-2">Sản phẩm bán chạy</h3>
-          <div className="flex items-center mb-2">
-            <div className="flex items-center border rounded-md px-2 w-full">
-              <input type="text" placeholder="Tên sản phẩm" className="w-full p-2 outline-none"/>
+    
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              {summaryData.map((item, index) => (
+                <div key={index} className="bg-white p-4 rounded-lg shadow-md relative">
+                  <h3 className="text-xl font-bold">{item.title}</h3>
+                    <>
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm text-gray-500 pt-2">
+                          {item.title === "Nhập hàng" ? "Số đơn nhập hàng" : item.title === "Bán hàng" ? "Số hóa đơn bán hàng" : item.dateRange}
+                        </p>
+                        <p className="text-xl font-bold text-right">
+                          {item.numPurchase || item.numSale}
+                        </p>
+                      </div>
+    
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm text-gray-500">
+                          {item.title === "Lợi nhuận" ? "" : "Tổng số tiền"} 
+                        </p>
+                        <p className="text-2xl font-bold text-right break-all">{item.value}₫</p>
+                      </div>
+                    </>
+                  <img src={item.icon} alt={item.title} className="w-10 ml-auto block" />
+                </div>
+              ))}
             </div>
-            <button className="ml-2 p-2">
-              <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
-            </button>
-          </div>
-          <BestSellTable
-            loading={loading}
-            dataHeader={dataHeaderBestSell}
-            data={dataBestSell}
-            handleDelete={handleDelete}
-          />
-          </div>
-          
-          <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-md">
-          <h3 className="text-xl font-bold mb-2">Khách hàng mua nhiều</h3>
-          <div className="flex items-center mb-2">
-            <div className="flex items-center border rounded-md px-2 w-full">
-              <input type="text" placeholder="Tên khách hàng" className="w-full p-2 outline-none"/>
+    
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+              <h3 className="text-xl font-bold mb-2">Sản phẩm bán chạy</h3>
+              <div className="flex items-center mb-2">
+                <div className="flex items-center border rounded-lg px-2 w-full">
+                  <input type="text" placeholder="Tên sản phẩm" className="w-full p-2 outline-none"/>
+                </div>
+                <button className="ml-2 p-2">
+                  <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
+                </button>
+              </div>
+              <BestSellTable
+                loading={loading}
+                dataHeader={dataHeaderBestSell}
+                data={dataBestSell}
+                handleDelete={handleDelete}
+              />
+              </div>
+              
+              <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+              <h3 className="text-xl font-bold mb-2">Khách hàng mua nhiều</h3>
+              <div className="flex items-center mb-2">
+                <div className="flex items-center border rounded-lg px-2 w-full">
+                  <input type="text" placeholder="Tên khách hàng" className="w-full p-2 outline-none"/>
+                </div>
+                <button className="ml-2 p-2">
+                  <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
+                </button>
+              </div>
+              <TopCustomerTable
+                loading={loading}
+                dataHeader={dataHeaderTopCustomer}
+                data={dataTopCustomer}
+                handleDelete={handleDelete}
+              />
+              </div>
             </div>
-            <button className="ml-2 p-2">
-              <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
-            </button>
-          </div>
-          <TopCustomerTable
-            loading={loading}
-            dataHeader={dataHeaderTopCustomer}
-            data={dataTopCustomer}
-            handleDelete={handleDelete}
-          />
           </div>
         </div>
-      </div>
-    </main>
+    
+        <Footer toggle={footerToggle} />
+      </main>
+    </>
   );
-}
+}  
 
 export default StatisticReport;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar/Index";
+import Header from "../../components/Navbar/header";
+import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
 
 import InventoryTable from "../../components/Modal/tableModel/inventoryTable";
@@ -13,7 +14,8 @@ import AddSupplier from "../../components/Modal/addModel/addSupplier";
 import searchIcon from "../../assets/images/search.svg";
 
 function InventoryPurchase() {
-  const [sidebarToggle] = useOutletContext();
+  const [headerToggle] = useOutletContext();
+  const [footerToggle] = useOutletContext();
   const [loading] = useState(false);
   const [activeTab, setActiveTab] = useState('inventory');
 
@@ -144,185 +146,189 @@ function InventoryPurchase() {
 
   return (
     <>
-      <main className="">
-        <Navbar toggle={sidebarToggle} />
-        <h2 className="pt-4 pl-4 text-2xl font-bold mb-4">Quản lý kho & nhập hàng</h2>
+      <main className="flex flex-col min-h-screen">
+        <Header toggle={headerToggle} />
 
-        <div className="w-full bg-[#efffef] px-4 rounded-lg">
-          <div className="flex">
-            <button
-              onClick={() => setActiveTab("inventory")}
-              className={`flex-1 py-2 text-white text-lg font-medium ${
-                activeTab === "inventory" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
-              }`}
-            >
-              Kho
-            </button>
-            <button
-              onClick={() => setActiveTab("purchase")}
-              className={`flex-1 py-2 text-white text-lg font-medium ${
-                activeTab === "purchase" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
-              }`}
-            >
-              Nhập hàng
-            </button>
-            <button
-              onClick={() => setActiveTab("product")}
-              className={`flex-1 py-2 text-white text-lg font-medium ${
-                activeTab === "product" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
-              }`}
-            >
-              Sản phẩm hiện có
-            </button>
-            <button
-              onClick={() => setActiveTab("supplier")}
-              className={`flex-1 py-2 text-white text-lg font-medium ${
-                activeTab === "supplier" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
-              }`}
-            >
-              Nhà cung cấp
-            </button>
-          </div>
+        <div className="flex-grow">
+          <h2 className="pt-4 pl-4 text-2xl font-bold mb-4">Quản lý kho & nhập hàng</h2>
 
-          <div className="p-1 bg-white rounded-b-lg shadow-md">
-          {activeTab === 'inventory' && (
-            <div>
-              <div className="mainCard">
-                <div className="flex items-center gap-2 mb-2">
-                  <select className="border rounded-md p-2 outline-none w-3/5">
-                    <option disabled selected>Tên sản phẩm</option>
-                    <option>Tên sản phẩm</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-1/4">
-                    <option disabled selected>Ngày nhập</option>
-                    <option>Ngày nhập</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-1/4">
-                    <option disabled selected>Hạn dùng</option>
-                    <option>Hạn dùng</option>
-                  </select>
-                  <label className="items-center p-2 w-1/5">
-                    <input type="checkbox" className="mr-1" />
-                    Sắp hết hạn
-                  </label>
-                  <label className="items-center p-2 w-1/5">
-                    <input type="checkbox" className="mr-1" />
-                    Sắp hết hàng
-                  </label>
-                  <button className="p-2 w-1/5 flex justify-end">
-                    <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
-                  </button>
-                </div>
-                <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-md">
-                  <InventoryTable
-                    loading={loading}
-                    dataHeader={dataHeaderInventory}
-                    data={dataInventory}
-                    handleDelete={handleDelete}
-                  />
+          <div className="w-full bg-[#efffef] px-4 rounded-lg mb-6">
+            <div className="flex">
+              <button
+                onClick={() => setActiveTab("inventory")}
+                className={`flex-1 py-2 text-white text-lg font-medium ${
+                  activeTab === "inventory" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
+                }`}
+              >
+                Kho
+              </button>
+              <button
+                onClick={() => setActiveTab("purchase")}
+                className={`flex-1 py-2 text-white text-lg font-medium ${
+                  activeTab === "purchase" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
+                }`}
+              >
+                Nhập hàng
+              </button>
+              <button
+                onClick={() => setActiveTab("product")}
+                className={`flex-1 py-2 text-white text-lg font-medium ${
+                  activeTab === "product" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
+                }`}
+              >
+                Sản phẩm hiện có
+              </button>
+              <button
+                onClick={() => setActiveTab("supplier")}
+                className={`flex-1 py-2 text-white text-lg font-medium ${
+                  activeTab === "supplier" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
+                }`}
+              >
+                Nhà cung cấp
+              </button>
+            </div>
+
+            <div className="p-1 bg-white rounded-lg shadow-md">
+            {activeTab === 'inventory' && (
+              <div>
+                <div className="mainCard">
+                  <div className="flex items-center gap-2 mb-2">
+                    <select className="border rounded-lg p-2 outline-none w-3/5">
+                      <option disabled selected>Tên sản phẩm</option>
+                      <option>Tên sản phẩm</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-1/4">
+                      <option disabled selected>Ngày nhập</option>
+                      <option>Ngày nhập</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-1/4">
+                      <option disabled selected>Hạn dùng</option>
+                      <option>Hạn dùng</option>
+                    </select>
+                    <label className="items-center p-2 w-1/5">
+                      <input type="checkbox" className="mr-1" />
+                      Sắp hết hạn
+                    </label>
+                    <label className="items-center p-2 w-1/5">
+                      <input type="checkbox" className="mr-1" />
+                      Sắp hết hàng
+                    </label>
+                    <button className="p-2 w-1/5 flex justify-end">
+                      <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
+                    </button>
+                  </div>
+                  <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                    <InventoryTable
+                      loading={loading}
+                      dataHeader={dataHeaderInventory}
+                      data={dataInventory}
+                      handleDelete={handleDelete}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {activeTab === 'purchase' && (
-            <div>
-              <div className="mainCard">
-                <div className="flex items-center gap-2 mb-2">
-                  <select className="border rounded-md p-2 outline-none w-5/6">
-                    <option disabled selected>Mã số</option>
-                    <option>Mã số</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-3/5">
-                    <option disabled selected>Ngày nhập</option>
-                    <option>Ngày nhập</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-full">
-                    <option disabled selected>Nhà cung cấp</option>
-                    <option>Nhà cung cấp</option>
-                  </select>
-                  <button className="p-2 w-1/5">
-                    <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
-                  </button>
-                  <AddOrder/>
-                </div>
-                <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-md">
-                  <PurchaseTable
-                    loading={loading}
-                    dataHeader={dataHeaderPurchase}
-                    data={dataPurchase}
-                    handleDelete={handleDelete}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-          {activeTab === 'product' && (
-            <div>
-              <div className="mainCard">
-                <div className="flex items-center gap-2 mb-2">
-                  <select className="border rounded-md p-2 outline-none w-full">
-                    <option disabled selected>Tên sản phẩm</option>
-                    <option>Tên sản phẩm</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-3/5">
-                    <option disabled selected>Loại</option>
-                    <option>Loại</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-5/6">
-                    <option disabled selected>Công dụng</option>
-                    <option>Công dụng</option>
-                  </select>
-                  <button className="p-2 w-1/5">
-                    <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
-                  </button>
-                  <AddProduct/>
-                </div>
-                <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-md">
-                  <ProductTable
-                    loading={loading}
-                    dataHeader={dataHeaderProduct}
-                    data={dataProduct}
-                    handleDelete={handleDelete}
-                  />
+            )}
+            {activeTab === 'purchase' && (
+              <div>
+                <div className="mainCard">
+                  <div className="flex items-center gap-2 mb-2">
+                    <select className="border rounded-lg p-2 outline-none w-5/6">
+                      <option disabled selected>Mã số</option>
+                      <option>Mã số</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-3/5">
+                      <option disabled selected>Ngày nhập</option>
+                      <option>Ngày nhập</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-full">
+                      <option disabled selected>Nhà cung cấp</option>
+                      <option>Nhà cung cấp</option>
+                    </select>
+                    <button className="p-2 w-1/5">
+                      <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
+                    </button>
+                    <AddOrder/>
+                  </div>
+                  <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                    <PurchaseTable
+                      loading={loading}
+                      dataHeader={dataHeaderPurchase}
+                      data={dataPurchase}
+                      handleDelete={handleDelete}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {activeTab === 'supplier' && (
-            <div>
-              <div className="mainCard">
-                <div className="flex items-center gap-2 mb-2">
-                  <select className="border rounded-md p-2 outline-none w-full">
-                    <option disabled selected>Tên nhà cung cấp</option>
-                    <option>Tên nhà cung cấp</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-3/5">
-                    <option disabled selected>Điện thoại</option>
-                    <option>Điện thoại</option>
-                  </select>
-                  <select className="border rounded-md p-2 outline-none w-5/6">
-                    <option disabled selected>Địa chỉ</option>
-                    <option>Địa chỉ</option>
-                  </select>
-                  <button className="p-2 w-1/5">
-                    <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
-                  </button>
-                  <AddSupplier/>
-                </div>
-                <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-md">
-                  <SupplierTable
-                    loading={loading}
-                    dataHeader={dataHeaderSupplier}
-                    data={dataSupplier}
-                    handleDelete={handleDelete}
-                  />
+            )}
+            {activeTab === 'product' && (
+              <div>
+                <div className="mainCard">
+                  <div className="flex items-center gap-2 mb-2">
+                    <select className="border rounded-lg p-2 outline-none w-full">
+                      <option disabled selected>Tên sản phẩm</option>
+                      <option>Tên sản phẩm</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-3/5">
+                      <option disabled selected>Loại</option>
+                      <option>Loại</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-5/6">
+                      <option disabled selected>Công dụng</option>
+                      <option>Công dụng</option>
+                    </select>
+                    <button className="p-2 w-1/5">
+                      <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
+                    </button>
+                    <AddProduct/>
+                  </div>
+                  <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                    <ProductTable
+                      loading={loading}
+                      dataHeader={dataHeaderProduct}
+                      data={dataProduct}
+                      handleDelete={handleDelete}
+                    />
+                  </div>
                 </div>
               </div>
+            )}
+            {activeTab === 'supplier' && (
+              <div>
+                <div className="mainCard">
+                  <div className="flex items-center gap-2 mb-2">
+                    <select className="border rounded-lg p-2 outline-none w-full">
+                      <option disabled selected>Tên nhà cung cấp</option>
+                      <option>Tên nhà cung cấp</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-3/5">
+                      <option disabled selected>Điện thoại</option>
+                      <option>Điện thoại</option>
+                    </select>
+                    <select className="border rounded-lg p-2 outline-none w-5/6">
+                      <option disabled selected>Địa chỉ</option>
+                      <option>Địa chỉ</option>
+                    </select>
+                    <button className="p-2 w-1/5">
+                      <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
+                    </button>
+                    <AddSupplier/>
+                  </div>
+                  <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                    <SupplierTable
+                      loading={loading}
+                      dataHeader={dataHeaderSupplier}
+                      data={dataSupplier}
+                      handleDelete={handleDelete}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
             </div>
-          )}
           </div>
         </div>
 
+        <Footer toggle={footerToggle} />
       </main>
     </>
   );
