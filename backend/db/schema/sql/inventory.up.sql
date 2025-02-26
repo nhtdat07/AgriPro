@@ -1,4 +1,5 @@
-CREATE TABLE inventory_product (
+-- name: createTableInventoryProduct
+CREATE TABLE IF NOT EXISTS inventory_product (
   "agency_id" char(6) NOT NULL,
   "product_id" char(6) NOT NULL,
   "quantity" int NOT NULL DEFAULT 0,
