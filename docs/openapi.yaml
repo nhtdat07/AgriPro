@@ -49,6 +49,9 @@ paths:
                 password:
                   type: string
                   example: "aflkbajvnf34njka"
+              required:
+                - email
+                - password
       responses:
         "200":
           description: Successfully authenticated
