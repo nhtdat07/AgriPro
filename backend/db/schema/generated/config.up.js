@@ -1,5 +1,12 @@
-require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
-const { Pool } = require('pg');
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+
+import pkg from 'pg';
+const { Pool } = pkg;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 /**
@@ -7,7 +14,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
  */
-async function createTableConfiguration(params = {}) {
+export async function createTableConfiguration(params = {}) {
     try {
         const query = `DO $$ 
 BEGIN
@@ -34,5 +41,3 @@ CREATE TABLE IF NOT EXISTS configuration (
     }
 }
 
-
-module.exports = { createTableConfiguration };

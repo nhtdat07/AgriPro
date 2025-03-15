@@ -1,13 +1,6 @@
-const express = require('express');
-const app = express();
-const port = 8080;
-const pool = require('./db');
-
-app.use(express.json());
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+import { app } from './app.js';
+import * as consts from './consts/consts.js';
+import { pool } from './db.js';
 
 // Test DB connection on startup
 const startServer = async () => {
@@ -17,8 +10,8 @@ const startServer = async () => {
         console.log('Connected to the database');
 
         // Start the server after DB is ready
-        app.listen(port, () => {
-            console.log(`Server running at http://localhost:${port}/`);
+        app.listen(consts.SERVER_PORT, () => {
+            console.log(`Server running at http://localhost:${consts.SERVER_PORT}/`);
         });
     } catch (err) {
         console.error('Failed to connect to the database:', err);
