@@ -1,23 +1,24 @@
-const { Pool } = require('pg');
+import pkg from 'pg';
+const { Pool } = pkg;
 
-const pool = new Pool({
+// Functions for creating tables
+import { createTableUserAgency } from './db/schema/generated/user_agency.up.js';
+import { createTableConfiguration } from './db/schema/generated/config.up.js';
+import { createTableCustomer } from './db/schema/generated/customer.up.js';
+import { createTableInventoryProduct } from './db/schema/generated/inventory.up.js';
+import { createTableNotification } from './db/schema/generated/notification.up.js';
+import { createTableProduct } from './db/schema/generated/product.up.js';
+import { createTablePurchaseOrder } from './db/schema/generated/purchase_order.up.js';
+import { createTableSalesInvoice } from './db/schema/generated/sales_invoice.up.js';
+import { createTableSupplier } from './db/schema/generated/supplier.up.js';
+
+export const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'postgres',
     password: 'postgres',
     port: 5432,
 });
-
-// Functions for creating tables
-const { createTableUserAgency } = require('./db/schema/generated/user_agency.up');
-const { createTableConfiguration } = require('./db/schema/generated/config.up');
-const { createTableCustomer } = require('./db/schema/generated/customer.up');
-const { createTableInventoryProduct } = require('./db/schema/generated/inventory.up');
-const { createTableNotification } = require('./db/schema/generated/notification.up');
-const { createTableProduct } = require('./db/schema/generated/product.up');
-const { createTablePurchaseOrder } = require('./db/schema/generated/purchase_order.up');
-const { createTableSalesInvoice } = require('./db/schema/generated/sales_invoice.up');
-const { createTableSupplier } = require('./db/schema/generated/supplier.up');
 
 // Init schema
 const initSchema = async () => {
@@ -42,5 +43,3 @@ pool.on('connect', async () => {
     console.log('Connected to the database');
     await initSchema();
 });
-
-module.exports = pool;

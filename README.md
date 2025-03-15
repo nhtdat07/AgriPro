@@ -24,4 +24,4 @@ A system to manage inventory, orders, and sales for agricultural supply agencies
 ![ER Diagram](docs/DB_diagram.png)
 
 ## API Documentation
-![API documentation](docs/openapi.yaml)
+[API documentation](https://nhtdat07.github.io/AgriPro/docs/api-doc.html)

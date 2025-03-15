@@ -1,5 +1,12 @@
-require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
-const { Pool } = require('pg');
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+
+import pkg from 'pg';
+const { Pool } = pkg;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 /**
@@ -7,7 +14,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
  */
-async function getUserByEmail(params = {}) {
+export async function getUserByEmail(params = {}) {
     try {
         const query = `SELECT * FROM users WHERE email = $1;`;
         const { rows } = await pool.query(query, Object.values(params));
@@ -23,7 +30,7 @@ async function getUserByEmail(params = {}) {
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
  */
-async function createUser(params = {}) {
+export async function createUser(params = {}) {
     try {
         const query = `INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *;`;
         const { rows } = await pool.query(query, Object.values(params));
@@ -34,5 +41,3 @@ async function createUser(params = {}) {
     }
 }
 
-
-module.exports = { getUserByEmail, createUser };

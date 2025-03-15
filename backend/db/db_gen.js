@@ -1,5 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Reads a SQL file and generates JavaScript functions, then writes them to a new JS file.
@@ -15,8 +18,15 @@ function generateQueryFiles(sqlFilePath, outputDir) {
 
     // Split queries based on `-- name: functionName`
     const queryBlocks = sqlContent.split(/-- name:\s*(\w+)/).slice(1);
-    let functionCode = `require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
-const { Pool } = require('pg');
+    let functionCode = `import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+
+import pkg from 'pg';
+const { Pool } = pkg;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 `;
@@ -30,7 +40,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
  */
-async function ${functionName}(params = {}) {
+export async function ${functionName}(params = {}) {
     try {
         const query = \`${sqlQuery}\`;
         const { rows } = await pool.query(query, Object.values(params));
@@ -43,8 +53,6 @@ async function ${functionName}(params = {}) {
 
 `;
     }
-
-    functionCode += `\nmodule.exports = { ${queryBlocks.filter((_, i) => i % 2 === 0).join(', ')} };\n`;
 
     // Write the generated JS file
     fs.writeFileSync(outputFilePath, functionCode, 'utf8');
