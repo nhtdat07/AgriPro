@@ -26,17 +26,19 @@ export async function getUserByEmail(params = {}) {
 }
 
 /**
- * Executes the 'createUser' query.
+ * Executes the 'addUser' query.
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
  */
-export async function createUser(params = {}) {
+export async function addUser(params = {}) {
     try {
-        const query = `INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *;`;
+        const query = `INSERT INTO user_agency (agency_name, owner_name, email, phone, password_hash) 
+VALUES ($1, $2, $3, $4, $5)
+RETURNING *;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing createUser:', error);
+        console.error('Error executing addUser:', error);
         throw error;
     }
 }

@@ -1,5 +1,13 @@
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, './.env') });
+
 import pkg from 'pg';
 const { Pool } = pkg;
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 // Functions for creating tables
 import { createTableUserAgency } from './db/schema/generated/user_agency.up.js';
@@ -11,14 +19,6 @@ import { createTableProduct } from './db/schema/generated/product.up.js';
 import { createTablePurchaseOrder } from './db/schema/generated/purchase_order.up.js';
 import { createTableSalesInvoice } from './db/schema/generated/sales_invoice.up.js';
 import { createTableSupplier } from './db/schema/generated/supplier.up.js';
-
-export const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'postgres',
-    password: 'postgres',
-    port: 5432,
-});
 
 // Init schema
 const initSchema = async () => {
@@ -32,9 +32,9 @@ const initSchema = async () => {
         await createTablePurchaseOrder();
         await createTableSalesInvoice();
         await createTableSupplier();
-        console.log('All tables initialized');
+        // console.log('All tables initialized');
     } catch (err) {
-        console.error('Error initializing schema:', err);
+        // console.error('Error initializing schema:', err);
     }
 };
 
