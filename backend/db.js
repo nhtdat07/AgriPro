@@ -32,9 +32,9 @@ const initSchema = async () => {
         await createTablePurchaseOrder();
         await createTableSalesInvoice();
         await createTableSupplier();
-        console.log('All tables initialized');
+        // console.log('All tables initialized');
     } catch (err) {
-        console.error('Error initializing schema:', err);
+        // console.error('Error initializing schema:', err);
     }
 };
 
