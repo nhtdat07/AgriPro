@@ -25,3 +25,6 @@ export const PASSWORD_SALT = 10;
 
 // Error
 export const SQL_UNIQUE_ERROR_CODE = '23505';
+
+// Empty values
+export const EMPTY_STRING = '';

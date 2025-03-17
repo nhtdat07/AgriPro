@@ -4,7 +4,7 @@ import { signUpService } from '../../services/auth/sign_up.js';
 import * as errors from '../../errors/error_handler.js';
 
 afterEach(async () => {
-    await pool.query("DELETE FROM user_agency;");
+    await pool.query("TRUNCATE TABLE user_agency RESTART IDENTITY;");
 });
 
 afterAll(async () => {

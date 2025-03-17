@@ -31,7 +31,11 @@ export const signUpService = async (userData) => {
         const hashedPassword = await bcrypt.hash(password, consts.PASSWORD_SALT);
 
         // Store the new user in the database
-        const result = await addUser({ agencyName, ownerName, email, phone, password_hash: hashedPassword });
+        const result = await addUser({
+            agencyName, ownerName, email,
+            phone: phone || consts.EMPTY_STRING,
+            password_hash: hashedPassword
+        });
 
         if (!result) {
             return { error: new errors.InternalError('Database failed to create user') };

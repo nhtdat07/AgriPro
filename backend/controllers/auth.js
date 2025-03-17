@@ -9,9 +9,9 @@ export const signUpController = async (req, res) => {
 
         if (result.error) {
             errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.CREATED).json({ message: result.message });
         }
-
-        res.status(consts.HTTP_STATUS.CREATED).json({ message: result.message });
     } catch (error) {
         console.error('Sign-up error:', error);
         res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
