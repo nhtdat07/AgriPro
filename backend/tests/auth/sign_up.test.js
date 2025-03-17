@@ -2,6 +2,11 @@ import bcrypt from 'bcryptjs';
 import { pool } from '../../db.js';
 import { signUpService } from '../../services/auth/sign_up.js';
 import * as errors from '../../errors/error_handler.js';
+import { createTableUserAgency } from '../../db/schema/generated/user_agency.up.js';
+
+beforeAll(async () => {
+    await createTableUserAgency();
+});
 
 afterEach(async () => {
     await pool.query("TRUNCATE TABLE user_agency RESTART IDENTITY;");
@@ -20,7 +25,7 @@ test("Happy case: should store user in the database successfully", async () => {
         phone: "1234567890"
     };
 
-    const _ = await signUpService(userData);
+    await signUpService(userData);
 
     const { rows } = await pool.query("SELECT * FROM user_agency WHERE email=$1", [userData.email]);
     expect(rows.length).toBe(1);
