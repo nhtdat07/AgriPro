@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS user_agency (
   "tax_code" varchar(20),
   "address" varchar(255),
   "email" varchar(50) UNIQUE NOT NULL,
-  "password_hash" char(64) NOT NULL
+  "password_hash" char(60) NOT NULL
 );
 
 CREATE OR REPLACE FUNCTION set_custom_user_agency_id()
@@ -26,4 +26,4 @@ EXECUTE FUNCTION set_custom_user_agency_id();
 
 CREATE UNIQUE INDEX IF NOT EXISTS user_agency_email_idx ON user_agency ("email");
 
-COMMENT ON COLUMN user_agency."password_hash" IS 'SHA-256 hexadecimal hash string of password';
+COMMENT ON COLUMN user_agency."password_hash" IS 'Eksblowfish hash string of password';
