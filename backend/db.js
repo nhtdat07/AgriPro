@@ -39,7 +39,6 @@ import { createTableSupplier } from './db/schema/generated/supplier.up.js';
 // Init schema
 const initSchema = async (pool) => {
     try {
-        await pool.query("BEGIN");
         await createTableUserAgency(pool);
         await createTableConfiguration(pool);
         await createTableCustomer(pool);
@@ -49,11 +48,8 @@ const initSchema = async (pool) => {
         await createTablePurchaseOrder(pool);
         await createTableSalesInvoice(pool);
         await createTableSupplier(pool);
-        await pool.query("LOCK TABLE user_agency IN ACCESS EXCLUSIVE MODE");
-        await pool.query("COMMIT");
         console.log('All tables initialized');
     } catch (err) {
-        await pool.query("ROLLBACK");
         console.error('Error initializing schema:', err);
     }
 };
