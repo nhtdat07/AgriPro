@@ -40,7 +40,6 @@ import { createTableSupplier } from './db/schema/generated/supplier.up.js';
 const initSchema = async (pool) => {
     try {
         await pool.query("BEGIN");
-        await pool.query("LOCK TABLE user_agency IN ACCESS EXCLUSIVE MODE");
         await createTableUserAgency(pool);
         await createTableConfiguration(pool);
         await createTableCustomer(pool);
@@ -50,6 +49,7 @@ const initSchema = async (pool) => {
         await createTablePurchaseOrder(pool);
         await createTableSalesInvoice(pool);
         await createTableSupplier(pool);
+        await pool.query("LOCK TABLE user_agency IN ACCESS EXCLUSIVE MODE");
         await pool.query("COMMIT");
         console.log('All tables initialized');
     } catch (err) {
