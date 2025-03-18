@@ -10,7 +10,6 @@ import jwt from 'jsonwebtoken';
 import { getUserByEmail } from '../../db/queries/generated/auth.js';
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
-import { pool } from '../../db.js';
 
 /**
  * Handles user sign-in logic.

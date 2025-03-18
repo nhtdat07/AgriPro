@@ -7,7 +7,23 @@ dotenv.config({ path: path.resolve(__dirname, './.env') });
 
 import pkg from 'pg';
 const { Pool } = pkg;
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+if (!globalThis.dbPool) {
+    globalThis.dbPool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+    globalThis.dbPool
+        .connect()
+        .then(async (client) => {
+            try {
+                console.log("Connected to the database");
+                await initSchema(client);
+            } finally {
+                client.release();
+            }
+        })
+        .catch((err) => console.error("Error during DB initialization:", err));
+}
+
+export const pool = globalThis.dbPool;
 
 // Functions for creating tables
 import { createTableUserAgency } from './db/schema/generated/user_agency.up.js';
@@ -21,9 +37,8 @@ import { createTableSalesInvoice } from './db/schema/generated/sales_invoice.up.
 import { createTableSupplier } from './db/schema/generated/supplier.up.js';
 
 // Init schema
-const initSchema = async () => {
+const initSchema = async (pool) => {
     try {
-        await pool.query("BEGIN");
         await createTableUserAgency(pool);
         await createTableConfiguration(pool);
         await createTableCustomer(pool);
@@ -33,17 +48,8 @@ const initSchema = async () => {
         await createTablePurchaseOrder(pool);
         await createTableSalesInvoice(pool);
         await createTableSupplier(pool);
-        await pool.query("LOCK TABLE user_agency IN ACCESS EXCLUSIVE MODE");
-        await pool.query("COMMIT");
         console.log('All tables initialized');
     } catch (err) {
-        await pool.query("ROLLBACK");
         console.error('Error initializing schema:', err);
     }
 };
-
-// Connect to DB
-pool.on('connect', async () => {
-    console.log('Connected to the database');
-    await initSchema();
-});
