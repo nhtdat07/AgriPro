@@ -32,7 +32,7 @@ afterAll(async () => {
     await dbTest.teardownTestDb(pool);
 });
 
-test("Happy case: should store user in the database successfully", async () => {
+test("Happy case: should return JWT token when signing in successfully", async () => {
     const userData = {
         email: "test1@example.com",
         password: "@SecurePass123"
