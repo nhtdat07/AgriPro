@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --passWithNoTests",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --passWithNoTests --testTimeout=30000",
     "db-gen": "node ./db/db_gen.js",
     "start": "node index.js"
   },
@@ -15,6 +15,7 @@
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1"
   },
   "devDependencies": {

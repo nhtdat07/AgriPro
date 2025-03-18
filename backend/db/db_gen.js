@@ -18,18 +18,7 @@ function generateQueryFiles(sqlFilePath, outputDir) {
 
     // Split queries based on `-- name: functionName`
     const queryBlocks = sqlContent.split(/-- name:\s*(\w+)/).slice(1);
-    let functionCode = `import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
-
-import pkg from 'pg';
-const { Pool } = pkg;
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
-`;
+    let functionCode = ``;
 
     for (let i = 0; i < queryBlocks.length; i += 2) {
         const functionName = queryBlocks[i].trim();
@@ -40,7 +29,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
  */
-export async function ${functionName}(params = {}) {
+export async function ${functionName}(pool, params = {}) {
     try {
         const query = \`${sqlQuery}\`;
         const { rows } = await pool.query(query, Object.values(params));

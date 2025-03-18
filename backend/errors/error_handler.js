@@ -7,6 +7,13 @@ export class ValidationError extends Error {
     }
 }
 
+export class UnauthorizedError extends Error {
+    constructor(message) {
+        super(message);
+        this.statusCode = consts.HTTP_STATUS.UNAUTHORIZED;
+    }
+}
+
 export class ConflictError extends Error {
     constructor(message) {
         super(message);

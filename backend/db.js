@@ -23,18 +23,18 @@ import { createTableSupplier } from './db/schema/generated/supplier.up.js';
 // Init schema
 const initSchema = async () => {
     try {
-        await createTableUserAgency();
-        await createTableConfiguration();
-        await createTableCustomer();
-        await createTableInventoryProduct();
-        await createTableNotification();
-        await createTableProduct();
-        await createTablePurchaseOrder();
-        await createTableSalesInvoice();
-        await createTableSupplier();
-        // console.log('All tables initialized');
+        await createTableUserAgency(pool);
+        await createTableConfiguration(pool);
+        await createTableCustomer(pool);
+        await createTableInventoryProduct(pool);
+        await createTableNotification(pool);
+        await createTableProduct(pool);
+        await createTablePurchaseOrder(pool);
+        await createTableSalesInvoice(pool);
+        await createTableSupplier(pool);
+        console.log('All tables initialized');
     } catch (err) {
-        // console.error('Error initializing schema:', err);
+        console.error('Error initializing schema:', err);
     }
 };
 

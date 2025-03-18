@@ -22,3 +22,18 @@ export const validateSignUpData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate sign-in request data.
+export const validateSignInData = (req, res, next) => {
+    const { email, password } = req.body;
+
+    if (!email) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing email' });
+    }
+
+    if (!password) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing password' });
+    }
+
+    next();
+}; 

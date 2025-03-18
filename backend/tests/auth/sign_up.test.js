@@ -1,11 +1,14 @@
 import bcrypt from 'bcryptjs';
-import { pool } from '../../db.js';
 import { signUpService } from '../../services/auth/sign_up.js';
 import * as errors from '../../errors/error_handler.js';
 import { createTableUserAgency } from '../../db/schema/generated/user_agency.up.js';
+import * as dbTest from '../test_util.js';
+
+let pool;
 
 beforeAll(async () => {
-    await createTableUserAgency();
+    pool = await dbTest.setupTestDb();
+    await createTableUserAgency(pool);
 });
 
 afterEach(async () => {
@@ -13,7 +16,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-    await pool.end();
+    await dbTest.teardownTestDb(pool);
 });
 
 test("Happy case: should store user in the database successfully", async () => {
@@ -25,7 +28,7 @@ test("Happy case: should store user in the database successfully", async () => {
         phone: "1234567890"
     };
 
-    await signUpService(userData);
+    await signUpService(pool, userData);
 
     const { rows } = await pool.query("SELECT * FROM user_agency WHERE email=$1", [userData.email]);
     expect(rows.length).toBe(1);
@@ -46,7 +49,7 @@ test("Bad case: email not in correct format", async () => {
         phone: "1234567890"
     };
 
-    const { error } = await signUpService(userData);
+    const { error } = await signUpService(pool, userData);
 
     expect(error).toBeInstanceOf(errors.ValidationError);
     expect(error.message).toBe('Invalid email format');
@@ -61,7 +64,7 @@ test("Bad case: weak password", async () => {
         phone: "1234567890"
     };
 
-    const { error } = await signUpService(userData);
+    const { error } = await signUpService(pool, userData);
 
     expect(error).toBeInstanceOf(errors.ValidationError);
     expect(error.message).toBe('Weak password: must be at least 8 characters, contain uppercase, lowercase, number, and special character');
@@ -69,7 +72,7 @@ test("Bad case: weak password", async () => {
 
 test("Bad case: email has existed", async () => {
     try {
-        const _ = await pool.query(
+        await pool.query(
             `INSERT INTO user_agency (email, password_hash) VALUES ('test@example.com', '123');`
         );
     } catch (error) {
@@ -85,7 +88,7 @@ test("Bad case: email has existed", async () => {
         phone: "1234567890"
     };
 
-    const { error } = await signUpService(userData);
+    const { error } = await signUpService(pool, userData);
     expect(error).toBeInstanceOf(errors.ConflictError);
     expect(error.message).toBe('Email already exists');
 });
