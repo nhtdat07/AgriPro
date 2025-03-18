@@ -1,5 +1,5 @@
 -- name: getUserByEmail
-SELECT * FROM users WHERE email = $1;
+SELECT * FROM user_agency WHERE email = $1;
 
 -- name: addUser
 INSERT INTO user_agency (agency_name, owner_name, email, phone, password_hash) 

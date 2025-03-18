@@ -7,7 +7,7 @@ const startServer = async () => {
     try {
         // Check if the database is connected
         await pool.query('SELECT NOW()');
-        console.log('Connected to the database');
+        // console.log('Connected to the database');
 
         // Start the server after DB is ready
         app.listen(consts.SERVER_PORT, () => {

@@ -9,7 +9,7 @@ import * as passwordUtils from '../../utils/password.js';
  * @param {Object} userData - The user details from the request body.
  * @returns {Object} - Success message or error.
  */
-export const signUpService = async (userData) => {
+export const signUpService = async (pool, userData) => {
     const { agencyName, ownerName, email, phone, password } = userData;
 
     try {
@@ -31,7 +31,7 @@ export const signUpService = async (userData) => {
         const hashedPassword = await bcrypt.hash(password, consts.PASSWORD_SALT);
 
         // Store the new user in the database
-        const result = await addUser({
+        const result = await addUser(pool, {
             agencyName, ownerName, email,
             phone: phone || consts.EMPTY_STRING,
             password_hash: hashedPassword

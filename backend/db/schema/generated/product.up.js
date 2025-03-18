@@ -1,20 +1,9 @@
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
-
-import pkg from 'pg';
-const { Pool } = pkg;
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
 /**
  * Executes the 'createTableProduct' query.
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
  */
-export async function createTableProduct(params = {}) {
+export async function createTableProduct(pool, params = {}) {
     try {
         const query = `DO $$ 
 BEGIN
