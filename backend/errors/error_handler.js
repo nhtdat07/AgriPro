@@ -14,6 +14,13 @@ export class UnauthorizedError extends Error {
     }
 }
 
+export class UndefinedError extends Error {
+    constructor(message) {
+        super(message);
+        this.statusCode = consts.HTTP_STATUS.NOT_FOUND;
+    }
+}
+
 export class ConflictError extends Error {
     constructor(message) {
         super(message);

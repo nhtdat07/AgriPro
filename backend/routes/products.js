@@ -7,3 +7,10 @@ export const router = express.Router();
 
 // POST /products
 router.post('/', authenticateUser, productMiddlewares.validateAddProductData, productControllers.addProductController);
+
+// GET /products/{productId}
+router.get('/:productId',
+    authenticateUser,
+    productMiddlewares.validateGetProductDetailsData,
+    productControllers.getProductDetailsController
+);
