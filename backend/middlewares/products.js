@@ -34,3 +34,14 @@ export const validateAddProductData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate GetProductDetails request data.
+export const validateGetProductDetailsData = (req, res, next) => {
+    const { productId } = req.params;
+
+    if (!productId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing product ID' });
+    }
+
+    next();
+};

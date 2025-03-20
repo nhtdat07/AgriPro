@@ -8,6 +8,7 @@ export const HTTP_STATUS = {
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     FORBIDDEN: 403,
+    NOT_FOUND: 404,
     CONFLICT: 409,
     INTERNAL_SERVER_ERROR: 500
 };
@@ -41,6 +42,7 @@ export const SPACE = ' ';
 export const FIRST_IDX_ARRAY = 0;
 export const SECOND_IDX_ARRAY = 1;
 export const DEFAULT_TOKEN_EXPIRED_TIME = '20h';
+export const DECIMAL_BASE = 10;
 
 // Product types
 export const PRODUCT_TYPES = [

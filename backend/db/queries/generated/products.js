@@ -16,3 +16,35 @@ RETURNING *;`;
     }
 }
 
+/**
+ * Executes the 'getProductById' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getProductById(pool, params = {}) {
+    try {
+        const query = `SELECT * FROM product WHERE agency_id = $1 AND id = $2;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        console.error('Error executing getProductById:', error);
+        throw error;
+    }
+}
+
+/**
+ * Executes the 'getProductQuantityInInventory' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getProductQuantityInInventory(pool, params = {}) {
+    try {
+        const query = `SELECT SUM(quantity) AS total_quantity FROM inventory_product WHERE agency_id = $1 AND product_id = $2;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        console.error('Error executing getProductQuantityInInventory:', error);
+        throw error;
+    }
+}
+
