@@ -60,3 +60,14 @@ export const validateEditProductDetailsData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate DeleteProduct request data.
+export const validateDeleteProductData = (req, res, next) => {
+    const { productId } = req.params;
+
+    if (!productId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing product ID' });
+    }
+
+    next();
+};

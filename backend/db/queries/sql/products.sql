@@ -22,3 +22,9 @@ SET
     image_path = CASE WHEN $8::VARCHAR IS NOT NULL THEN $8 ELSE image_path::VARCHAR END
 WHERE agency_id = $9 AND id = $10 AND is_deleted = false
 RETURNING *;
+
+-- name: markProductAsDeleted
+UPDATE product
+SET is_deleted = true
+WHERE agency_id = $1 AND id = $2 AND is_deleted = false
+RETURNING *;

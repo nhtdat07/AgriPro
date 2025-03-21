@@ -4,6 +4,7 @@ import { pool } from '../db.js';
 import { addProductService } from '../services/products/add_product.js';
 import { getProductDetailsService } from '../services/products/get_product_details.js';
 import { editProductDetailsService } from '../services/products/edit_product_details.js';
+import { deleteProductService } from '../services/products/delete_product.js';
 
 // Controller for handling user AddProduct requests
 export const addProductController = async (req, res) => {
@@ -52,6 +53,22 @@ export const editProductDetailsController = async (req, res) => {
         }
     } catch (error) {
         console.error('EditProductDetails error:', error);
+        res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
+};
+
+// Controller for handling user DeleteProduct requests
+export const deleteProductController = async (req, res) => {
+    try {
+        const result = await deleteProductService(pool, req.user, req.params);
+
+        if (result.error) {
+            errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.OK).json({ message: result.message });
+        }
+    } catch (error) {
+        console.error('DeleteProduct error:', error);
         res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
     }
 };
