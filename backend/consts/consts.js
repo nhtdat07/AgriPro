@@ -43,6 +43,12 @@ export const FIRST_IDX_ARRAY = 0;
 export const SECOND_IDX_ARRAY = 1;
 export const DEFAULT_TOKEN_EXPIRED_TIME = '20h';
 export const DECIMAL_BASE = 10;
+export const PATTERN_LIKE_SIGN = '%';
+
+export const MIN_LIMIT = 1;
+export const DEFAULT_LIMIT = 20;
+export const MIN_OFFSET = 0;
+export const DEFAULT_OFFSET = 0;
 
 export const DEFAULT_PRODUCT_QUANTITY = 0;
 

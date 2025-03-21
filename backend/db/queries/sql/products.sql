@@ -1,3 +1,12 @@
+-- name: getProducts
+SELECT * FROM product
+WHERE agency_id = $1 AND is_deleted = false
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN id = $2::VARCHAR ELSE true END
+    AND CASE WHEN $3::product_type IS NOT NULL THEN category = $3::product_type ELSE true END
+    AND CASE WHEN $4::VARCHAR IS NOT NULL THEN usages ILIKE $4::VARCHAR ELSE true END
+ORDER BY id
+LIMIT $5 OFFSET $6;
+
 -- name: addProduct
 INSERT INTO product (agency_id, name, brand, category, out_price, production_place, usages, guidelines, image_path)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
