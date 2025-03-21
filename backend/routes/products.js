@@ -21,3 +21,10 @@ router.patch('/:productId',
     productMiddlewares.validateEditProductDetailsData,
     productControllers.editProductDetailsController
 );
+
+// DELETE /products/{productId}
+router.delete('/:productId',
+    authenticateUser,
+    productMiddlewares.validateDeleteProductData,
+    productControllers.deleteProductController
+);
