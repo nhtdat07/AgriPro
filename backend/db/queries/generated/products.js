@@ -1,4 +1,25 @@
 /**
+ * Executes the 'getProducts' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getProducts(pool, params = {}) {
+    try {
+        const query = `SELECT * FROM product
+WHERE agency_id = $1 AND is_deleted = false
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN id = $2::VARCHAR ELSE true END
+    AND CASE WHEN $3::product_type IS NOT NULL THEN category = $3::product_type ELSE true END
+    AND CASE WHEN $4::VARCHAR IS NOT NULL THEN usages ILIKE $4::VARCHAR ELSE true END
+ORDER BY id
+LIMIT $5 OFFSET $6;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
  * Executes the 'addProduct' query.
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.

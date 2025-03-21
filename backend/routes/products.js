@@ -5,6 +5,9 @@ import * as productControllers from '../controllers/products.js';
 
 export const router = express.Router();
 
+// GET /products
+router.get('/', authenticateUser, productMiddlewares.validateGetListProductsData, productControllers.getListProductsController);
+
 // POST /products
 router.post('/', authenticateUser, productMiddlewares.validateAddProductData, productControllers.addProductController);
 
