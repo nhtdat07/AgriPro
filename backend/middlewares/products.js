@@ -45,3 +45,18 @@ export const validateGetProductDetailsData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate EditProductDetails request data.
+export const validateEditProductDetailsData = (req, res, next) => {
+    const { productId } = req.params;
+
+    if (!productId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing product ID' });
+    }
+
+    if (!req.body || Object.keys(req.body).length === consts.ZERO_LENGTH) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: "At least one field must be provided for update" });
+    }
+
+    next();
+};
