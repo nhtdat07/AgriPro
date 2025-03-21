@@ -14,3 +14,10 @@ router.get('/:productId',
     productMiddlewares.validateGetProductDetailsData,
     productControllers.getProductDetailsController
 );
+
+// PATCH /products/{productId}
+router.patch('/:productId',
+    authenticateUser,
+    productMiddlewares.validateEditProductDetailsData,
+    productControllers.editProductDetailsController
+);
