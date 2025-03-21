@@ -11,7 +11,6 @@ RETURNING *;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing addProduct:', error);
         throw error;
     }
 }
@@ -27,7 +26,6 @@ export async function getProductById(pool, params = {}) {
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing getProductById:', error);
         throw error;
     }
 }
@@ -43,7 +41,6 @@ export async function getProductQuantityInInventory(pool, params = {}) {
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing getProductQuantityInInventory:', error);
         throw error;
     }
 }

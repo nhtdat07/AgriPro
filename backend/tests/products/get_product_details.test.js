@@ -25,7 +25,12 @@ beforeAll(async () => {
                     17000, 'Công ty TNHH Ngân Anh', 
                     'Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào.',
                     'Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày.',
-                    true);
+                    true),
+                ('UA0001', 'Thuốc trừ rệp sáp CONFIDOR 200SL', '/products/PR0003', 'CONFIDOR', 'HẠT GIỐNG - CÂY TRỒNG',
+                    17000, 'Công ty TNHH Ngân Anh', 
+                    'Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào.',
+                    'Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày.',
+                    false);
         `);
         await pool.query(`
             INSERT INTO inventory_product (agency_id, product_id, quantity, imported_timestamp, in_price) 
@@ -69,9 +74,33 @@ test("Happy case: should return product details successfully", async () => {
     expect(result).toEqual(expectedResponse);
 });
 
-test("Bad case: product ID not found", async () => {
+test("Happy case: should return product details successfully when it has not been imported", async () => {
     const user = { userAgencyId: 'UA0001' };
     const params = { productId: 'PR0003' };
+
+    const expectedResponse = {
+        message: 'Get product details successfully',
+        data: {
+            productId: 'PR0003',
+            productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
+            brand: 'CONFIDOR',
+            category: 'HẠT GIỐNG - CÂY TRỒNG',
+            productionPlace: 'Công ty TNHH Ngân Anh',
+            outPrice: 17000,
+            usage: 'Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào.',
+            guideline: 'Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày.',
+            imagePath: '/products/PR0003',
+            availableQuantity: 0
+        }
+    };
+
+    const result = await getProductDetailsService(pool, user, params);
+    expect(result).toEqual(expectedResponse);
+});
+
+test("Bad case: product ID not found", async () => {
+    const user = { userAgencyId: 'UA0001' };
+    const params = { productId: 'PR0004' };
 
     const { error } = await getProductDetailsService(pool, user, params);
 

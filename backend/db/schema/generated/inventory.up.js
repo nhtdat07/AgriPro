@@ -17,7 +17,6 @@ export async function createTableInventoryProduct(pool, params = {}) {
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing createTableInventoryProduct:', error);
         throw error;
     }
 }

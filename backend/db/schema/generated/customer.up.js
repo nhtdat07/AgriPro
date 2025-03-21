@@ -30,7 +30,6 @@ EXECUTE FUNCTION set_custom_customer_id();`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing createTableCustomer:', error);
         throw error;
     }
 }

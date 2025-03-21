@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS configuration (
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing createTableConfiguration:', error);
         throw error;
     }
 }

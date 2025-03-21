@@ -9,7 +9,6 @@ export async function getUserByEmail(pool, params = {}) {
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing getUserByEmail:', error);
         throw error;
     }
 }
@@ -27,7 +26,6 @@ RETURNING *;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing addUser:', error);
         throw error;
     }
 }
