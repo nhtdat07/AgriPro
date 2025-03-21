@@ -35,7 +35,6 @@ export async function ${functionName}(pool, params = {}) {
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing ${functionName}:', error);
         throw error;
     }
 }

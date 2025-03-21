@@ -24,18 +24,16 @@ export const getProductDetailsService = async (pool, user, params) => {
         const productDetails = result[consts.FIRST_IDX_ARRAY];
 
         // Get product quantity in inventory
+        let quantity = consts.DEFAULT_PRODUCT_QUANTITY;
         result = await getProductQuantityInInventory(pool, {
             agency_id: user.userAgencyId,
             id: params.productId
         });
-        if (!result || result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.InternalError('Failed to get product quantity from the database') };
-        }
-
-        // Convert quantity to int
-        const quantity = parseInt(result[consts.FIRST_IDX_ARRAY].total_quantity, consts.DECIMAL_BASE);
-        if (isNaN(quantity)) {
-            return { error: new errors.InternalError('Failed to convert quantity to int') };
+        if (result && result.length != consts.ZERO_LENGTH && result[consts.FIRST_IDX_ARRAY].total_quantity) {
+            quantity = parseInt(result[consts.FIRST_IDX_ARRAY].total_quantity, consts.DECIMAL_BASE);
+            if (isNaN(quantity)) {
+                return { error: new errors.InternalError('Failed to convert quantity to int') };
+            }
         }
 
         return {

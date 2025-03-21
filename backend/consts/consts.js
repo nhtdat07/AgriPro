@@ -44,6 +44,8 @@ export const SECOND_IDX_ARRAY = 1;
 export const DEFAULT_TOKEN_EXPIRED_TIME = '20h';
 export const DECIMAL_BASE = 10;
 
+export const DEFAULT_PRODUCT_QUANTITY = 0;
+
 // Product types
 export const PRODUCT_TYPES = [
     'HẠT GIỐNG - CÂY TRỒNG',

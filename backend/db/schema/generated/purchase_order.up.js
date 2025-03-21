@@ -37,7 +37,6 @@ EXECUTE FUNCTION set_custom_purchase_order_id();`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing createTablePurchaseOrder:', error);
         throw error;
     }
 }

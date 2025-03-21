@@ -37,7 +37,6 @@ EXECUTE FUNCTION set_custom_sales_invoice_id();`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing createTableSalesInvoice:', error);
         throw error;
     }
 }

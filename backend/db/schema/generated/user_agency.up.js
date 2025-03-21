@@ -36,7 +36,6 @@ COMMENT ON COLUMN user_agency."password_hash" IS 'Eksblowfish hash string of pas
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
-        console.error('Error executing createTableUserAgency:', error);
         throw error;
     }
 }
