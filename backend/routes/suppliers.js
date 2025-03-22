@@ -7,3 +7,8 @@ export const router = express.Router();
 
 // POST /suppliers
 router.post('/', authenticateUser, supplierMiddlewares.validateAddSupplierData, supplierControllers.addSupplierController);
+
+// DELETE /suppliers/{supplierId}
+router.delete('/:supplierId',
+    authenticateUser, supplierMiddlewares.validateDeleteSupplierData, supplierControllers.deleteSupplierController
+);
