@@ -20,6 +20,7 @@ export const TOKEN_PREFIX = 'Bearer ';
 // Regex
 export const REGEX = {
     EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    PHONE: /^0\d{9}$/,
     UPPERCASE: /[A-Z]/,
     LOWERCASE: /[a-z]/,
     DIGIT: /\d/,
