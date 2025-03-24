@@ -4,6 +4,7 @@ import { pool } from '../db.js';
 import { addSupplierService } from '../services/suppliers/add_supplier.js';
 import { deleteSupplierService } from '../services/suppliers/delete_supplier.js';
 import { getSupplierDetailsService } from '../services/suppliers/get_supplier_details.js';
+import { editSupplierDetailsService } from '../services/suppliers/edit_supplier_details.js';
 
 // Controller for handling user AddSupplier requests
 export const addSupplierController = async (req, res) => {
@@ -36,6 +37,22 @@ export const getSupplierDetailsController = async (req, res) => {
         }
     } catch (error) {
         console.error('GetSupplierDetails error:', error);
+        res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
+};
+
+// Controller for handling user EditSupplierDetails requests
+export const editSupplierDetailsController = async (req, res) => {
+    try {
+        const result = await editSupplierDetailsService(pool, req.user, req.params, req.body);
+
+        if (result.error) {
+            errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.OK).json({ message: result.message });
+        }
+    } catch (error) {
+        console.error('EditSupplierDetails error:', error);
         res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
     }
 };
