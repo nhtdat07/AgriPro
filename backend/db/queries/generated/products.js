@@ -43,7 +43,7 @@ RETURNING *;`;
  */
 export async function getProductById(pool, params = {}) {
     try {
-        const query = `SELECT * FROM product WHERE agency_id = $1 AND id = $2;`;
+        const query = `SELECT * FROM product WHERE agency_id = $1 AND id = $2 AND is_deleted = false;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {

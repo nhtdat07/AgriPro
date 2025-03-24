@@ -3,6 +3,9 @@ INSERT INTO supplier (agency_id, name, address, phone, email)
 VALUES ($1, $2, $3, $4, $5)
 RETURNING *;
 
+-- name: getSupplierById
+SELECT * FROM supplier WHERE agency_id = $1 AND id = $2 AND is_deleted = false;
+
 -- name: markSupplierAsDeleted
 UPDATE supplier
 SET is_deleted = true

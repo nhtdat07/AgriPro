@@ -8,6 +8,11 @@ export const router = express.Router();
 // POST /suppliers
 router.post('/', authenticateUser, supplierMiddlewares.validateAddSupplierData, supplierControllers.addSupplierController);
 
+// GET /suppliers/{supplierId}
+router.get('/:supplierId',
+    authenticateUser, supplierMiddlewares.validateGetSupplierDetailsData, supplierControllers.getSupplierDetailsController
+);
+
 // DELETE /suppliers/{supplierId}
 router.delete('/:supplierId',
     authenticateUser, supplierMiddlewares.validateDeleteSupplierData, supplierControllers.deleteSupplierController
