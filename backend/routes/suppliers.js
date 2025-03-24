@@ -13,6 +13,11 @@ router.get('/:supplierId',
     authenticateUser, supplierMiddlewares.validateGetSupplierDetailsData, supplierControllers.getSupplierDetailsController
 );
 
+// PATCH /suppliers/{supplierId}
+router.patch('/:supplierId',
+    authenticateUser, supplierMiddlewares.validateEditSupplierDetailsData, supplierControllers.editSupplierDetailsController
+);
+
 // DELETE /suppliers/{supplierId}
 router.delete('/:supplierId',
     authenticateUser, supplierMiddlewares.validateDeleteSupplierData, supplierControllers.deleteSupplierController
