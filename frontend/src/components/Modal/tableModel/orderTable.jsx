@@ -1,7 +1,7 @@
 import React from "react";
 import Datatables from "../../Datatables/Table";
 import TableCell from "../../Datatables/TableCell";
-import ModifyPurchase from "../modifyModel/modifyPurchase";
+import ViewPurchase from "../detailModel/detailOrder";
 
 function PurchaseTable({ loading, dataHeader, data, handleDelete }) {
   return (
@@ -24,7 +24,7 @@ function PurchaseTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.supplier}</p>
           </TableCell>
           <TableCell>
-            <ModifyPurchase name={row.name} email={row.email} stu_id={row.stu_id}/>
+            <ViewPurchase code={row.code} timestamp={row.timestamp} supplier={row.supplier}/>
           </TableCell>
         </tr>
       ))}

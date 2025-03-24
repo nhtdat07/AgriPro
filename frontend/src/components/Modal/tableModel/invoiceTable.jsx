@@ -1,7 +1,7 @@
 import React from "react";
 import Datatables from "../../Datatables/Table";
 import TableCell from "../../Datatables/TableCell";
-import ModifyInvoice from "../modifyModel/modifyInvoice";
+import ViewInvoice from "../detailModel/detailInvoice";
 
 function InvoiceTable({ loading, dataHeader, data, handleDelete }) {
   return (
@@ -24,7 +24,7 @@ function InvoiceTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.customer}</p>
           </TableCell>
           <TableCell>
-            <ModifyInvoice name={row.name} email={row.email} stu_id={row.stu_id}/>
+            <ViewInvoice code={row.code} timestamp={row.timestamp} customer={row.customer}/>
           </TableCell>
         </tr>
       ))}

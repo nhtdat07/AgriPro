@@ -5,16 +5,21 @@ import plus from "../../../assets/images/plus.png";
 
 export default function AddIvoice() {
     const [showModal, setShowModal] = useState(false);
-    const [products, setProducts] = useState([{ id: 1, name: "", expiry: "", quantity:"", price:"", total:"" }]);
+    const [showSaveModal, setShowSaveModal] = useState(false);
+    const [products, setProducts] = useState([{ id: 1, name: "", quantity:"", price:"", total:"" }]);
 
     const codeData = { code: "BH0000000346" };
 
     const addProduct = () => {
-        setProducts([...products, { id: products.length + 1, name: "", expiry: "", quantity:"", price:"", total:"" }]);
+        setProducts([...products, { id: products.length + 1, name: "", quantity:"", price:"", total:"" }]);
     };
 
     const removeProduct = (id) => {
         setProducts(products.filter(product => product.id !== id));
+    };
+
+    const resetForm = () => {
+        setProducts([{ id: 1, name: "", quantity: "", price: "", total: "" }]);
     };
 
     const handleInputChange = (id, field, value) => {
@@ -34,10 +39,10 @@ export default function AddIvoice() {
                     <span>THÊM HÓA ĐƠN</span>
                 </button>
             </div>
-            {showModal ? (
+            {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-lg shadow-md w-[1200px] p-6">
-                        <h3 className="text-2xl font-semibold text-center">Thêm đơn nhập hàng mới</h3>
+                    <div className="bg-white rounded-lg shadow-md w-[1200px] max-h-[650px] overflow-y-auto p-6">
+                        <h3 className="text-2xl font-semibold text-center">Thêm hóa đơn mới</h3>
                         <div className="flex gap-4">
                             <div className="w-1/4">
                                 <label className="p-2 block text-sm font-medium text-gray-700">Mã số</label>
@@ -110,12 +115,26 @@ export default function AddIvoice() {
                         </div>
                         <div className="text-lg font-semibold text-right p-2 mt-5">TỔNG CỘNG: {totalAmount.toLocaleString()}</div>
                         <div className="flex justify-center gap-4 p-4">
-                            <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700" onClick={() => setShowModal(false)}>LƯU</button>
-                            <button className="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500" onClick={() => setShowModal(false)}>THOÁT</button>
+                            <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowSaveModal(true)}>LƯU</button>
+                            <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowModal(false)}>THOÁT</button>
                         </div>
                     </div>
                 </div>
-            ) : null}
+            )}
+            {showSaveModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-md w-[500px] p-6">
+                        <h3 className="text-2xl font-semibold text-center">Lưu ý</h3>
+                        <p className="my-4 text-gray-700 text-lg leading-relaxed text-center">
+                            Bạn có muốn lưu lại thông tin về hóa đơn này?
+                        </p>
+                        <div className="flex justify-center gap-4 p-4">
+                            <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => { setShowSaveModal(false); setShowModal(false); resetForm(); }}>XÁC NHẬN</button>
+                            <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowSaveModal(false)}>TRỞ LẠI</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

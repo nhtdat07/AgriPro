@@ -51,7 +51,7 @@ function Homepage() {
                   <p className="p-2">{block.title}</p>
                   <button 
                     onClick={() => navigate(block.link)}
-                    className="mt-2 bg-[#2c9e4b] w-30 h-10 px-4 py-2 rounded text-white font-semibold"
+                    className="mt-2 bg-[#2c9e4b] w-30 h-10 px-4 py-2 rounded-lg text-white font-semibold"
                   >
                     XEM NGAY
                   </button>

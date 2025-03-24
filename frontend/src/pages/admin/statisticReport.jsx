@@ -6,6 +6,8 @@ import { useOutletContext } from "react-router-dom";
 import BestSellTable from "../../components/Modal/tableModel/bestSellTable";
 import TopCustomerTable from "../../components/Modal/tableModel/topCustomerTable";
 
+import AddReport from "../../components/Modal/addModel/addReport";
+
 import moneyIcon from "../../assets/images/money.svg";
 import purchaseIcon from "../../assets/images/purchase_order.svg";
 import salesIcon from "../../assets/images/sales_invoice.svg";
@@ -121,7 +123,7 @@ function StatisticReport() {
               <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
               <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
               <button className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg min-w-[50px]">ÁP DỤNG</button>
-              <button className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg ml-auto min-w-[50px]">XUẤT BÁO CÁO</button>
+              <AddReport/>
             </div>
     
             <div className="grid grid-cols-3 gap-4 mb-6">

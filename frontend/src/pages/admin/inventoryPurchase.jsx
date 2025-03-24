@@ -4,7 +4,7 @@ import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
 
 import InventoryTable from "../../components/Modal/tableModel/inventoryTable";
-import PurchaseTable from "../../components/Modal/tableModel/purchaseTable";
+import PurchaseTable from "../../components/Modal/tableModel/orderTable";
 import ProductTable from "../../components/Modal/tableModel/productTable";
 import SupplierTable from "../../components/Modal/tableModel/supplierTable";
 import AddOrder from "../../components/Modal/addModel/addOrder";

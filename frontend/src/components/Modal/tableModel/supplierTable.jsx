@@ -1,7 +1,7 @@
 import React from "react";
 import Datatables from "../../Datatables/Table";
 import TableCell from "../../Datatables/TableCell";
-import ModifySupplier from "../modifyModel/modifySupplier";
+import ViewSupplier from "../detailModel/detailSupplier";
 
 function SupplierTable({ loading, dataHeader, data, handleDelete }) {
   return (
@@ -27,7 +27,7 @@ function SupplierTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.email}</p>
           </TableCell>
           <TableCell>
-            <ModifySupplier name={row.name} email={row.email} stu_id={row.stu_id}/>
+            <ViewSupplier name={row.name} address={row.address} phone={row.phone} email={row.email}/>
           </TableCell>
         </tr>
       ))}
