@@ -2,6 +2,7 @@ import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
 import { getProducts } from '../../db/queries/generated/products.js';
 import { getNextPagination } from '../../utils/pagination.js';
+import { transformToPatternQueryLike } from '../../utils/format.js';
 
 /**
  * Handles GetListProducts logic.
@@ -18,9 +19,7 @@ export const getListProductsService = async (pool, user, query) => {
         }
 
         // Transform usage to pattern
-        if (usage) {
-            usage = consts.PATTERN_LIKE_SIGN + usage + consts.PATTERN_LIKE_SIGN
-        }
+        usage = transformToPatternQueryLike(usage);
 
         // Get list products from the database
         const result = await getProducts(pool, {

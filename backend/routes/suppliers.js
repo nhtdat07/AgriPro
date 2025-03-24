@@ -5,6 +5,9 @@ import * as supplierControllers from '../controllers/suppliers.js';
 
 export const router = express.Router();
 
+// GET /suppliers
+router.get('/', authenticateUser, supplierMiddlewares.validateGetListSuppliersData, supplierControllers.getListSuppliersController);
+
 // POST /suppliers
 router.post('/', authenticateUser, supplierMiddlewares.validateAddSupplierData, supplierControllers.addSupplierController);
 
