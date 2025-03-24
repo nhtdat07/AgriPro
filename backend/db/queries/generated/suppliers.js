@@ -16,6 +16,21 @@ RETURNING *;`;
 }
 
 /**
+ * Executes the 'getSupplierById' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getSupplierById(pool, params = {}) {
+    try {
+        const query = `SELECT * FROM supplier WHERE agency_id = $1 AND id = $2 AND is_deleted = false;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
  * Executes the 'markSupplierAsDeleted' query.
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.

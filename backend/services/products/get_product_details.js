@@ -18,7 +18,7 @@ export const getProductDetailsService = async (pool, user, params) => {
         if (!result) {
             return { error: new errors.InternalError('Failed to get product details from the database') };
         }
-        if (result.length == consts.ZERO_LENGTH || result[consts.FIRST_IDX_ARRAY].is_deleted) {
+        if (result.length == consts.ZERO_LENGTH) {
             return { error: new errors.UndefinedError('Product not found') };
         }
         const productDetails = result[consts.FIRST_IDX_ARRAY];

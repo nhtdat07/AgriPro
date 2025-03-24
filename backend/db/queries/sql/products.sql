@@ -13,7 +13,7 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 RETURNING *;
 
 -- name: getProductById
-SELECT * FROM product WHERE agency_id = $1 AND id = $2;
+SELECT * FROM product WHERE agency_id = $1 AND id = $2 AND is_deleted = false;
 
 -- name: getProductQuantityInInventory
 SELECT SUM(quantity) AS total_quantity FROM inventory_product WHERE agency_id = $1 AND product_id = $2;

@@ -26,6 +26,17 @@ export const validateAddSupplierData = (req, res, next) => {
     next();
 };
 
+// Middleware to validate GetSupplierDetails request data.
+export const validateGetSupplierDetailsData = (req, res, next) => {
+    const { supplierId } = req.params;
+
+    if (!supplierId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing supplier ID' });
+    }
+
+    next();
+};
+
 // Middleware to validate DeleteSupplier request data.
 export const validateDeleteSupplierData = (req, res, next) => {
     const { supplierId } = req.params;
