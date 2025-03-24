@@ -5,6 +5,26 @@ import { addSupplierService } from '../services/suppliers/add_supplier.js';
 import { deleteSupplierService } from '../services/suppliers/delete_supplier.js';
 import { getSupplierDetailsService } from '../services/suppliers/get_supplier_details.js';
 import { editSupplierDetailsService } from '../services/suppliers/edit_supplier_details.js';
+import { getListSuppliersService } from '../services/suppliers/get_list_suppliers.js';
+
+// Controller for handling user GetListSuppliers requests
+export const getListSuppliersController = async (req, res) => {
+    try {
+        const result = await getListSuppliersService(pool, req.user, req.query);
+
+        if (result.error) {
+            errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.OK).json({
+                message: result.message,
+                data: result.data
+            });
+        }
+    } catch (error) {
+        console.error('GetListSuppliers error:', error);
+        res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
+};
 
 // Controller for handling user AddSupplier requests
 export const addSupplierController = async (req, res) => {
