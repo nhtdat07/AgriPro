@@ -48,7 +48,7 @@ test("Happy case: should return customer details successfully", async () => {
 });
 
 
-test("Bad case: supplier ID not found", async () => {
+test("Bad case: customer ID not found", async () => {
     const user = { userAgencyId: 'UA0001' };
     const params = { customerId: 'CU0003' };
 
