@@ -8,7 +8,12 @@ export const router = express.Router();
 // POST /customers
 router.post('/', authenticateUser, customerMiddlewares.validateAddCustomerData, customerControllers.addCustomerController);
 
-// GET /suppliers/{customerId}
+// GET /customers/{customerId}
 router.get('/:customerId',
     authenticateUser, customerMiddlewares.validateGetCustomerDetailsData, customerControllers.getCustomerDetailsController
+);
+
+// PATCH /customers/{customerId}
+router.patch('/:customerId',
+    authenticateUser, customerMiddlewares.validateEditCustomerDetailsData, customerControllers.editCustomerDetailsController
 );
