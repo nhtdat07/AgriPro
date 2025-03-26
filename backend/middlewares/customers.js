@@ -60,3 +60,14 @@ export const validateEditCustomerDetailsData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate DeleteCustomer request data.
+export const validateDeleteCustomerData = (req, res, next) => {
+    const { customerId } = req.params;
+
+    if (!customerId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing customer ID' });
+    }
+
+    next();
+};
