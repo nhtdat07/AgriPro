@@ -5,6 +5,26 @@ import { addCustomerService } from '../services/customers/add_customer.js';
 import { getCustomerDetailsService } from '../services/customers/get_customer_details.js';
 import { editCustomerDetailsService } from '../services/customers/edit_customer_details.js';
 import { deleteCustomerService } from '../services/customers/delete_customer.js';
+import { getListCustomersService } from '../services/customers/get_list_customers.js';
+
+// Controller for handling user GetListCustomers requests
+export const getListCustomersController = async (req, res) => {
+    try {
+        const result = await getListCustomersService(pool, req.user, req.query);
+
+        if (result.error) {
+            errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.OK).json({
+                message: result.message,
+                data: result.data
+            });
+        }
+    } catch (error) {
+        console.error('GetListCustomers error:', error);
+        res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
+};
 
 // Controller for handling user AddCustomer requests
 export const addCustomerController = async (req, res) => {
