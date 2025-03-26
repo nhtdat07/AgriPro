@@ -5,6 +5,9 @@ import * as customerControllers from '../controllers/customers.js';
 
 export const router = express.Router();
 
+// GET /customers
+router.get('/', authenticateUser, customerMiddlewares.validateGetListCustomersData, customerControllers.getListCustomersController);
+
 // POST /customers
 router.post('/', authenticateUser, customerMiddlewares.validateAddCustomerData, customerControllers.addCustomerController);
 

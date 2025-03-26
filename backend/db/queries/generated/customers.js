@@ -1,4 +1,25 @@
 /**
+ * Executes the 'getCustomers' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getCustomers(pool, params = {}) {
+    try {
+        const query = `SELECT * FROM customer
+WHERE agency_id = $1 AND is_deleted = false
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN name ILIKE $2::VARCHAR ELSE true END
+    AND CASE WHEN $3::VARCHAR IS NOT NULL THEN address ILIKE $3::VARCHAR ELSE true END
+    AND CASE WHEN $4::VARCHAR IS NOT NULL THEN phone ILIKE $4::VARCHAR ELSE true END
+ORDER BY id
+LIMIT $5 OFFSET $6;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
  * Executes the 'addCustomer' query.
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
