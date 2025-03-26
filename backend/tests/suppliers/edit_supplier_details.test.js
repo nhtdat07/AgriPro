@@ -64,7 +64,7 @@ test("Bad case: supplier ID not found", async () => {
 
 test("Bad case: deleted supplier", async () => {
     const user = { userAgencyId: 'UA0001' };
-    const params = { productId: 'SU0002' };
+    const params = { supplierId: 'SU0002' };
     const data = { phoneNumber: '0124536798' };
 
     const { error } = await editSupplierDetailsService(pool, user, params, data);
