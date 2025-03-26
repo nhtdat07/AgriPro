@@ -15,3 +15,18 @@ RETURNING *;`;
     }
 }
 
+/**
+ * Executes the 'getCustomerById' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getCustomerById(pool, params = {}) {
+    try {
+        const query = `SELECT * FROM customer WHERE agency_id = $1 AND id = $2 AND is_deleted = false;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
