@@ -25,3 +25,14 @@ export const validateAddCustomerData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate GetCustomerDetails request data.
+export const validateGetCustomerDetailsData = (req, res, next) => {
+    const { customerId } = req.params;
+
+    if (!customerId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing customer ID' });
+    }
+
+    next();
+};

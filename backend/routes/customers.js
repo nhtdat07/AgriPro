@@ -7,3 +7,8 @@ export const router = express.Router();
 
 // POST /customers
 router.post('/', authenticateUser, customerMiddlewares.validateAddCustomerData, customerControllers.addCustomerController);
+
+// GET /suppliers/{customerId}
+router.get('/:customerId',
+    authenticateUser, customerMiddlewares.validateGetCustomerDetailsData, customerControllers.getCustomerDetailsController
+);

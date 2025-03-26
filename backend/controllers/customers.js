@@ -2,6 +2,7 @@ import * as consts from '../consts/consts.js';
 import { errorHandler } from '../errors/error_handler.js';
 import { pool } from '../db.js';
 import { addCustomerService } from '../services/customers/add_customer.js';
+import { getCustomerDetailsService } from '../services/customers/get_customer_details.js';
 
 // Controller for handling user AddCustomer requests
 export const addCustomerController = async (req, res) => {
@@ -15,6 +16,25 @@ export const addCustomerController = async (req, res) => {
         }
     } catch (error) {
         console.error('AddCustomer error:', error);
+        res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
+};
+
+// Controller for handling user GetCustomerDetails requests
+export const getCustomerDetailsController = async (req, res) => {
+    try {
+        const result = await getCustomerDetailsService(pool, req.user, req.params);
+
+        if (result.error) {
+            errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.OK).json({
+                message: result.message,
+                data: result.data
+            });
+        }
+    } catch (error) {
+        console.error('GetCustomerDetails error:', error);
         res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
     }
 };
