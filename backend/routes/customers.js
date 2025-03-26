@@ -17,3 +17,8 @@ router.get('/:customerId',
 router.patch('/:customerId',
     authenticateUser, customerMiddlewares.validateEditCustomerDetailsData, customerControllers.editCustomerDetailsController
 );
+
+// DELETE /customers/{customerId}
+router.delete('/:customerId',
+    authenticateUser, customerMiddlewares.validateDeleteCustomerData, customerControllers.deleteCustomerController
+);

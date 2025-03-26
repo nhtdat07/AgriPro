@@ -15,3 +15,9 @@ SET
     email = CASE WHEN $4::VARCHAR IS NOT NULL THEN $4 ELSE email::VARCHAR END
 WHERE agency_id = $5 AND id = $6 AND is_deleted = false
 RETURNING *;
+
+-- name: markCustomerAsDeleted
+UPDATE customer
+SET is_deleted = true
+WHERE agency_id = $1 AND id = $2 AND is_deleted = false
+RETURNING *;
