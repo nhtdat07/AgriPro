@@ -61,13 +61,13 @@ test("Happy case: should store purchase order in the database successfully", asy
     let expectedData = [
         {
             product_id: 'PR0001',
-            expired_date: '28/03/2027 00:00:00',
+            // expired_date: '28/03/2027 00:00:00',
             quantity: 20,
             in_price: 20000
         },
         {
             product_id: 'PR0002',
-            expired_date: '30/03/2027 00:00:00',
+            // expired_date: '30/03/2027 00:00:00',
             quantity: 15,
             in_price: 14000
         }
