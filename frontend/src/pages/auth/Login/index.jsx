@@ -1,149 +1,89 @@
-
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import log from '../../../assets/images/log.png';
+import background from '../../../assets/images/background.png';
 
-const LOGIN_URL = '/login';
-function LoginIndex() {
+const LoginIndex = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
-    email: '',
-    password: ''
-  })
+    email: "",
+    password: ""
+  });
 
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = data
-    if (email == 'admin' && password == '123'){
-      navigate("/homepage")
+    const { email, password } = data;
+    if (email === "admin@gmail.com" && password === "123") {
+      navigate("/homepage");
     }
   };
 
-  const LoginImage = log
+  const currentYear = new Date().getFullYear();
 
   return (
-    <>
-      <div className="flex min-h-screen">
-        <div className="flex w-full flex-col md:flex-row">
-          {/* Image */}
-          <div className="md:bg-emerald-500 md:min-h-screen flex flex-wrap md:w-1/2">
-            <div className="items-center text-center flex flex-col relative justify-center mx-auto">
-              <img
-                src={LoginImage}
-                alt="Logo Login"
-                className="md:w-288 w-192 mx-auto"
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${background})` }}
+    >
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+        <h3 className="text-2xl font-semibold text-center">Đăng nhập</h3>
+        <h3 className="text-sm font-medium text-center">Chào mừng bạn đã quay trở lại!</h3>
+        <form onSubmit={handleSubmit} className="p-2">
+          <div className="mb-4">
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <FontAwesomeIcon icon={faEnvelope} />
+              </span>
+              <input
+                type="email"
+                name="email"
+                value={data.email}
+                onChange={(e) => setData({ ...data, email: e.target.value })}
+                placeholder="Email"
+                required
+                className="w-full px-10 py-2 border rounded-lg"
               />
             </div>
           </div>
-          {/* Login Section */}
-          <div className="flex flex-col md:flex-1 items-center justify-center">
-            <div className="loginWrapper flex flex-col w-full lg:px-36 md:px-8 px-8 md:py-8">
-              {/* Login Header Text */}
-              <div className="hidden md:block font-black self-center text-xl sm:text-3xl text-gray-800">
-                AgriPro
-              </div>
 
-              {/* Sparator */}
-              <div className="hidden md:block relative mt-10 h-px bg-gray-300">
-                <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
-                  <span className="bg-white px-4 text-xs text-gray-500 uppercase">
-                    AGRIPRO
-                  </span>
-                </div>
-              </div>
-
-              <div className="md:hidden block my-4">
-                <h1 className="text-2xl font-semibold">Đăng nhập</h1>
-              </div>
-
-              {/* Login Form */}
-              <div className="md:mt-10 mt-4">
-                <form onSubmit={handleSubmit}>
-                  {/* Username */}
-                  <div className="flex flex-col mb-3">
-                    <div className="relative">
-                      <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-                        <FontAwesomeIcon icon={faEnvelope} />
-                      </div>
-
-                      <input
-                        id="email"
-                        type="text"
-                        name="email"
-                        value={data.email}
-                        onChange={e => setData({ ...data, email: e.target.value })}
-                        required
-                        className="text-sm placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full md:py-2 py-3 focus:outline-none focus:border-emerald-400"
-                        placeholder="Email"
-                      />
-                    </div>
-                    {error?.email && (
-                      <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                        {error.email[0]}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Password */}
-                  <div className="flex flex-col mb-6">
-                    <div className="relative">
-                      <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-                        <FontAwesomeIcon icon={faLock} />
-                      </div>
-
-                      <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        onChange={e => setData({ ...data, password: e.target.value })}
-                        required
-                        className="text-sm placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full md:py-2 py-3 focus:outline-none focus:border-emerald-400"
-                        placeholder="Mật khẩu"
-                      />
-                    </div>
-                    {error?.password && (
-                      <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                        {error.password[0]}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Button Login */}
-                  <div className="flex w-full">
-                    <button
-                      // disabled={loading}
-                      type="submit"
-                      className="flex items-center justify-center focus:outline-none text-white text-sm bg-emerald-500 hover:bg-emerald-700 rounded-lg md:rounded md:py-2 py-3 w-full transition duration-150 ease-in"
-                    >
-                      <span className="mr-2 md:uppercase">
-                        {loading ? "Processing...." : "Đăng nhập"}
-                      </span>
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              {/* Sparator */}
-              <div className="relative mt-6 h-px bg-gray-300">
-                <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
-                  <span className="bg-white px-4 text-xs text-gray-500 uppercase">
-                    TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐẠI HỌC QUỐC GIA TP.HCM
-                  </span>
-                </div>
-              </div>
+          <div className="mb-4">
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <FontAwesomeIcon icon={faLock} />
+              </span>
+              <input
+                type="password"
+                name="password"
+                value={data.password}
+                onChange={(e) => setData({ ...data, password: e.target.value })}
+                placeholder="Mật khẩu"
+                required
+                className="w-full px-10 py-2 border rounded-lg"
+              />
             </div>
           </div>
+
+          <button
+            type="submit"
+            className="w-full px-6 py-2 text-white bg-[#2c9e4b] hover:bg-[#0c5c30] rounded-lg focus:outline-none"
+          >
+            XÁC NHẬN
+          </button>
+        </form>
+
+        <div className="flex justify-between mt-4 text-sm text-gray-600">
+          <Link to="/register" className="hover:underline">Bạn chưa có tài khoản? Đăng ký</Link>
+          <Link to="/forgot-password" className="hover:underline">Quên mật khẩu</Link>
         </div>
+
+        <p className="mt-6 text-center text-xs text-gray-400">
+          © Bản quyền thuộc về AgriPro, {currentYear}.
+        </p>
       </div>
-    </>
+    </div>
   );
-}
+};
 
 export default LoginIndex;

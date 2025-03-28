@@ -122,7 +122,7 @@ function StatisticReport() {
             <div className="flex items-center gap-4 mb-4">
               <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
               <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
-              <button className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg min-w-[50px]">ÁP DỤNG</button>
+              <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg min-w-[50px]">ÁP DỤNG</button>
               <AddReport/>
             </div>
     

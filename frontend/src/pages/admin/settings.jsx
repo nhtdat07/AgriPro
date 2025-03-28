@@ -129,7 +129,7 @@ function Settings() {
                   <div className="flex gap-4 justify-center">
                     <button
                       onClick={handleChangePassword}
-                      className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg"
+                      className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg"
                     >
                       LƯU
                     </button>
@@ -176,7 +176,7 @@ function Settings() {
                     <div className="flex justify-center mt-6">
                       <button
                         onClick={() => setIsChangingPassword(true)}
-                        className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg"
+                        className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg"
                       >
                         ĐỔI MẬT KHẨU
                       </button>
@@ -249,7 +249,7 @@ function Settings() {
                   <div className="flex gap-4 mt-4 justify-center">
                     <button
                       onClick={handleSave}
-                      className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg mb-6"
+                      className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg mb-6"
                     >
                       LƯU
                     </button>
@@ -264,7 +264,7 @@ function Settings() {
                   <div className="flex justify-center mt-4">
                     <button
                       onClick={handleEdit}
-                      className="bg-[#2c9e4b] text-white px-4 py-2 rounded-lg mb-6"
+                      className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg mb-6"
                     >
                       CHỈNH SỬA
                     </button>
