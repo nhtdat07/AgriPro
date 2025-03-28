@@ -52,6 +52,7 @@ export const MIN_OFFSET = 0;
 export const DEFAULT_OFFSET = 0;
 
 export const DEFAULT_PRODUCT_QUANTITY = 0;
+export const DEFAULT_TOTAL_PAYMENT = 0;
 
 // Product types
 export const PRODUCT_TYPES = [
