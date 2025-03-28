@@ -45,6 +45,7 @@ export const SECOND_IDX_ARRAY = 1;
 export const DEFAULT_TOKEN_EXPIRED_TIME = '20h';
 export const DECIMAL_BASE = 10;
 export const PATTERN_LIKE_SIGN = '%';
+export const COMMA = ',';
 
 export const MIN_LIMIT = 1;
 export const DEFAULT_LIMIT = 20;
@@ -52,6 +53,20 @@ export const MIN_OFFSET = 0;
 export const DEFAULT_OFFSET = 0;
 
 export const DEFAULT_PRODUCT_QUANTITY = 0;
+export const DEFAULT_TOTAL_PAYMENT = 0;
+
+// Time option
+export const TIME_OPTIONS = {
+    timeZone: 'Asia/Bangkok',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+};
+export const DEFAULT_TIME_FORMAT = 'en-GB';
 
 // Product types
 export const PRODUCT_TYPES = [
