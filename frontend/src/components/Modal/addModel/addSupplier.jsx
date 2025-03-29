@@ -7,7 +7,7 @@ export default function AddSupplier() {
     return (
         <>
             <div className="rounded-lg py-2 outline-none w-3/5 flex justify-end">
-                <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white font-medium px-4 py-2 inline-flex items-center rounded-lg" onClick={() => setShowModal(true)}>
+                <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 inline-flex items-center rounded-lg" onClick={() => setShowModal(true)}>
                     <span>THÊM NHÀ CUNG CẤP</span>
                 </button>
             </div>

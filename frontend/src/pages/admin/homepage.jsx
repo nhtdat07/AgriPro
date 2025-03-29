@@ -47,12 +47,9 @@ function Homepage() {
             {blockContents.map((block, index) => (
               <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden relative h-96">
                 <img src={block.image} alt={block.title} className="w-full h-full object-cover opacity-60" />
-                <div className="absolute bottom-0 bg-black bg-opacity-50 w-full text-white font-medium text-center p-6">
-                  <p className="p-2">{block.title}</p>
-                  <button 
-                    onClick={() => navigate(block.link)}
-                    className="mt-2 bg-[#2c9e4b] w-30 h-10 px-4 py-2 rounded-lg text-white font-semibold"
-                  >
+                <div className="absolute bottom-0 bg-black bg-opacity-50 w-full text-white text-center p-6">
+                  <p className="p-2 font-medium ">{block.title}</p>
+                  <button onClick={() => navigate(block.link)} className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 inline-flex items-center rounded-lg">
                     XEM NGAY
                   </button>
                 </div>

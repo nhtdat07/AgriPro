@@ -90,38 +90,67 @@ function InventoryPurchase() {
     {
       photo: "https://product.hstatic.net/1000269461/product/132_3835456dcd1140ea8a5582edc2fd3c35_medium.png",
       name: "Thuốc trừ bệnh cây trồng COC85 - Gói 20 gram",
+      brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "17.000"
+      price: "17.000",
+      origin: "Công ty TNHH Ngân Anh",
+      price: "16.000",
+      usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
+      instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
     {
       photo: "https://product.hstatic.net/1000269461/product/nnp_-_sp_ko_logo_-_502x502-thuoc_tru_rep_sap_confidor_200sl-_20ml_c2794056cada4801a73f3a6e82cdb9ca_medium.jpg",
       name: "Thuốc trừ rệp sáp CONFIDOR 200SL",
+      brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "199.000"
+      price: "199.000",
+      origin: "Công ty TNHH Ngân Anh",
+      price: "16.000",
+      usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
+      instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
     {
       photo: "https://product.hstatic.net/1000269461/product/73_994e52afa4194cef8139d6a250571bdc_medium.png",
       name: "Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC",
+      brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "16.000"
+      origin: "Công ty TNHH Ngân Anh",
+      price: "16.000",
+      usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
+      instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
     {
       photo: "https://product.hstatic.net/1000269461/product/movento-moi-2_a8895a601e2b4fa4840b0860300d3aa0_medium.jpg",
       name: "Thuốc đặc trị rệp sáp, trừ sâu, trị bọ trĩ MOVENTO 150OD - 100ml",
+      brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "155.000"
+      price: "155.000",
+      origin: "Công ty TNHH Ngân Anh",
+      price: "16.000",
+      usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
+      instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
     {
       photo: "https://product.hstatic.net/1000269461/product/tui_dao_don_-_tui_guc_nga__10__7a555e24a5e34a27a52dc364d850e705_medium.png",
       name: "Thuốc diệt rầy DANTOTSU 50WG - Gói 5 gram",
+      brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "40.000"
+      price: "40.000",
+      origin: "Công ty TNHH Ngân Anh",
+      price: "16.000",
+      usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
+      instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
     {
       photo: "https://product.hstatic.net/1000269461/product/yamida-2_2b9c8ff014e44977a7152ad02a346ec1_medium.jpg",
       name: "Thuốc trừ bọ trĩ - rầy trên cây trồng và hoa kiểng YAMIDA 100EC",
+      brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "24.000"
+      price: "24.000",
+      origin: "Công ty TNHH Ngân Anh",
+      price: "16.000",
+      usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
+      instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     }
   ];
 

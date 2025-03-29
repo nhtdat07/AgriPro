@@ -135,7 +135,7 @@ function Settings() {
                     </button>
                     <button
                       onClick={() => setIsChangingPassword(false)}
-                      className="bg-gray-400 text-white px-4 py-2 rounded-lg"
+                      className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg"
                     >
                       HỦY
                     </button>
@@ -255,7 +255,7 @@ function Settings() {
                     </button>
                     <button
                       onClick={handleCancel}
-                      className="bg-gray-400 text-white px-4 py-2 rounded-lg mb-6"
+                      className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg mb-6"
                     >
                       HỦY
                     </button>

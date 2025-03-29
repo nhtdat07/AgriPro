@@ -27,7 +27,7 @@ export default function ViewCustomer(props) {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-md w-[1000px] max-h-[650px] overflow-y-auto p-6">
-            <h3 className="text-2xl font-semibold text-center">{isEditing ? "Chi tiết khách hàng" : "Chi tiết khách hàng"}</h3>
+            <h3 className="text-2xl font-semibold text-center">{isEditing ? "Chỉnh sửa thông tin" : "Chi tiết khách hàng"}</h3>
             <form>
               <div>
                 <label className="p-2 block text-sm font-medium text-gray-700">Tên khách hàng</label>

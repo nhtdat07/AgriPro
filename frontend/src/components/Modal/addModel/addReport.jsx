@@ -31,7 +31,7 @@ export default function ExportReport() {
         <>
             <div className="rounded-lg py-2 outline-none w-3/5 flex justify-end ml-auto">
                 <button 
-                    className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white font-medium px-4 py-2 inline-flex items-center rounded-lg"
+                    className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 inline-flex items-center rounded-lg"
                     onClick={() => setShowModal(true)}
                 >
                     <span>XUẤT BÁO CÁO</span>
@@ -178,8 +178,8 @@ export default function ExportReport() {
                             </div>
                         </form>
                         <div className="flex justify-center gap-4 p-4">
-                            <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700" onClick={() => setShowModal(false)}>LƯU</button>
-                            <button className="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500" onClick={() => setShowModal(false)}>THOÁT</button>
+                            <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowModal(false)}>LƯU</button>
+                            <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowModal(false)}>THOÁT</button>
                         </div>
                     </div>
                 </div>
