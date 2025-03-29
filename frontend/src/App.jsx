@@ -3,7 +3,9 @@ import { Route, Routes } from "react-router-dom";
 
 import AuthLayout from "./components/Layout/AuthLayout";
 
-import Login from "./pages/auth/Login";
+import Landing from "./pages/auth/landing";
+import Login from "./pages/auth/login";
+import Register from "./pages/auth/register";
 
 import Homepage from "./pages/admin/homepage";
 import InventoryPurchase from "./pages/admin/inventoryPurchase";
@@ -17,7 +19,9 @@ function App() {
   return (
     <React.StrictMode>
       <Routes>
-        <Route exact path="/" element={<Login />}></Route>
+        <Route exact path="/" element={<Landing />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/register" element={<Register />}></Route>
 
         <Route path="/homepage" element={<AuthLayout menu={initadMenu} />}>
           <Route path="/homepage/" element={<Homepage />}></Route>
@@ -36,7 +40,6 @@ function App() {
         </Route>
       </Routes>
     </React.StrictMode>
-
   );
 }
 

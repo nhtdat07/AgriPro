@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import background from '../../../assets/images/background.png';
+import background from '../../assets/images/background.png';
 
 const LoginIndex = () => {
   const navigate = useNavigate();
