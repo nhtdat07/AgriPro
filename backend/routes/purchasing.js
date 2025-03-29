@@ -9,3 +9,10 @@ export const router = express.Router();
 router.post('/',
     authenticateUser, purchasingMiddlewares.validateAddPurchaseOrderData, purchasingControllers.addPurchaseOrderController
 );
+
+// GET /purchase-orders/{orderId}
+router.get('/:orderId',
+    authenticateUser,
+    purchasingMiddlewares.validateGetPurchaseOrderDetailsData,
+    purchasingControllers.getPurchaseOrderDetailsController
+);

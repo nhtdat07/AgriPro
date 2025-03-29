@@ -50,3 +50,14 @@ export const validateAddPurchaseOrderData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate GetPurchaseOrderDetails request data.
+export const validateGetPurchaseOrderDetailsData = (req, res, next) => {
+    const { orderId } = req.params;
+
+    if (!orderId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing purchase order ID' });
+    }
+
+    next();
+};

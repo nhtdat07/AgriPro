@@ -66,7 +66,7 @@ export const TIME_OPTIONS = {
     second: '2-digit',
     hour12: false
 };
-export const DEFAULT_TIME_FORMAT = 'en-GB';
+export const DEFAULT_TIME_FORMAT = 'en-CA';
 
 // Product types
 export const PRODUCT_TYPES = [

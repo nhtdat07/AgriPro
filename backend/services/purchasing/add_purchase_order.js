@@ -1,5 +1,6 @@
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
+import { formatDate } from '../../utils/format.js';
 import { addInventory, addProductForPurchaseOrder, addPurchaseOrder } from '../../db/queries/generated/purchasing.js';
 
 /**
@@ -15,6 +16,7 @@ export const addPurchaseOrderService = async (pool, user, data) => {
     try {
         let totalPayment = consts.DEFAULT_TOTAL_PAYMENT;
         let result;
+        const timestamp = formatDate(new Date());
 
         for (const product of products) {
             const { productId, expiredDate, quantity, inPrice } = product;
@@ -24,6 +26,7 @@ export const addPurchaseOrderService = async (pool, user, data) => {
                 agency_id: agencyId,
                 product_id: productId,
                 quantity,
+                imported_timestamp: timestamp,
                 expired_date: expiredDate,
                 in_price: inPrice
             });
@@ -39,6 +42,7 @@ export const addPurchaseOrderService = async (pool, user, data) => {
         result = await addPurchaseOrder(pool, {
             agency_id: agencyId,
             supplier_id: supplierId,
+            recorded_at: timestamp,
             total_payment: totalPayment
         });
         if (!result) {
