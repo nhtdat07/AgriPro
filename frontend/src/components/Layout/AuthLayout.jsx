@@ -17,20 +17,15 @@ function AuthLayout({...props}) {
 
   return (
     <div className="adminLayout">
-      {/* Sidebar */}
       <Sidebar
         menu = {props.menu}
         toggle={sidebarToggle}
         className={sidebarStatus ? "" : "mobile"}
       />
 
-      {/* Main Wrapper */}
       <div className="mainWrapper">
         <Outlet context={[sidebarToggle]} />
       </div>
-
-      {/* Bottom Navigation */}
-      {/*sidebarStatus && <BottomNavbar />*/}
     </div>
   );
 }

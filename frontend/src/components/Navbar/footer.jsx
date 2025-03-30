@@ -1,6 +1,6 @@
 import React from "react";
 
-import banner from "../../assets/images/banner.png";
+import banner from "../../assets/images/footer_banner.png";
 
 function Footer({ toggle }) {
   const currentYear = new Date().getFullYear();

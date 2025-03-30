@@ -6,6 +6,9 @@ import AuthLayout from "./components/Layout/AuthLayout";
 import Landing from "./pages/auth/landing";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
+import Forgot from "./pages/auth/forgot_pass";
+import Verify from "./pages/auth/verify";
+import NewPass from "./pages/auth/new_pass";
 
 import Homepage from "./pages/admin/homepage";
 import InventoryPurchase from "./pages/admin/inventoryPurchase";
@@ -22,6 +25,9 @@ function App() {
         <Route exact path="/" element={<Landing />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="/forgot-password" element={<Forgot />}></Route>
+        <Route path="/verify" element={<Verify />}></Route>
+        <Route path="/new-password" element={<NewPass />}></Route>
 
         <Route path="/homepage" element={<AuthLayout menu={initadMenu} />}>
           <Route path="/homepage/" element={<Homepage />}></Route>

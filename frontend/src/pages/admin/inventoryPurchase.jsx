@@ -185,7 +185,7 @@ function InventoryPurchase() {
             <div className="flex">
               <button
                 onClick={() => setActiveTab("inventory")}
-                className={`flex-1 py-2 text-white text-lg font-medium ${
+                className={`flex-1 py-2 text-white text-lg font-medium hover:bg-[#2c9e4b] ${
                   activeTab === "inventory" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
                 }`}
               >
@@ -193,7 +193,7 @@ function InventoryPurchase() {
               </button>
               <button
                 onClick={() => setActiveTab("purchase")}
-                className={`flex-1 py-2 text-white text-lg font-medium ${
+                className={`flex-1 py-2 text-white text-lg font-medium hover:bg-[#2c9e4b] ${
                   activeTab === "purchase" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
                 }`}
               >
@@ -201,7 +201,7 @@ function InventoryPurchase() {
               </button>
               <button
                 onClick={() => setActiveTab("product")}
-                className={`flex-1 py-2 text-white text-lg font-medium ${
+                className={`flex-1 py-2 text-white text-lg font-medium hover:bg-[#2c9e4b] ${
                   activeTab === "product" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
                 }`}
               >
@@ -209,7 +209,7 @@ function InventoryPurchase() {
               </button>
               <button
                 onClick={() => setActiveTab("supplier")}
-                className={`flex-1 py-2 text-white text-lg font-medium ${
+                className={`flex-1 py-2 text-white text-lg font-medium hover:bg-[#2c9e4b] ${
                   activeTab === "supplier" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
                 }`}
               >

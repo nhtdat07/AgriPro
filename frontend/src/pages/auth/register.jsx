@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import background from "../../assets/images/background.png";
-import exitIcon from "../../assets/images/exit.svg"; // Import biểu tượng thoát
+import exitIcon from "../../assets/images/exit.svg";
 
 const RegisterIndex = () => {
   const [data, setData] = useState({
@@ -22,13 +22,14 @@ const RegisterIndex = () => {
     e.preventDefault();
     if (data.password === data.confirmPassword) {
       alert("Đăng ký thành công!");
+      navigate("/login");
     } else {
       alert("Mật khẩu không khớp!");
     }
-  };
+  };  
 
   const handleExit = () => {
-    navigate("/login"); // Quay lại trang đăng nhập
+    navigate("/");
   };
 
   const currentYear = new Date().getFullYear();
@@ -38,7 +39,6 @@ const RegisterIndex = () => {
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
       style={{ backgroundImage: `url(${background})` }}
     >
-      {/* Nút thoát nằm ngoài giao diện chính */}
       <img
         src={exitIcon}
         alt="Exit"
@@ -46,11 +46,10 @@ const RegisterIndex = () => {
         onClick={handleExit}
       />
 
-      {/* Thẻ giao diện chính */}
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h3 className="text-2xl font-semibold text-center">Đăng ký</h3>
         <h3 className="text-sm font-medium text-center">Tạo một tài khoản ngay!</h3>
-        <form onSubmit={handleSubmit} className="p-2">
+        <form onSubmit={handleSubmit} className="p-4">
           <div className="mb-4">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-black">
@@ -153,18 +152,11 @@ const RegisterIndex = () => {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full px-6 py-2 text-white bg-[#2c9e4b] hover:bg-[#0c5c30] rounded-lg focus:outline-none"
-          >
-            XÁC NHẬN
-          </button>
+          <button type="submit" className="w-full px-6 py-2 text-white bg-[#2c9e4b] hover:bg-[#0c5c30] rounded-lg focus:outline-none">XÁC NHẬN</button>
         </form>
 
         <div className="text-center mt-4 text-sm text-gray-600">
-          <Link to="/login" className="hover:underline">
-            Bạn đã có tài khoản? Đăng nhập
-          </Link>
+          <Link to="/login" className="hover:underline">Bạn đã có tài khoản? Đăng nhập</Link>
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-400">

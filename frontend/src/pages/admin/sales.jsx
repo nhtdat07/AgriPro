@@ -79,7 +79,7 @@ function Sales() {
             <div className="flex">
               <button
                 onClick={() => setActiveTab("sale")}
-                className={`flex-1 py-2 text-white text-lg font-medium ${
+                className={`flex-1 py-2 text-white text-lg font-medium hover:bg-[#2c9e4b] ${
                   activeTab === "sale" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
                 }`}
               >
@@ -87,7 +87,7 @@ function Sales() {
               </button>
               <button
                 onClick={() => setActiveTab("customer")}
-                className={`flex-1 py-2 text-white text-lg font-medium ${
+                className={`flex-1 py-2 text-white text-lg font-medium hover:bg-[#2c9e4b] ${
                   activeTab === "customer" ? "bg-[#2c9e4b]" : "bg-[#0c5c30]"
                 }`}
               >

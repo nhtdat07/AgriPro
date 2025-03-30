@@ -49,9 +49,7 @@ function Homepage() {
                 <img src={block.image} alt={block.title} className="w-full h-full object-cover opacity-60" />
                 <div className="absolute bottom-0 bg-black bg-opacity-50 w-full text-white text-center p-6">
                   <p className="p-2 font-medium ">{block.title}</p>
-                  <button onClick={() => navigate(block.link)} className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 inline-flex items-center rounded-lg">
-                    XEM NGAY
-                  </button>
+                  <button onClick={() => navigate(block.link)} className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 inline-flex items-center rounded-lg">XEM NGAY</button>
                 </div>
               </div>
             ))}
