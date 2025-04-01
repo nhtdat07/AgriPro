@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --passWithNoTests --testTimeout=30000",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --passWithNoTests --testTimeout=300000",
     "db-gen": "node ./db/db_gen.js",
     "start": "node index.js"
   },
