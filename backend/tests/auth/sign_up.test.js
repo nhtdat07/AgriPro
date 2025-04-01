@@ -11,6 +11,17 @@ beforeAll(async () => {
     await createTableUserAgency(pool);
 });
 
+beforeEach(async () => {
+    try {
+        await pool.query(`
+            INSERT INTO user_agency (email, password_hash) VALUES ('test1@example.com', '123');
+        `);
+    } catch (error) {
+        console.error('Error insert data:', error);
+        throw error;
+    }
+});
+
 afterEach(async () => {
     await pool.query("TRUNCATE TABLE user_agency RESTART IDENTITY;");
 });
@@ -71,17 +82,8 @@ test("Bad case: weak password", async () => {
 });
 
 test("Bad case: email has existed", async () => {
-    try {
-        await pool.query(
-            `INSERT INTO user_agency (email, password_hash) VALUES ('test@example.com', '123');`
-        );
-    } catch (error) {
-        console.error('Error insert data:', error);
-        throw error;
-    }
-
     const userData = {
-        email: "test@example.com",
+        email: "test1@example.com",
         password: "@SecurePass123",
         agencyName: "Test Agency",
         ownerName: "John Doe",

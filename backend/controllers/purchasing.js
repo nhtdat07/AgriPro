@@ -3,6 +3,26 @@ import { errorHandler } from '../errors/error_handler.js';
 import { pool } from '../db.js';
 import { addPurchaseOrderService } from '../services/purchasing/add_purchase_order.js';
 import { getPurchaseOrderDetailsService } from '../services/purchasing/get_purchase_order_details.js';
+import { getListPurchaseOrdersService } from '../services/purchasing/get_list_purchase_orders.js';
+
+// Controller for handling user GetListPurchaseOrders requests
+export const getListPurchaseOrdersController = async (req, res) => {
+    try {
+        const result = await getListPurchaseOrdersService(pool, req.user, req.query);
+
+        if (result.error) {
+            errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.OK).json({
+                message: result.message,
+                data: result.data
+            });
+        }
+    } catch (error) {
+        console.error('GetListPurchaseOrders error:', error);
+        res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
+};
 
 // Controller for handling user AddPurchaseOrder requests
 export const addPurchaseOrderController = async (req, res) => {

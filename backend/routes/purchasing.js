@@ -5,6 +5,11 @@ import * as purchasingControllers from '../controllers/purchasing.js';
 
 export const router = express.Router();
 
+// GET /purchase-orders
+router.get('/',
+    authenticateUser, purchasingMiddlewares.validateGetListPurchaseOrdersData, purchasingControllers.getListPurchaseOrdersController
+);
+
 // POST /purchase-orders
 router.post('/',
     authenticateUser, purchasingMiddlewares.validateAddPurchaseOrderData, purchasingControllers.addPurchaseOrderController

@@ -1,4 +1,26 @@
 /**
+ * Executes the 'getPurchaseOrders' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getPurchaseOrders(pool, params = {}) {
+    try {
+        const query = `SELECT purchase_order.id AS id, purchase_order.recorded_at AS recorded_at, supplier.name AS supplier_name
+FROM purchase_order JOIN supplier ON purchase_order.supplier_id = supplier.id
+WHERE purchase_order.agency_id = $1
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN purchase_order.id = $2::VARCHAR ELSE true END
+    AND CASE WHEN $3::DATE IS NOT NULL THEN DATE(purchase_order.recorded_at) = $3::DATE ELSE true END
+    AND CASE WHEN $4::VARCHAR IS NOT NULL THEN purchase_order.supplier_id = $4::VARCHAR ELSE true END
+ORDER BY purchase_order.id
+LIMIT $5 OFFSET $6;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
  * Executes the 'addPurchaseOrder' query.
  * @param {Object} params - Parameters for the query.
  * @returns {Promise<Array>} - Query result rows.
