@@ -1,7 +1,7 @@
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
 import { getProductsForPurchaseOrder, getPurchaseOrderById } from '../../db/queries/generated/purchasing.js';
-import { formatDate } from '../../utils/format.js';
+import { formatTimestamp } from '../../utils/format.js';
 
 /**
  * Handles GetPurchaseOrderDetails logic.
@@ -38,7 +38,7 @@ export const getPurchaseOrderDetailsService = async (pool, user, params) => {
         result.forEach(product => {
             productList.push({
                 productName: product.name,
-                expiredDate: formatDate(product.expired_date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY],
+                expiredDate: formatTimestamp(product.expired_date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY],
                 quantity: product.quantity,
                 inPrice: product.price,
                 totalPrice: product.quantity * product.price

@@ -1,3 +1,13 @@
+-- name: getPurchaseOrders
+SELECT purchase_order.id AS id, purchase_order.recorded_at AS recorded_at, supplier.name AS supplier_name
+FROM purchase_order JOIN supplier ON purchase_order.supplier_id = supplier.id
+WHERE purchase_order.agency_id = $1
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN purchase_order.id = $2::VARCHAR ELSE true END
+    AND CASE WHEN $3::DATE IS NOT NULL THEN DATE(purchase_order.recorded_at) = $3::DATE ELSE true END
+    AND CASE WHEN $4::VARCHAR IS NOT NULL THEN purchase_order.supplier_id = $4::VARCHAR ELSE true END
+ORDER BY purchase_order.id
+LIMIT $5 OFFSET $6;
+
 -- name: addPurchaseOrder
 INSERT INTO purchase_order (agency_id, supplier_id, recorded_at, total_payment)
 VALUES ($1, $2, $3, $4)

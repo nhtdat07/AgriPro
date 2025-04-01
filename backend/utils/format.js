@@ -7,8 +7,8 @@ export const transformToPatternQueryLike = (str) => {
     return str;
 }
 
-export const formatDate = (date) => {
-    if (!date) return consts.EMPTY_STRING;
+export const formatTimestamp = (time) => {
+    if (!time) return consts.EMPTY_STRING;
     return new Intl.DateTimeFormat(consts.DEFAULT_TIME_FORMAT, consts.TIME_OPTIONS)
-        .format(date).replace(consts.COMMA, consts.EMPTY_STRING);
+        .format(time).replace(consts.COMMA, consts.EMPTY_STRING);
 }

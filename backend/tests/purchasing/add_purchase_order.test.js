@@ -2,7 +2,7 @@ import { createTablePurchaseOrder } from '../../db/schema/generated/purchase_ord
 import { createTableInventoryProduct } from '../../db/schema/generated/inventory.up.js';
 import * as dbTest from '../test_util.js';
 import { addPurchaseOrderService } from '../../services/purchasing/add_purchase_order.js';
-import { formatDate } from '../../utils/format.js';
+import { formatTimestamp } from '../../utils/format.js';
 
 let pool;
 
@@ -74,7 +74,7 @@ test("Happy case: should store purchase order in the database successfully", asy
     ]
     expect(rows.length).toBe(2);
     for (let i = 0; i < rows.length; i++) {
-        rows[i].expired_date = formatDate(rows[i].expired_date);
+        rows[i].expired_date = formatTimestamp(rows[i].expired_date);
         expect(rows[i]).toMatchObject(expectedData[i]);
     }
 
