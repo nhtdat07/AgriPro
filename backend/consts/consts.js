@@ -76,3 +76,9 @@ export const PRODUCT_TYPES = [
     'NÔNG CỤ',
     'GIA SÚC - GIA CẦM'
 ];
+
+// Config keys
+export const CONFIG_KEYS = {
+    WARNING_EXPIRED: 'warning_expired',
+    WARNING_OUT_OF_STOCK: 'warning_out_of_stock'
+}

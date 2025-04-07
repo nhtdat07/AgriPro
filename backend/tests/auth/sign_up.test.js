@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { signUpService } from '../../services/auth/sign_up.js';
 import * as errors from '../../errors/error_handler.js';
 import { createTableUserAgency } from '../../db/schema/generated/user_agency.up.js';
+import { createTableConfiguration } from '../../db/schema/generated/config.up.js';
 import * as dbTest from '../test_util.js';
 
 let pool;
@@ -9,6 +10,7 @@ let pool;
 beforeAll(async () => {
     pool = await dbTest.setupTestDb();
     await createTableUserAgency(pool);
+    await createTableConfiguration(pool);
 });
 
 beforeEach(async () => {
@@ -23,7 +25,10 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-    await pool.query("TRUNCATE TABLE user_agency RESTART IDENTITY;");
+    await pool.query(`
+        TRUNCATE TABLE user_agency RESTART IDENTITY;
+        TRUNCATE TABLE configuration;
+    `);
 });
 
 afterAll(async () => {
@@ -41,7 +46,7 @@ test("Happy case: should store user in the database successfully", async () => {
 
     await signUpService(pool, userData);
 
-    const { rows } = await pool.query("SELECT * FROM user_agency WHERE email=$1", [userData.email]);
+    let { rows } = await pool.query("SELECT * FROM user_agency WHERE email=$1", [userData.email]);
     expect(rows.length).toBe(1);
     expect(rows[0].agency_name).toBe(userData.agencyName);
     expect(rows[0].owner_name).toBe(userData.ownerName);
@@ -49,6 +54,48 @@ test("Happy case: should store user in the database successfully", async () => {
     expect(rows[0].email).toBe(userData.email);
     const isMatch = await bcrypt.compare(userData.password, rows[0].password_hash);
     expect(isMatch).toBe(true);
+
+    const expectedConfig = [
+        {
+            category: 'INVENTORY_PARAMS',
+            key: 'warning_expired',
+            value: '5'
+        },
+        {
+            category: 'INVENTORY_PARAMS',
+            key: 'warning_out_of_stock',
+            value: '5'
+        },
+        {
+            category: 'PRINT_FORMAT',
+            key: 'left_margin',
+            value: '3'
+        },
+        {
+            category: 'PRINT_FORMAT',
+            key: 'right_margin',
+            value: '2'
+        },
+        {
+            category: 'PRINT_FORMAT',
+            key: 'top_margin',
+            value: '2'
+        },
+        {
+            category: 'PRINT_FORMAT',
+            key: 'bottom_margin',
+            value: '2'
+        },
+        {
+            category: 'PRINT_FORMAT',
+            key: 'font_size',
+            value: '13'
+        }
+    ];
+    const expectTest = expectedConfig.map(config => expect.objectContaining(config));
+    ({ rows } = await pool.query("SELECT * FROM configuration WHERE agency_id=$1", [rows[0].id]))
+    expect(rows.length).toBe(7);
+    expect(rows).toEqual(expect.arrayContaining(expectTest));
 });
 
 test("Bad case: email not in correct format", async () => {
