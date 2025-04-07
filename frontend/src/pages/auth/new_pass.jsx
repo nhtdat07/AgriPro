@@ -1,7 +1,7 @@
-import { faEnvelope, faLock, faPhone, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import background from "../../assets/images/background.png";
 import exitIcon from "../../assets/images/exit.svg";

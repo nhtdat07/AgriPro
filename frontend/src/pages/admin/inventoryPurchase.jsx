@@ -92,9 +92,8 @@ function InventoryPurchase() {
       name: "Thuốc trừ bệnh cây trồng COC85 - Gói 20 gram",
       brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "17.000",
       origin: "Công ty TNHH Ngân Anh",
-      price: "16.000",
+      price: "17.000",
       usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
       instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
@@ -103,9 +102,8 @@ function InventoryPurchase() {
       name: "Thuốc trừ rệp sáp CONFIDOR 200SL",
       brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "199.000",
       origin: "Công ty TNHH Ngân Anh",
-      price: "16.000",
+      price: "199.000",
       usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
       instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
@@ -124,9 +122,8 @@ function InventoryPurchase() {
       name: "Thuốc đặc trị rệp sáp, trừ sâu, trị bọ trĩ MOVENTO 150OD - 100ml",
       brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "155.000",
       origin: "Công ty TNHH Ngân Anh",
-      price: "16.000",
+      price: "155.000",
       usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
       instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
@@ -135,9 +132,8 @@ function InventoryPurchase() {
       name: "Thuốc diệt rầy DANTOTSU 50WG - Gói 5 gram",
       brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "40.000",
       origin: "Công ty TNHH Ngân Anh",
-      price: "16.000",
+      price: "40.000",
       usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
       instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     },
@@ -146,9 +142,8 @@ function InventoryPurchase() {
       name: "Thuốc trừ bọ trĩ - rầy trên cây trồng và hoa kiểng YAMIDA 100EC",
       brand: "COC85",
       category: "Thuốc bảo vệ thực vật",
-      price: "24.000",
       origin: "Công ty TNHH Ngân Anh",
-      price: "16.000",
+      price: "24.000",
       usage: "Sản phẩm được sản xuất từ ion gốc Đồng (Cu2+), dạng bột mịn, loang đều và bám dính tốt. Sản phẩm được dùng để phòng trừ nấm bệnh, rỉ sắt, đốm đen.",
       instructions: "Pha loãng khoảng 10 -20 gram cho bình 8 - 10 lít, phun khi cây mới chớm bệnh. Mỗi 14 ngày nên phun để phòng trừ bệnh. Thời gian cách ly là 7 ngày."
     }

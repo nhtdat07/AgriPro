@@ -14,8 +14,8 @@ function Landing() {
     <div className="bg-white min-h-screen">
       <header className="bg-[#0c5c30] text-white flex justify-end items-center">
         <div className="flex justify-center">
-            <button onClick={() => navigate("/login")} className="bg-[#0c5c30] hover:bg-[#2c9e4b] text-white px-4 py-4 inline-flex items-center">Đăng nhập</button>
-            <button onClick={() => navigate("/register")} className="bg-[#0c5c30] hover:bg-[#2c9e4b] text-white px-4 py-4 inline-flex items-center">Đăng ký</button>
+            <button onClick={() => navigate("/login")} className="bg-[#0c5c30] hover:bg-[#2c9e4b] text-white text-lg font-medium px-4 py-4 inline-flex items-center">Đăng nhập</button>
+            <button onClick={() => navigate("/register")} className="bg-[#0c5c30] hover:bg-[#2c9e4b] text-white text-lg font-medium px-4 py-4 inline-flex items-center">Đăng ký</button>
         </div>
       </header>
 

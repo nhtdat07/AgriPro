@@ -17,7 +17,6 @@ function StatisticReport() {
   const [headerToggle] = useOutletContext();
   const [footerToggle] = useOutletContext();
   const [loading] = useState(false);
-  const [activeTab, setActiveTab] = useState('sale');
 
   const summaryData = [
     {
