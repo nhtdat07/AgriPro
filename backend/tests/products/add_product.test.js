@@ -1,6 +1,8 @@
 import { addProductService } from '../../services/products/add_product.js';
 import * as errors from '../../errors/error_handler.js';
+import * as consts from '../../consts/consts.js';
 import { createTableProduct } from '../../db/schema/generated/product.up.js';
+import { createTableNotification } from '../../db/schema/generated/notification.up.js';
 import * as dbTest from '../test_util.js';
 
 let pool;
@@ -8,10 +10,14 @@ let pool;
 beforeAll(async () => {
     pool = await dbTest.setupTestDb();
     await createTableProduct(pool);
+    await createTableNotification(pool);
 });
 
 afterEach(async () => {
-    await pool.query("TRUNCATE TABLE product RESTART IDENTITY;");
+    await pool.query(`
+        TRUNCATE TABLE product RESTART IDENTITY;
+        TRUNCATE TABLE notification RESTART IDENTITY;
+    `);
 });
 
 afterAll(async () => {
@@ -33,7 +39,7 @@ test("Happy case: should store product in the database successfully", async () =
 
     await addProductService(pool, user, data);
 
-    const { rows } = await pool.query(
+    let { rows } = await pool.query(
         "SELECT * FROM product WHERE agency_id = $1 AND name = $2",
         [user.userAgencyId, data.productName]
     );
@@ -45,6 +51,13 @@ test("Happy case: should store product in the database successfully", async () =
     expect(rows[0].usages).toBe(data.usage);
     expect(rows[0].guidelines).toBe(data.guideline);
     expect(rows[0].image_path).toBe(data.imagePath);
+
+    ({ rows } = await pool.query(
+        "SELECT * FROM notification WHERE agency_id = $1 AND id = $2",
+        [user.userAgencyId, 'NO0001']
+    ));
+    expect(rows.length).toBe(1);
+    expect(rows[0].category).toBe(consts.NOTI_TYPES.SUCCESSFULLY_RECORDED);
 });
 
 test("Bad case: invalid product category", async () => {

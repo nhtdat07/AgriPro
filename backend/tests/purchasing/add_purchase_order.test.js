@@ -1,6 +1,8 @@
 import { createTablePurchaseOrder } from '../../db/schema/generated/purchase_order.up.js';
 import { createTableInventoryProduct } from '../../db/schema/generated/inventory.up.js';
+import { createTableNotification } from '../../db/schema/generated/notification.up.js';
 import * as dbTest from '../test_util.js';
+import * as consts from '../../consts/consts.js';
 import { addPurchaseOrderService } from '../../services/purchasing/add_purchase_order.js';
 import { formatTimestamp } from '../../utils/format.js';
 
@@ -10,6 +12,7 @@ beforeAll(async () => {
     pool = await dbTest.setupTestDb();
     await createTableInventoryProduct(pool);
     await createTablePurchaseOrder(pool);
+    await createTableNotification(pool);
 });
 
 afterEach(async () => {
@@ -17,6 +20,7 @@ afterEach(async () => {
         TRUNCATE TABLE purchase_order RESTART IDENTITY;
         TRUNCATE TABLE order_product;
         TRUNCATE TABLE inventory_product;
+        TRUNCATE TABLE notification RESTART IDENTITY;
     `);
 });
 
@@ -98,4 +102,11 @@ test("Happy case: should store purchase order in the database successfully", asy
     for (let i = 0; i < rows.length; i++) {
         expect(rows[i]).toMatchObject(expectedData[i]);
     }
+
+    ({ rows } = await pool.query(
+        "SELECT * FROM notification WHERE agency_id = $1 AND id = $2",
+        [user.userAgencyId, 'NO0001']
+    ));
+    expect(rows.length).toBe(1);
+    expect(rows[0].category).toBe(consts.NOTI_TYPES.SUCCESSFULLY_RECORDED);
 });

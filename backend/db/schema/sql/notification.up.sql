@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS notification (
 CREATE OR REPLACE FUNCTION set_custom_notification_id()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.id := 'SI' || LPAD(NEW.auto_id::text, 4, '0');
+    NEW.id := 'NO' || LPAD(NEW.auto_id::text, 4, '0');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

@@ -49,18 +49,18 @@ test("Happy case: should return products successfully with no constraints", asyn
         data: {
             products: [
                 {
-                    productId: 'PR0001',
-                    productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
-                    imagePath: '/products/PR0001',
-                    category: 'THUỐC BẢO VỆ THỰC VẬT',
-                    outPrice: 17000
-                },
-                {
                     productId: 'PR0003',
                     productName: 'Hạt giống cải mầm Phú Nông',
                     imagePath: '/products/PR0003',
                     category: 'HẠT GIỐNG - CÂY TRỒNG',
                     outPrice: 9000
+                },
+                {
+                    productId: 'PR0001',
+                    productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
+                    imagePath: '/products/PR0001',
+                    category: 'THUỐC BẢO VỆ THỰC VẬT',
+                    outPrice: 17000
                 }
             ],
             pagination: { offset: 2 }
@@ -83,11 +83,11 @@ test("Happy case: should return products successfully with offset + limit", asyn
         data: {
             products: [
                 {
-                    productId: 'PR0003',
-                    productName: 'Hạt giống cải mầm Phú Nông',
-                    imagePath: '/products/PR0003',
-                    category: 'HẠT GIỐNG - CÂY TRỒNG',
-                    outPrice: 9000
+                    productId: 'PR0001',
+                    productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
+                    imagePath: '/products/PR0001',
+                    category: 'THUỐC BẢO VỆ THỰC VẬT',
+                    outPrice: 17000
                 }
             ],
             pagination: { offset: 2 }

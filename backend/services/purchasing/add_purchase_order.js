@@ -2,6 +2,7 @@ import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
 import { formatTimestamp } from '../../utils/format.js';
 import { addInventory, addProductForPurchaseOrder, addPurchaseOrder } from '../../db/queries/generated/purchasing.js';
+import { addNotification } from '../../db/queries/generated/notification.js';
 
 /**
  * Handles AddPurchaseOrder logic.
@@ -66,6 +67,19 @@ export const addPurchaseOrderService = async (pool, user, data) => {
                     `)
                 };
             }
+        }
+
+        // Add notification of successfully recording purchase order
+        result = await addNotification(pool, {
+            agency_id: agencyId,
+            category: consts.NOTI_TYPES.SUCCESSFULLY_RECORDED,
+            content: `Đã ghi nhận thành công đơn mua hàng mới!
+Mã đơn mua hàng: ${purchaseOrderId}
+Mã nhà cung cấp: ${supplierId}
+Thời gian ghi nhận: ${timestamp}`
+        });
+        if (!result) {
+            return { error: new errors.InternalError('Database failed to add notification') };
         }
 
         return { message: 'Add purchase order successfully' };
