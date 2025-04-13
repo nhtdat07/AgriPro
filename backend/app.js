@@ -5,6 +5,7 @@ import { router as supplierRoutes } from './routes/suppliers.js';
 import { router as customerRoutes } from './routes/customers.js';
 import { router as purchasingRoutes } from './routes/purchasing.js';
 import { router as inventoryRoutes } from './routes/inventory.js';
+import { router as notificationRoutes } from './routes/notifications.js';
 
 export const app = express();
 
@@ -32,3 +33,6 @@ app.use('/purchase-orders', purchasingRoutes);
 
 // Routes for inventory
 app.use('/inventory', inventoryRoutes);
+
+// Routes for notifications
+app.use('/notifications', notificationRoutes);
