@@ -82,3 +82,8 @@ export const CONFIG_KEYS = {
     WARNING_EXPIRED: 'warning_expired',
     WARNING_OUT_OF_STOCK: 'warning_out_of_stock'
 }
+
+// Noti types
+export const NOTI_TYPES = {
+    SUCCESSFULLY_RECORDED: 'GHI NHẬN THÀNH CÔNG'
+}

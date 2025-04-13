@@ -11,7 +11,7 @@ WHERE purchase_order.agency_id = $1
     AND CASE WHEN $2::VARCHAR IS NOT NULL THEN purchase_order.id = $2::VARCHAR ELSE true END
     AND CASE WHEN $3::DATE IS NOT NULL THEN DATE(purchase_order.recorded_at) = $3::DATE ELSE true END
     AND CASE WHEN $4::VARCHAR IS NOT NULL THEN purchase_order.supplier_id = $4::VARCHAR ELSE true END
-ORDER BY purchase_order.id
+ORDER BY purchase_order.id DESC
 LIMIT $5 OFFSET $6;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;

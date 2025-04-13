@@ -1,4 +1,5 @@
 import { addProduct } from '../../db/queries/generated/products.js';
+import { addNotification } from '../../db/queries/generated/notification.js';
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
 
@@ -20,7 +21,7 @@ export const addProductService = async (pool, user, data) => {
         }
 
         // Add product to database
-        const result = await addProduct(pool, {
+        let result = await addProduct(pool, {
             agency_id: user.userAgencyId,
             name: productName,
             brand,
@@ -34,6 +35,20 @@ export const addProductService = async (pool, user, data) => {
 
         if (!result) {
             return { error: new errors.InternalError('Database failed to add product') };
+        }
+
+        // Add notification of successfully recording product
+        result = await addNotification(pool, {
+            agency_id: user.userAgencyId,
+            category: consts.NOTI_TYPES.SUCCESSFULLY_RECORDED,
+            content: `Đã ghi nhận thành công sản phẩm mới!
+Mã sản phẩm: ${result[consts.FIRST_IDX_ARRAY].id}
+Tên sản phẩm: ${productName}
+Loại sản phẩm: ${category}
+Nơi sản xuất: ${productionPlace}`
+        });
+        if (!result) {
+            return { error: new errors.InternalError('Database failed to add notification') };
         }
 
         return { message: 'Add product successfully' };

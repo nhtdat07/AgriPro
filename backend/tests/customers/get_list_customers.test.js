@@ -40,18 +40,18 @@ test("Happy case: should return customers successfully with no constraints", asy
         data: {
             customers: [
                 {
-                    customerId: "CU0001",
-                    customerName: "Nguyễn Văn A",
-                    address: "Mỹ Tho, Tiền Giang",
-                    phoneNumber: "0123456789",
-                    email: "abc@gmail.com"
-                },
-                {
                     customerId: "CU0003",
                     customerName: "Lê Thị C",
                     address: "Quận 12, Thành phố Hồ Chí Minh",
                     phoneNumber: "0945621378",
                     email: ""
+                },
+                {
+                    customerId: "CU0001",
+                    customerName: "Nguyễn Văn A",
+                    address: "Mỹ Tho, Tiền Giang",
+                    phoneNumber: "0123456789",
+                    email: "abc@gmail.com"
                 }
             ],
             pagination: { offset: 2 }
@@ -74,11 +74,11 @@ test("Happy case: should return customers successfully with offset + limit", asy
         data: {
             customers: [
                 {
-                    customerId: "CU0003",
-                    customerName: "Lê Thị C",
-                    address: "Quận 12, Thành phố Hồ Chí Minh",
-                    phoneNumber: "0945621378",
-                    email: ""
+                    customerId: "CU0001",
+                    customerName: "Nguyễn Văn A",
+                    address: "Mỹ Tho, Tiền Giang",
+                    phoneNumber: "0123456789",
+                    email: "abc@gmail.com"
                 }
             ],
             pagination: { offset: 2 }

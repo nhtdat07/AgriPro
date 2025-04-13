@@ -47,14 +47,14 @@ test("Happy case: should return purchase orders successfully with no constraints
         data: {
             purchaseOrders: [
                 {
-                    purchaseOrderId: "PO0001",
-                    // recordedTimestamp: "2025-03-29 11:35:00",
-                    supplierName: "Nguyễn Văn A",
-                },
-                {
                     purchaseOrderId: "PO0002",
                     // recordedTimestamp: "2025-03-31 22:29:43",
                     supplierName: "Lê Thị B",
+                },
+                {
+                    purchaseOrderId: "PO0001",
+                    // recordedTimestamp: "2025-03-29 11:35:00",
+                    supplierName: "Nguyễn Văn A",
                 }
             ],
             pagination: { offset: 2 }
@@ -77,9 +77,9 @@ test("Happy case: should return purchase orders successfully with offset + limit
         data: {
             purchaseOrders: [
                 {
-                    purchaseOrderId: "PO0002",
-                    // recordedTimestamp: "2025-03-31 22:29:43",
-                    supplierName: "Lê Thị B",
+                    purchaseOrderId: "PO0001",
+                    // recordedTimestamp: "2025-03-29 11:35:00",
+                    supplierName: "Nguyễn Văn A",
                 }
             ],
             pagination: { offset: 2 }

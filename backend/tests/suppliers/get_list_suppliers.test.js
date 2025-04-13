@@ -40,18 +40,18 @@ test("Happy case: should return suppliers successfully with no constraints", asy
         data: {
             suppliers: [
                 {
-                    supplierId: "SU0001",
-                    supplierName: "Công ty TNHH TM Tân Thành",
-                    address: "Mỹ Tho, Tiền Giang",
-                    phoneNumber: "0123456789",
-                    email: "abc@gmail.com"
-                },
-                {
                     supplierId: "SU0003",
                     supplierName: "Công ty TNHH Chậu Cây Sài Gòn",
                     address: "Quận 12, Thành phố Hồ Chí Minh",
                     phoneNumber: "0945621378",
                     email: ""
+                },
+                {
+                    supplierId: "SU0001",
+                    supplierName: "Công ty TNHH TM Tân Thành",
+                    address: "Mỹ Tho, Tiền Giang",
+                    phoneNumber: "0123456789",
+                    email: "abc@gmail.com"
                 }
             ],
             pagination: { offset: 2 }
@@ -74,11 +74,11 @@ test("Happy case: should return suppliers successfully with offset + limit", asy
         data: {
             suppliers: [
                 {
-                    supplierId: "SU0003",
-                    supplierName: "Công ty TNHH Chậu Cây Sài Gòn",
-                    address: "Quận 12, Thành phố Hồ Chí Minh",
-                    phoneNumber: "0945621378",
-                    email: ""
+                    supplierId: "SU0001",
+                    supplierName: "Công ty TNHH TM Tân Thành",
+                    address: "Mỹ Tho, Tiền Giang",
+                    phoneNumber: "0123456789",
+                    email: "abc@gmail.com"
                 }
             ],
             pagination: { offset: 2 }
