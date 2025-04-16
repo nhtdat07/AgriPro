@@ -9,7 +9,7 @@ export async function getInventory(pool, params = {}) {
     inventory_product.imported_timestamp AS imported_timestamp, inventory_product.expired_date AS expired_date,
     inventory_product.in_price AS in_price
 FROM inventory_product 
-    JOIN product ON inventory_product.product_id = product.id AND product.agency_id = $1
+    JOIN product ON inventory_product.product_id = product.id AND product.agency_id = $1 AND product.is_deleted = false
     JOIN (
         SELECT product_id, SUM(quantity) AS total_quantity
         FROM inventory_product
