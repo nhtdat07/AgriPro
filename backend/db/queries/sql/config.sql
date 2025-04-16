@@ -12,3 +12,9 @@ RETURNING *;
 
 -- name: getConfig
 SELECT * FROM configuration WHERE agency_id = $1 AND key = ANY($2);
+
+-- name: getUserById
+SELECT * FROM user_agency WHERE id = $1;
+
+-- name: getSettings
+SELECT * FROM configuration WHERE agency_id = $1;
