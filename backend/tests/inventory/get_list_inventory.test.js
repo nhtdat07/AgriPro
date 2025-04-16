@@ -13,16 +13,18 @@ beforeAll(async () => {
     await createTableProduct(pool);
     try {
         await pool.query(`
-            INSERT INTO product (agency_id, name, brand, category, out_price, production_place, usages, guidelines)
+            INSERT INTO product (agency_id, name, brand, category, out_price, production_place, usages, guidelines, is_deleted)
             VALUES
-                ('UA0001', 'Thuốc trừ rệp sáp CONFIDOR 200SL', '', 'THUỐC BẢO VỆ THỰC VẬT', 0, '', '', ''),
-                ('UA0001', 'Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC', '', 'THUỐC BẢO VỆ THỰC VẬT', 0, '', '', '');
+                ('UA0001', 'Thuốc trừ rệp sáp CONFIDOR 200SL', '', 'THUỐC BẢO VỆ THỰC VẬT', 0, '', '', '', false),
+                ('UA0001', 'Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC', '', 'THUỐC BẢO VỆ THỰC VẬT', 0, '', '', '', false),
+                ('UA0001', 'Thuốc trừ sâu rầy nhện đỏ Pesieu 250SC', '', 'THUỐC BẢO VỆ THỰC VẬT', 0, '', '', '', true);
 
             INSERT INTO inventory_product (agency_id, product_id, quantity, imported_timestamp, expired_date, in_price) 
             VALUES 
                 ('UA0001', 'PR0001', 2, '2024-04-08 16:50:45', '2025-04-08', 12000),
                 ('UA0001', 'PR0001', 2, '2024-12-08 10:24:19', '2025-12-08', 13000),
-                ('UA0001', 'PR0002', 12, '2025-02-15 09:11:50', '2027-02-15', 8500);
+                ('UA0001', 'PR0002', 12, '2025-02-15 09:11:50', '2027-02-15', 8500),
+                ('UA0001', 'PR0003', 0, '2025-02-15 09:11:50', '2027-02-15', 8500);
 
             INSERT INTO configuration (agency_id, category, key, value)
             VALUES
