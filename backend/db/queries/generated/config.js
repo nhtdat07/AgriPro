@@ -37,3 +37,33 @@ export async function getConfig(pool, params = {}) {
     }
 }
 
+/**
+ * Executes the 'getUserById' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getUserById(pool, params = {}) {
+    try {
+        const query = `SELECT * FROM user_agency WHERE id = $1;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
+ * Executes the 'getSettings' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getSettings(pool, params = {}) {
+    try {
+        const query = `SELECT * FROM configuration WHERE agency_id = $1;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
