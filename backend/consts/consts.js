@@ -83,6 +83,12 @@ export const CONFIG_KEYS = {
     WARNING_OUT_OF_STOCK: 'warning_out_of_stock'
 }
 
+// Config types
+export const CONFIG_TYPES = [
+    'INVENTORY_PARAMS',
+    'PRINT_FORMAT'
+];
+
 // Noti types
 export const NOTI_TYPES = {
     SUCCESSFULLY_RECORDED: 'GHI NHẬN THÀNH CÔNG'
