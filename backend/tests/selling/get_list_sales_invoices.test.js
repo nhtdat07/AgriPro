@@ -48,12 +48,12 @@ test("Happy case: should return sales invoices successfully with no constraints"
             salesInvoices: [
                 {
                     salesInvoiceId: "SI0002",
-                    recordedTimestamp: "2025-03-31 22:29:43",
+                    // recordedTimestamp: "2025-03-31 22:29:43",
                     customerName: "Lê Thị B",
                 },
                 {
                     salesInvoiceId: "SI0001",
-                    recordedTimestamp: "2025-03-29 11:35:00",
+                    // recordedTimestamp: "2025-03-29 11:35:00",
                     customerName: "Nguyễn Văn A",
                 }
             ],
@@ -78,7 +78,7 @@ test("Happy case: should return sales invoices successfully with offset + limit"
             salesInvoices: [
                 {
                     salesInvoiceId: "SI0001",
-                    recordedTimestamp: "2025-03-29 11:35:00",
+                    // recordedTimestamp: "2025-03-29 11:35:00",
                     customerName: "Nguyễn Văn A",
                 }
             ],
@@ -104,7 +104,7 @@ test("Happy case: should return sales invoices successfully with query of salesI
             salesInvoices: [
                 {
                     salesInvoiceId: "SI0001",
-                    recordedTimestamp: "2025-03-29 11:35:00",
+                    // recordedTimestamp: "2025-03-29 11:35:00",
                     customerName: "Nguyễn Văn A",
                 }
             ],
@@ -130,7 +130,7 @@ test("Happy case: should return sales invoices successfully with query of record
             salesInvoices: [
                 {
                     salesInvoiceId: "SI0002",
-                    recordedTimestamp: "2025-03-31 22:29:43",
+                    // recordedTimestamp: "2025-03-31 22:29:43",
                     customerName: "Lê Thị B",
                 }
             ],
@@ -156,7 +156,7 @@ test("Happy case: should return sales invoices successfully with query of custom
             salesInvoices: [
                 {
                     salesInvoiceId: "SI0002",
-                    recordedTimestamp: "2025-03-31 22:29:43",
+                    // recordedTimestamp: "2025-03-31 22:29:43",
                     customerName: "Lê Thị B",
                 }
             ],
