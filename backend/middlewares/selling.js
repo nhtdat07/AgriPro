@@ -27,3 +27,14 @@ export const validateGetListSalesInvoicesData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate GetSalesInvoiceDetails request data.
+export const validateGetSalesInvoiceDetailsData = (req, res, next) => {
+    const { invoiceId } = req.params;
+
+    if (!invoiceId) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing sales invoice ID' });
+    }
+
+    next();
+};
