@@ -9,3 +9,10 @@ export const router = express.Router();
 router.get('/',
     authenticateUser, sellingMiddlewares.validateGetListSalesInvoicesData, sellingControllers.getListSalesInvoicesController
 );
+
+// GET /sales-invoices/{invoiceId}
+router.get('/:invoiceId',
+    authenticateUser,
+    sellingMiddlewares.validateGetSalesInvoiceDetailsData,
+    sellingControllers.getSalesInvoiceDetailsController
+);

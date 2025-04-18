@@ -20,3 +20,37 @@ LIMIT $5 OFFSET $6;`;
     }
 }
 
+/**
+ * Executes the 'getSalesInvoiceById' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getSalesInvoiceById(pool, params = {}) {
+    try {
+        const query = `SELECT sales_invoice.id AS id, customer.name AS customer_name, sales_invoice.total_payment AS total_price
+FROM sales_invoice JOIN customer ON customer.agency_id = $1 AND customer.id = sales_invoice.customer_id
+WHERE sales_invoice.agency_id = $1 AND sales_invoice.id = $2;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
+ * Executes the 'getProductsForSalesInvoice' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getProductsForSalesInvoice(pool, params = {}) {
+    try {
+        const query = `SELECT product.name AS name, invoice_product.quantity AS quantity, invoice_product.price AS price
+FROM invoice_product JOIN product ON product.agency_id = $1 AND invoice_product.product_id = product.id
+WHERE invoice_product.agency_id = $1 AND invoice_product.invoice_id = $2;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
