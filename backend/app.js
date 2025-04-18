@@ -7,6 +7,7 @@ import { router as purchasingRoutes } from './routes/purchasing.js';
 import { router as inventoryRoutes } from './routes/inventory.js';
 import { router as notificationRoutes } from './routes/notifications.js';
 import { router as settingsRoutes } from './routes/settings.js';
+import { router as sellingRoutes } from './routes/selling.js';
 
 export const app = express();
 
@@ -40,3 +41,6 @@ app.use('/notifications', notificationRoutes);
 
 // Routes for profile & settings
 app.use('/settings', settingsRoutes);
+
+// Routes for selling
+app.use('/sales-invoices', sellingRoutes);
