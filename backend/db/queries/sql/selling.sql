@@ -17,3 +17,61 @@ WHERE sales_invoice.agency_id = $1 AND sales_invoice.id = $2;
 SELECT product.name AS name, invoice_product.quantity AS quantity, invoice_product.price AS price
 FROM invoice_product JOIN product ON product.agency_id = $1 AND invoice_product.product_id = product.id
 WHERE invoice_product.agency_id = $1 AND invoice_product.invoice_id = $2;
+
+-- name: addSalesInvoice
+INSERT INTO sales_invoice (agency_id, customer_id, recorded_at, total_payment)
+VALUES ($1, $2, $3, $4)
+RETURNING *;
+
+-- name: addProductForSalesInvoice
+INSERT INTO invoice_product (agency_id, invoice_id, product_id, quantity, price)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING *;
+
+-- name: updateInventory
+WITH ordered AS (
+    -- Reorder the products by expired_date + imported_timestamp
+    -- Add running total (cumulative sum of quantity of previous products)
+    SELECT 
+        agency_id,
+        product_id,
+        imported_timestamp,
+        quantity,
+        expired_date,
+        SUM(quantity) OVER (
+            PARTITION BY product_id 
+            ORDER BY expired_date, imported_timestamp
+        ) AS running_total
+    FROM inventory_product
+    WHERE agency_id = $1 AND product_id = $2 AND quantity > 0
+),
+to_update_raw AS (
+    -- Add the previous running total
+    SELECT 
+        *,
+        LAG(running_total, 1, 0) OVER (
+            ORDER BY expired_date, imported_timestamp
+        ) AS previous_total
+    FROM ordered
+),
+to_update AS (
+    -- Get the subtracted amount for each product
+    SELECT 
+        agency_id,
+        product_id,
+        imported_timestamp,
+        quantity,
+        GREATEST(
+            LEAST(quantity, $3 - previous_total),
+            0
+        ) AS subtract_qty
+    FROM to_update_raw
+    WHERE $3 > previous_total
+)
+UPDATE inventory_product i
+SET quantity = i.quantity - u.subtract_qty
+FROM to_update u
+WHERE i.agency_id = u.agency_id
+    AND i.product_id = u.product_id
+    AND i.imported_timestamp = u.imported_timestamp
+RETURNING i.*;
