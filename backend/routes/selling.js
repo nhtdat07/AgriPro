@@ -10,6 +10,11 @@ router.get('/',
     authenticateUser, sellingMiddlewares.validateGetListSalesInvoicesData, sellingControllers.getListSalesInvoicesController
 );
 
+// POST /sales-invoices
+router.post('/',
+    authenticateUser, sellingMiddlewares.validateAddSalesInvoiceData, sellingControllers.addSalesInvoiceController
+);
+
 // GET /sales-invoices/{invoiceId}
 router.get('/:invoiceId',
     authenticateUser,
