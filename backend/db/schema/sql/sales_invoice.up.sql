@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS invoice_product (
   "product_id" char(6),
   "quantity" int NOT NULL,
   "price" int NOT NULL,
-  PRIMARY KEY ("agency_id", "invoice_id", "product_id")
+  "imported_timestamp" timestamp NOT NULL,
+  PRIMARY KEY ("agency_id", "invoice_id", "product_id", "imported_timestamp")
 );
 
 CREATE OR REPLACE FUNCTION set_custom_sales_invoice_id()

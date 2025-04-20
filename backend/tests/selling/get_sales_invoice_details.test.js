@@ -23,12 +23,13 @@ beforeAll(async () => {
                 ('UA0001', 'Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC', '', 'THUỐC BẢO VỆ THỰC VẬT', 0, '', '', '');
 
             INSERT INTO sales_invoice (agency_id, customer_id, total_payment)
-            VALUES ('UA0001', 'CU0001', 610000);
+            VALUES ('UA0001', 'CU0001', 810000);
 
-            INSERT INTO invoice_product (agency_id, invoice_id, product_id, quantity, price)
+            INSERT INTO invoice_product (agency_id, invoice_id, product_id, quantity, price, imported_timestamp)
             VALUES
-                ('UA0001', 'SI0001', 'PR0001', 20, 20000),
-                ('UA0001', 'SI0001', 'PR0002', 15, 14000);
+                ('UA0001', 'SI0001', 'PR0001', 20, 20000, '2025-03-28'),
+                ('UA0001', 'SI0001', 'PR0001', 10, 20000, '2025-03-29'),
+                ('UA0001', 'SI0001', 'PR0002', 15, 14000, '2025-03-28');
         `);
     } catch (error) {
         console.error('Error insert data:', error);
@@ -58,9 +59,9 @@ test("Happy case: should return sales invoice details successfully", async () =>
             products: [
                 {
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
-                    quantity: 20,
+                    quantity: 30,
                     outPrice: 20000,
-                    totalPrice: 400000
+                    totalPrice: 600000
                 },
                 {
                     productName: 'Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC',
@@ -69,7 +70,7 @@ test("Happy case: should return sales invoice details successfully", async () =>
                     totalPrice: 210000
                 }
             ],
-            totalPrice: 610000
+            totalPrice: 810000
         }
     };
 

@@ -44,9 +44,10 @@ WHERE sales_invoice.agency_id = $1 AND sales_invoice.id = $2;`;
  */
 export async function getProductsForSalesInvoice(pool, params = {}) {
     try {
-        const query = `SELECT product.name AS name, invoice_product.quantity AS quantity, invoice_product.price AS price
-FROM invoice_product JOIN product ON product.agency_id = $1 AND invoice_product.product_id = product.id
-WHERE invoice_product.agency_id = $1 AND invoice_product.invoice_id = $2;`;
+        const query = `SELECT product.name AS name, SUM(invoice_product.quantity)::INTEGER AS quantity, invoice_product.price AS price
+FROM invoice_product JOIN product ON invoice_product.product_id = product.id
+WHERE product.agency_id = $1 AND invoice_product.agency_id = $1 AND invoice_product.invoice_id = $2
+GROUP BY invoice_product.product_id, product.name, invoice_product.price;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {
@@ -78,8 +79,8 @@ RETURNING *;`;
  */
 export async function addProductForSalesInvoice(pool, params = {}) {
     try {
-        const query = `INSERT INTO invoice_product (agency_id, invoice_id, product_id, quantity, price)
-VALUES ($1, $2, $3, $4, $5)
+        const query = `INSERT INTO invoice_product (agency_id, invoice_id, product_id, quantity, price, imported_timestamp)
+VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING *;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
@@ -140,7 +141,7 @@ FROM to_update u
 WHERE i.agency_id = u.agency_id
     AND i.product_id = u.product_id
     AND i.imported_timestamp = u.imported_timestamp
-RETURNING i.*;`;
+RETURNING i.*, u.subtract_qty;`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {

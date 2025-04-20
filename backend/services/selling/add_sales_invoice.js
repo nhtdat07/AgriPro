@@ -18,6 +18,7 @@ export const addSalesInvoiceService = async (pool, user, data) => {
         let totalPayment = consts.DEFAULT_TOTAL_PAYMENT;
         let result;
         let timestamp = formatTimestamp(new Date());
+        let updatedProducts = [];
 
         for (const product of products) {
             const { productId, quantity, outPrice } = product;
@@ -34,6 +35,8 @@ export const addSalesInvoiceService = async (pool, user, data) => {
 
             // Calculate total payment
             totalPayment += quantity * outPrice;
+
+            updatedProducts.push(...result);
         }
 
         // Add sales invoice to the database
@@ -49,13 +52,16 @@ export const addSalesInvoiceService = async (pool, user, data) => {
 
         // Add products for sales invoice
         const salesInvoiceId = result[consts.FIRST_IDX_ARRAY].id;
-        for (const product of products) {
+        for (const product of updatedProducts) {
+            const targetProduct = products.find(requestProduct => requestProduct.productId === product.product_id);
+
             result = await addProductForSalesInvoice(pool, {
                 agency_id: agencyId,
                 invoice_id: salesInvoiceId,
-                product_id: product.productId,
-                quantity: product.quantity,
-                price: product.outPrice
+                product_id: product.product_id,
+                quantity: product.subtract_qty,
+                price: targetProduct.outPrice,
+                imported_timestamp: product.imported_timestamp
             })
             if (!result) {
                 return {
