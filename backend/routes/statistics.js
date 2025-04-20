@@ -9,3 +9,8 @@ export const router = express.Router();
 router.get('/load-screen',
     authenticateUser, statisticsMiddlewares.validateLoadStatisticsScreenData, statisticsControllers.loadStatisticsScreenController
 );
+
+// GET /statistics/best-sellers
+router.get('/best-sellers',
+    authenticateUser, statisticsMiddlewares.validateGetListSoldProductsData, statisticsControllers.getListSoldProductsController
+);
