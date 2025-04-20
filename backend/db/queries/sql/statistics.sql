@@ -16,3 +16,16 @@ WHERE agency_id = $1 AND recorded_at >= $2::DATE AND recorded_at < $3::DATE + IN
 SELECT COUNT(*)::INTEGER AS invoice_quantity, SUM(total_payment)::INTEGER AS total_selling
 FROM sales_invoice
 WHERE agency_id = $1 AND recorded_at >= $2::DATE AND recorded_at < $3::DATE + INTERVAL '1 day';
+
+-- name: getSoldProducts
+SELECT invoice_product.product_id AS product_id, product.name AS product_name, 
+    SUM(invoice_product.quantity)::INTEGER AS sold_quantity
+FROM invoice_product 
+    JOIN product ON product.id = invoice_product.product_id
+    JOIN sales_invoice ON sales_invoice.id = invoice_product.invoice_id
+WHERE invoice_product.agency_id = $1 AND product.agency_id = $1 AND sales_invoice.agency_id = $1
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN invoice_product.product_id = $2::VARCHAR ELSE true END
+    AND sales_invoice.recorded_at >= $3::DATE AND sales_invoice.recorded_at < $4::DATE + INTERVAL '1 day'
+GROUP BY invoice_product.product_id, product.name
+ORDER BY SUM(invoice_product.quantity) DESC
+LIMIT $5 OFFSET $6;
