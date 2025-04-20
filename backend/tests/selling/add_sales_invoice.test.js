@@ -97,7 +97,12 @@ test("Happy case: should store sales invoice in the database successfully", asyn
     expectedData = [
         {
             product_id: 'PR0001',
-            quantity: 24,
+            quantity: 20,
+            price: 20000
+        },
+        {
+            product_id: 'PR0001',
+            quantity: 4,
             price: 20000
         },
         {
@@ -106,7 +111,7 @@ test("Happy case: should store sales invoice in the database successfully", asyn
             price: 14000
         }
     ]
-    expect(rows.length).toBe(2);
+    expect(rows.length).toBe(3);
     for (let i = 0; i < rows.length; i++) {
         expect(rows[i]).toMatchObject(expectedData[i]);
     }

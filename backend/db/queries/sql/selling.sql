@@ -14,9 +14,10 @@ FROM sales_invoice JOIN customer ON customer.agency_id = $1 AND customer.id = sa
 WHERE sales_invoice.agency_id = $1 AND sales_invoice.id = $2;
 
 -- name: getProductsForSalesInvoice
-SELECT product.name AS name, invoice_product.quantity AS quantity, invoice_product.price AS price
-FROM invoice_product JOIN product ON product.agency_id = $1 AND invoice_product.product_id = product.id
-WHERE invoice_product.agency_id = $1 AND invoice_product.invoice_id = $2;
+SELECT product.name AS name, SUM(invoice_product.quantity)::INTEGER AS quantity, invoice_product.price AS price
+FROM invoice_product JOIN product ON invoice_product.product_id = product.id
+WHERE product.agency_id = $1 AND invoice_product.agency_id = $1 AND invoice_product.invoice_id = $2
+GROUP BY invoice_product.product_id, product.name, invoice_product.price;
 
 -- name: addSalesInvoice
 INSERT INTO sales_invoice (agency_id, customer_id, recorded_at, total_payment)
@@ -24,8 +25,8 @@ VALUES ($1, $2, $3, $4)
 RETURNING *;
 
 -- name: addProductForSalesInvoice
-INSERT INTO invoice_product (agency_id, invoice_id, product_id, quantity, price)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO invoice_product (agency_id, invoice_id, product_id, quantity, price, imported_timestamp)
+VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING *;
 
 -- name: updateInventory
@@ -74,4 +75,4 @@ FROM to_update u
 WHERE i.agency_id = u.agency_id
     AND i.product_id = u.product_id
     AND i.imported_timestamp = u.imported_timestamp
-RETURNING i.*;
+RETURNING i.*, u.subtract_qty;
