@@ -1,4 +1,3 @@
-import * as errors from '../../errors/error_handler.js';
 import { createTableProduct } from '../../db/schema/generated/product.up.js';
 import { createTableSalesInvoice } from '../../db/schema/generated/sales_invoice.up.js';
 import * as dbTest from '../test_util.js';
@@ -114,7 +113,7 @@ test("Happy case: should return sold products successfully with offset + limit",
     expect(result).toEqual(expectedResponse);
 });
 
-test("Happy case: should return products successfully with query of productId", async () => {
+test("Happy case: should return sold products successfully with query of productId", async () => {
     const user = { userAgencyId: 'UA0001' };
     const query = {
         startDate: '2025-04-01',

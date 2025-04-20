@@ -78,3 +78,26 @@ LIMIT $5 OFFSET $6;`;
     }
 }
 
+/**
+ * Executes the 'getActiveCustomers' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getActiveCustomers(pool, params = {}) {
+    try {
+        const query = `SELECT customer.id AS customer_id, customer.name AS customer_name, 
+    SUM(sales_invoice.total_payment)::INTEGER AS buying_amount
+FROM customer JOIN sales_invoice ON sales_invoice.customer_id = customer.id
+WHERE customer.agency_id = $1 AND sales_invoice.agency_id = $1
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN customer.id = $2::VARCHAR ELSE true END
+    AND sales_invoice.recorded_at >= $3::DATE AND sales_invoice.recorded_at < $4::DATE + INTERVAL '1 day'
+GROUP BY customer.id, customer.name
+ORDER BY SUM(sales_invoice.total_payment) DESC
+LIMIT $5 OFFSET $6;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
