@@ -14,3 +14,8 @@ router.get('/load-screen',
 router.get('/best-sellers',
     authenticateUser, statisticsMiddlewares.validateGetListSoldProductsData, statisticsControllers.getListSoldProductsController
 );
+
+// GET /statistics/active-customers
+router.get('/active-customers',
+    authenticateUser, statisticsMiddlewares.validateGetListActiveCustomersData, statisticsControllers.getListActiveCustomersController
+);

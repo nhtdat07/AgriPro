@@ -3,6 +3,7 @@ import { errorHandler } from '../errors/error_handler.js';
 import { pool } from '../db.js';
 import { loadStatisticsScreenService } from '../services/statistics/load_statistics_screen.js';
 import { getListSoldProductsService } from '../services/statistics/get_list_sold_products.js';
+import { getListActiveCustomersService } from '../services/statistics/get_list_active_customers.js';
 
 // Controller for handling user LoadStatisticsScreen requests
 export const loadStatisticsScreenController = async (req, res) => {
@@ -38,6 +39,25 @@ export const getListSoldProductsController = async (req, res) => {
         }
     } catch (error) {
         console.error('GetListSoldProducts error:', error);
+        res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+    }
+};
+
+// Controller for handling user GetListActiveCustomers requests
+export const getListActiveCustomersController = async (req, res) => {
+    try {
+        const result = await getListActiveCustomersService(pool, req.user, req.query);
+
+        if (result.error) {
+            errorHandler(result.error, res)
+        } else {
+            res.status(consts.HTTP_STATUS.OK).json({
+                message: result.message,
+                data: result.data
+            });
+        }
+    } catch (error) {
+        console.error('GetListActiveCustomers error:', error);
         res.status(consts.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
     }
 };

@@ -29,3 +29,14 @@ WHERE invoice_product.agency_id = $1 AND product.agency_id = $1 AND sales_invoic
 GROUP BY invoice_product.product_id, product.name
 ORDER BY SUM(invoice_product.quantity) DESC
 LIMIT $5 OFFSET $6;
+
+-- name: getActiveCustomers
+SELECT customer.id AS customer_id, customer.name AS customer_name, 
+    SUM(sales_invoice.total_payment)::INTEGER AS buying_amount
+FROM customer JOIN sales_invoice ON sales_invoice.customer_id = customer.id
+WHERE customer.agency_id = $1 AND sales_invoice.agency_id = $1
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN customer.id = $2::VARCHAR ELSE true END
+    AND sales_invoice.recorded_at >= $3::DATE AND sales_invoice.recorded_at < $4::DATE + INTERVAL '1 day'
+GROUP BY customer.id, customer.name
+ORDER BY SUM(sales_invoice.total_payment) DESC
+LIMIT $5 OFFSET $6;
