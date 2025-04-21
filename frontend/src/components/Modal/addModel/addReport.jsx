@@ -95,7 +95,6 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData 
                         body {
                             font-family: Arial, sans-serif;
                         }
-                        /* Thêm CSS ở đây */
                     </style>
                 </head>
                 <body>${element.innerHTML}</body>
@@ -107,7 +106,6 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData 
         }
     };
     
-
     return (
         <>
             <div className="rounded-lg py-2 outline-none w-3/5 flex justify-end ml-auto">
@@ -231,27 +229,11 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData 
                             <p className="text-center">(Thời gian: {dateRange})</p>
                             <p className="text-center"><strong>Ngày xuất báo cáo:</strong> {formatDate(today)}</p>
                             <hr className="my-2" />
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <div>
-                                    {iconStates[0] && (
-                                    <p><strong>Tổng lợi nhuận:</strong> {dataReport.totalProfit}</p>
-                                    )}
-                                    {iconStates[1] && (
-                                    <p><strong>Số đơn nhập hàng:</strong> {dataReport.numPurchase}</p>
-                                    )}
-                                    {iconStates[3] && (
-                                    <p><strong>Số hóa đơn:</strong> {dataReport.numSale}</p>
-                                    )}
-                                </div>
-                                <div>
-                                    {iconStates[2] && (
-                                    <p><strong><br></br>Tổng số tiền nhập hàng:</strong> {dataReport.valuePurchase}</p>
-                                    )}
-                                    {iconStates[4] && (
-                                    <p><strong>Tổng số tiền bán hàng:</strong> {dataReport.valueSale}</p>
-                                    )}
-                                </div>
-                            </div>
+                            {iconStates[0] && (<p><strong>Tổng lợi nhuận:</strong> {dataReport.totalProfit}</p>)}
+                            {iconStates[1] && (<p><strong>Số đơn nhập hàng:</strong> {dataReport.numPurchase}</p>)}
+                            {iconStates[3] && (<p><strong>Số hóa đơn:</strong> {dataReport.numSale}</p>)}
+                            {iconStates[2] && (<p><strong>Tổng số tiền nhập hàng:</strong> {dataReport.valuePurchase}</p>)}
+                            {iconStates[4] && (<p><strong>Tổng số tiền bán hàng:</strong> {dataReport.valueSale}</p>)}
 
                             {iconStates[5] && (
                                 <div className="mt-4">
@@ -300,8 +282,12 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData 
                                     </table>
                                 </div>
                             )}
-                            <p className="mt-6 ml-20 pl-20 text-center"><strong>Chủ đại lý</strong></p>
-                            <p className="ml-20 pl-20 text-center">{dataReport.ownerName}</p>
+                            <div className="mt-6 text-right pr-20">
+                                <div className="inline-block text-center">
+                                    <p><strong>Chủ đại lý</strong></p>
+                                    <p>{dataReport.ownerName}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
               

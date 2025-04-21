@@ -84,7 +84,8 @@ export default function AddOrder() {
                                                 <td className="p-2"><input type="date" className="w-full p-2 border rounded-lg" /></td>
                                                 <td className="p-2">
                                                     <input 
-                                                        type="number" 
+                                                        type="number"
+                                                        min="0"
                                                         className="w-full p-2 border rounded-lg" 
                                                         value={product.quantity} 
                                                         onChange={(e) => handleInputChange(product.id, "quantity", Number(e.target.value))} 
@@ -92,7 +93,8 @@ export default function AddOrder() {
                                                 </td>
                                                 <td className="p-2">
                                                     <input 
-                                                        type="number" 
+                                                        type="number"
+                                                        min="0"
                                                         className="w-full p-2 border rounded-lg" 
                                                         value={product.price} 
                                                         onChange={(e) => handleInputChange(product.id, "price", Number(e.target.value))} 
