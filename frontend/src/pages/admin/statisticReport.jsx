@@ -14,14 +14,25 @@ import salesIcon from "../../assets/images/sales_invoice.svg";
 import searchIcon from "../../assets/images/search.svg";
 
 function StatisticReport() {
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const today = new Date().toISOString().split("T")[0];
   const [headerToggle] = useOutletContext();
   const [footerToggle] = useOutletContext();
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
+  const [applieRange, setApplieRange] = useState(`${formatDate(today)} - ${formatDate(today)}`);
   const [loading] = useState(false);
 
   const summaryData = [
     {
       title: "Lợi nhuận",
-      dateRange: "15/10/2024 - 15/11/2024",
       value: "12.368.000",
       icon: moneyIcon
     },
@@ -107,6 +118,12 @@ function StatisticReport() {
     }
   ];
 
+  const handleApply = () => {
+    const formattedStart = formatDate(startDate ? startDate : today);
+    const formattedEnd = formatDate(endDate ? endDate : today);
+    setApplieRange(`${formattedStart} - ${formattedEnd}`);
+  };
+
   const handleDelete = () => { };
 
   return (
@@ -119,10 +136,28 @@ function StatisticReport() {
     
           <div className="px-4">        
             <div className="flex items-center gap-4 mb-4">
-              <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
-              <input type="date" className="border px-2 py-1 rounded-lg min-w-[50px]" />
-              <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg min-w-[50px]">ÁP DỤNG</button>
-              <AddReport/>
+              <input
+                type="date"
+                className="border px-2 py-1 rounded-lg min-w-[50px]"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+              <input
+                type="date"
+                className="border px-2 py-1 rounded-lg min-w-[50px]"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+              <button
+                className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg min-w-[50px]"
+                onClick={handleApply}
+              >
+                ÁP DỤNG
+              </button>
+              <AddReport
+                dateRange={applieRange} 
+                bestSellData={dataBestSell} 
+                topCustomerData={dataTopCustomer}/>
             </div>
     
             <div className="grid grid-cols-3 gap-4 mb-6">
