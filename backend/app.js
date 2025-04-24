@@ -9,10 +9,18 @@ import { router as notificationRoutes } from './routes/notifications.js';
 import { router as settingsRoutes } from './routes/settings.js';
 import { router as sellingRoutes } from './routes/selling.js';
 import { router as statisticsRoutes } from './routes/statistics.js';
+import cors from "cors";
 
 export const app = express();
 
 app.use(express.json()); // Enable JSON parsing
+app.use(
+    cors({
+        origin: ["http://localhost:3000"],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        credentials: true,
+    })
+);
 
 // Default API
 app.get('/', (req, res) => {

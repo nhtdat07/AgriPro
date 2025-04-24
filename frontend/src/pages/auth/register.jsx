@@ -2,6 +2,7 @@ import { faEnvelope, faLock, faPhone, faUser } from "@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance.js"
 
 import background from "../../assets/images/background.png";
 import exitIcon from "../../assets/images/exit.svg";
@@ -18,16 +19,41 @@ const RegisterIndex = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (data.password === data.confirmPassword) {
-      alert("Đăng ký thành công!");
-      navigate("/login");
-    } else {
+    const requestData = {
+      agencyName: data.agencyName,
+      ownerName: data.ownerName,
+      email: data.email,
+      phone: data.phone,
+      password: data.password,
+      confirmPassword: data.confirmPassword
+    };
+  
+    let response;
+    if (data.password !== data.confirmPassword) {
       alert("Mật khẩu không khớp!");
+      return;
     }
-  };  
-
+    else{
+      try {
+        const response = await axiosInstance.post('/auth/sign-up', requestData);
+        if (response.status === 201) {
+          navigate("/login");
+        }
+      } catch (error) {
+        if (error.response) {
+          const { status } = error.response;
+          if (status === 409) {
+            alert("Email này đã được sử dụng!");
+          } else if (status === 400) {
+            alert("Mật khẩu không hợp lệ!");
+          }
+        }
+      }
+    }
+  };
+  
   const handleExit = () => {
     navigate("/");
   };
@@ -49,7 +75,7 @@ const RegisterIndex = () => {
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h3 className="text-2xl font-semibold text-center">Đăng ký</h3>
         <h3 className="text-sm font-medium text-center">Tạo một tài khoản ngay!</h3>
-        <form onSubmit={handleSubmit} className="p-4">
+        <form onSubmit={(e) => handleSubmit(e)} className="p-4">
           <div className="mb-4">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-black">

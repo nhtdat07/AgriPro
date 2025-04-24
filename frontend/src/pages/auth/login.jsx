@@ -2,6 +2,7 @@ import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance.js"
 
 import background from '../../assets/images/background.png';
 import exitIcon from "../../assets/images/exit.svg";
@@ -13,11 +14,28 @@ const LoginIndex = () => {
     password: ""
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = data;
-    if (email === "admin@gmail.com" && password === "123") {
-      navigate("/homepage");
+    const requestData = {
+      email: data.email,
+      password: data.password
+    };
+    try {
+      const response = await axiosInstance.post('/auth/sign-in', requestData);
+      if (response.status === 200) {
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        navigate("/homepage");
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bạn vui lòng nhập đầy đủ thông tin!");
+        } else if (status === 401) {
+          alert("Email hoặc mật khẩu không đúng!");
+        }
+      }
     }
   };
 

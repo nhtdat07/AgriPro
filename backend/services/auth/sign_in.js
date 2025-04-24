@@ -43,6 +43,7 @@ export const signInService = async (pool, userData) => {
             data: { token: jwtToken }
         };
     } catch (error) {
+        console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }
 };

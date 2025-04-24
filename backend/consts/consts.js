@@ -24,7 +24,7 @@ export const REGEX = {
     UPPERCASE: /[A-Z]/,
     LOWERCASE: /[a-z]/,
     DIGIT: /\d/,
-    SPECIAL_CHAR: /[@$!%*?&]/
+    SPECIAL_CHAR: /[@$!%*?&#]/
 };
 
 // Password
