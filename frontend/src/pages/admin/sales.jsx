@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Header from "../../components/Navbar/header";
 import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance.js"
 
 import InvoiceTable from "../../components/Modal/tableModel/invoiceTable";
 import CustomerTable from "../../components/Modal/tableModel/customerTable";
@@ -32,38 +33,37 @@ function Sales() {
     {key: "email", label: "Email"},
     {key: "action", label: ""},
   ];
+  
+  const [invoicesData, setInvoicesData] = useState([]);
+  const [customersData, setCustomersData] = useState([]);
 
-  const dataInvoice = [
-    {
-      id: 1,
-      code: "BH0000000345",
-      timestamp: "10:28 15/11/2024",
-      customer: "Nguyễn Văn A"
-    },
-    {
-      id: 2,
-      code: "BH0000000344",
-      timestamp: "08:08 15/11/2024",
-      customer: "Trần Văn B"
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const invoicesRes = await axiosInstance.get("/sales-invoices");
+        const customersRes = await axiosInstance.get("/customers");
 
-  const dataCustomer = [
-    {
-      id: 1,
-      name: "Nguyễn Văn A",
-      address: "879, Mỹ Phong, TP. Mỹ Tho, T. Tiền Giang",
-      phone: "0977868686",
-      email: "nguyenvana@gmail.com"
-    },
-    {
-      id: 2,
-      name: "Trần Văn B",
-      address: "289, Thanh Bình, H. Chợ Gạo, T. Tiền Giang",
-      phone: "0355123456",
-      email: ""
-    }
-  ];
+        const invoicesArray = invoicesRes.data.data.salesInvoices;
+        const customersArray = customersRes.data.data.customers;
+  
+        setInvoicesData(invoicesArray);
+        setCustomersData(customersArray);
+      } catch (error) {
+        if (error.response) {
+          const { status } = error.response;
+          if (status === 400) {
+            alert("Bad Request!");
+          } else if (status === 401) {
+            alert("Bạn không có quyền truy cập vào trang này!");
+          } else if (status === 500) {
+            alert("Vui lòng tải lại trang!");
+          }
+        }  
+      }
+    };
+  
+    fetchData();
+  }, []);  
 
   const handleDelete = () => { };
 
@@ -121,7 +121,7 @@ function Sales() {
                     <InvoiceTable
                       loading={loading}
                       dataHeader={dataHeaderInvoice}
-                      data={dataInvoice}
+                      data={invoicesData}
                       handleDelete={handleDelete}
                     />
                   </div>
@@ -153,7 +153,7 @@ function Sales() {
                     <CustomerTable
                       loading={loading}
                       dataHeader={dataHeaderCustomer}
-                      data={dataCustomer}
+                      data={customersData}
                       handleDelete={handleDelete}
                     />
                   </div>

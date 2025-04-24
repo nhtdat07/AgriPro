@@ -11,22 +11,22 @@ function InventoryTable({ loading, dataHeader, data, handleDelete }) {
           className="bg-white border md:border-b block md:table-row rounded-lg shadow-md md:rounded-none md:shadow-none mb-5"
         >
           <TableCell dataLabel="STT" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.id}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{index + 1}</p>
           </TableCell>
           <TableCell dataLabel="Tên sản phẩm" showLabel={true}>
-            <p className="font-normal text-sm text-black">{row.name}</p>
+            <p className="font-normal text-sm text-black">{row.productName}</p>
           </TableCell>
           <TableCell dataLabel="Số lượng" showLabel={true}>
             <p className="font-normal text-sm text-right md:text-center text-black">{row.quantity}</p>
           </TableCell>
           <TableCell dataLabel="Ngày nhập kho" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.import_date}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.importDate}</p>
           </TableCell>
           <TableCell dataLabel="Hạn dùng" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.exp}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.expiredDate}</p>
           </TableCell>
           <TableCell dataLabel="Giá nhập" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.import_price}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.inPrice}</p>
           </TableCell>
         </tr>
       ))}

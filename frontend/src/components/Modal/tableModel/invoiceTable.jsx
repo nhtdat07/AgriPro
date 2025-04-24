@@ -12,19 +12,19 @@ function InvoiceTable({ loading, dataHeader, data, handleDelete }) {
           className="bg-white border md:border-b block md:table-row rounded-lg shadow-md md:rounded-none md:shadow-none mb-5"
         >
           <TableCell dataLabel="STT" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.id}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{index + 1}</p>
           </TableCell>
           <TableCell dataLabel="Mã số" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.code}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.salesInvoiceId}</p>
           </TableCell>
           <TableCell dataLabel="Thời gian bán hàng" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.timestamp}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.recordedTimestamp}</p>
           </TableCell>
           <TableCell dataLabel="Khách hàng" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.customer}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.customerName}</p>
           </TableCell>
           <TableCell>
-            <ViewInvoice code={row.code} timestamp={row.timestamp} customer={row.customer}/>
+            <ViewInvoice code={row.salesInvoiceId} timestamp={row.recordedTimestamp} customer={row.customerName}/>
           </TableCell>
         </tr>
       ))}

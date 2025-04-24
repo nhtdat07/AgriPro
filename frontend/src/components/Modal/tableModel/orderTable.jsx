@@ -12,19 +12,19 @@ function PurchaseTable({ loading, dataHeader, data, handleDelete }) {
           className="bg-white border md:border-b block md:table-row rounded-lg shadow-md md:rounded-none md:shadow-none mb-5"
         >
           <TableCell dataLabel="STT" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.id}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{index + 1}</p>
           </TableCell>
           <TableCell dataLabel="Mã số" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.code}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.purchaseOrderId}</p>
           </TableCell>
           <TableCell dataLabel="Thời gian nhập kho" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.timestamp}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.recordedTimestamp}</p>
           </TableCell>
           <TableCell dataLabel="Nhà cung cấp" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.supplier}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.supplierName}</p>
           </TableCell>
           <TableCell>
-            <ViewPurchase code={row.code} timestamp={row.timestamp} supplier={row.supplier}/>
+            <ViewPurchase code={row.purchaseOrderId} timestamp={row.recordedTimestamp} supplier={row.supplierName}/>
           </TableCell>
         </tr>
       ))}

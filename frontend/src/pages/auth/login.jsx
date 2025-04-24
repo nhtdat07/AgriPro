@@ -23,7 +23,7 @@ const LoginIndex = () => {
     try {
       const response = await axiosInstance.post('/auth/sign-in', requestData);
       if (response.status === 200) {
-        const token = response.data.token;
+        const token = response.data.data.token;
         localStorage.setItem('token', token);
         navigate("/homepage");
       }
