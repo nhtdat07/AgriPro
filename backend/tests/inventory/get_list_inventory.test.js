@@ -241,7 +241,6 @@ test("Happy case: should return inventory successfully with query of isAboutToEx
     }
 
     const result = await getListInventoryService(pool, user, query);
-    console.log(result)
     expect(result).toMatchObject(expectedResponse);
 });
 
