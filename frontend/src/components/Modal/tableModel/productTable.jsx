@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DetailProduct from "../detailModel/detailProduct";
 
-function ProductCard({ row, onClick }) {
+function ProductCard({ row, onClick, refreshProducts }) {
   return (
     <div className="bg-[#efffef] border rounded-lg shadow-md p-4 mb-4 flex-shrink-0 overflow-hidden flex flex-col justify-between">
       <div
@@ -19,7 +19,7 @@ function ProductCard({ row, onClick }) {
   );
 }
 
-function ProductTable({ loading, data }) {
+function ProductTable({ loading, data, refreshProducts }) {
   const [selectedProduct, setSelectedProduct] = useState();
 
   const handleCloseDetail = () => { setSelectedProduct(undefined); };
@@ -37,7 +37,7 @@ function ProductTable({ loading, data }) {
       {selectedProduct && (
         <div className="fixed inset-0 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg relative w-3/4 max-w-2xl">
-            <DetailProduct product={selectedProduct} onClose={handleCloseDetail} />
+            <DetailProduct code={selectedProduct.productId} onClose={handleCloseDetail} refreshProducts={refreshProducts} />
           </div>
         </div>
       )}

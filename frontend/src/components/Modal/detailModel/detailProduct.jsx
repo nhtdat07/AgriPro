@@ -1,15 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../../utils/axiosInstance";
 
-export default function DetailProduct({ product, onClose }) {
+export default function DetailProduct({ code, onClose, refreshProducts }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [editableProduct, setEditableProduct] = useState({ ...product }); 
+    const [editableProduct, setEditableProduct] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const fetchProductDetails = async () => {
+        try {
+            const productRes = await axiosInstance.get(`/products/${code}`);
+            const data = productRes.data.data;
+
+            const mappedData = {
+                name: data.productName,
+                brand: data.brand,
+                category: data.category,
+                origin: data.productionPlace,
+                price: data.outPrice,
+                usage: data.usage,
+                guideline: data.guideline,
+                photo: data.imagePath,
+                quantity: data.availableQuantity,
+            };
+
+            setEditableProduct(mappedData);
+        } catch (error) {
+            if (error.response) {
+                const { status } = error.response;
+                if (status === 400) {
+                    alert("Bad Request!");
+                } else if (status === 401) {
+                    alert("Bạn không có quyền truy cập vào trang này!");
+                } else if (status === 404) {
+                    alert("Sản phẩm này hiện không tồn tại!");
+                } else if (status === 500) {
+                    alert("Vui lòng tải lại trang!");
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (code) {
+            fetchProductDetails();
+        }
+    }, [code]);
 
     const handleInputChange = (field, value) => {
         setEditableProduct({ ...editableProduct, [field]: value });
     };
 
-    const handleSave = () => { setIsEditing(false) };
+    const handleSave = async () => {
+        const price = Number(editableProduct.price);
+        const maxSafe = Number.MAX_SAFE_INTEGER;
+
+        if (
+            isNaN(price) ||
+            !Number.isInteger(price) ||
+            price < 0 ||
+            price > maxSafe
+        ) {
+            alert("Giá bán không hợp lệ");
+            return;
+        }
+
+        try {
+            await axiosInstance.patch(`/products/${code}`, {
+                productName: editableProduct.name,
+                brand: editableProduct.brand,
+                category: editableProduct.category,
+                productionPlace: editableProduct.origin,
+                outPrice: editableProduct.price,
+                usage: editableProduct.usage,
+                guideline: editableProduct.guideline,
+                imagePath: editableProduct.photo,
+                availableQuantity: editableProduct.quantity
+            });
+            setIsEditing(false);
+            refreshProducts();
+        } catch (error) {
+            if (error.response) {
+                const { status } = error.response;
+                if (status === 400) {
+                    alert("Bad Request!");
+                } else if (status === 401) {
+                    alert("Bạn không có quyền truy cập vào trang này!");
+                } else if (status === 404) {
+                    alert("Sản phẩm này hiện không tồn tại!");
+                } else if (status === 500) {
+                    alert("Vui lòng tải lại trang!");
+                }
+            }
+        }
+    };    
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -26,10 +109,29 @@ export default function DetailProduct({ product, onClose }) {
         setEditableProduct({ ...editableProduct, photo: "" });
     };
 
-    const handleDeleteConfirm = () => {
-        setShowDeleteModal(false);
-        onClose();
-    };
+    const handleDeleteConfirm = async () => {
+        try {
+            await axiosInstance.delete(`/products/${code}`);
+            setShowDeleteModal(false);
+            refreshProducts();
+            onClose();
+        } catch (error) {
+            if (error.response) {
+                const { status } = error.response;
+                if (status === 400) {
+                    alert("Bad Request!");
+                } else if (status === 401) {
+                    alert("Bạn không có quyền truy cập vào trang này!");
+                } else if (status === 404) {
+                    alert("Sản phẩm này hiện không tồn tại!");
+                } else if (status === 500) {
+                    alert("Vui lòng tải lại trang!");
+                }
+            }
+        }
+    };    
+
+    if (!editableProduct) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -68,18 +170,24 @@ export default function DetailProduct({ product, onClose }) {
                         )}
                     </div>
                     <div className="w-3/4">
-                        <div>
-                            <label className="p-2 block text-sm font-medium text-gray-700">Tên sản phẩm</label>
-                            {isEditing ? (
-                                <input
-                                    type="text"
-                                    value={editableProduct.name}
-                                    onChange={(e) => handleInputChange("name", e.target.value)}
-                                    className="w-full p-2 border rounded-lg"
-                                />
-                            ) : (
-                                <p className="w-full p-2 border rounded-lg">{editableProduct.name}</p>
-                            )}
+                        <div className="flex gap-4">
+                            <div className="w-3/4">
+                                <label className="p-2 block text-sm font-medium text-gray-700">Tên sản phẩm</label>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={editableProduct.name}
+                                        onChange={(e) => handleInputChange("name", e.target.value)}
+                                        className="w-full p-2 border rounded-lg min-h-[40px]"
+                                    />
+                                ) : (
+                                    <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.name}</p>
+                                )}
+                            </div>
+                            <div className="w-1/4">
+                            <label className="p-2 block text-sm font-medium text-gray-700">Số lượng hiện có</label>
+                                <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.quantity}</p>
+                            </div>
                         </div>
                         <div className="flex gap-4">
                             <div className="w-1/2">
@@ -89,23 +197,29 @@ export default function DetailProduct({ product, onClose }) {
                                         type="text"
                                         value={editableProduct.brand}
                                         onChange={(e) => handleInputChange("brand", e.target.value)}
-                                        className="w-full p-2 border rounded-lg"
+                                        className="w-full p-2 border rounded-lg min-h-[40px]"
                                     />
                                 ) : (
-                                    <p className="w-full p-2 border rounded-lg">{editableProduct.brand}</p>
+                                    <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.brand}</p>
                                 )}
                             </div>
                             <div className="w-1/2">
                                 <label className="p-2 block text-sm font-medium text-gray-700">Phân loại</label>
                                 {isEditing ? (
-                                    <input
-                                        type="text"
+                                    <select
                                         value={editableProduct.category}
                                         onChange={(e) => handleInputChange("category", e.target.value)}
-                                        className="w-full p-2 border rounded-lg"
-                                    />
+                                        className="w-full p-2 border rounded-lg min-h-[40px] bg-white"
+                                    >
+                                        <option disabled selected>Phân loại</option>
+                                        <option value="THUỐC BẢO VỆ THỰC VẬT">THUỐC BẢO VỆ THỰC VẬT</option>
+                                        <option value="PHÂN BÓN - ĐẤT TRỒNG">PHÂN BÓN - ĐẤT TRỒNG</option>
+                                        <option value="HẠT GIỐNG - CÂY TRỒNG">HẠT GIỐNG - CÂY TRỒNG</option>
+                                        <option value="NÔNG CỤ">NÔNG CỤ</option>
+                                        <option value="GIA SÚC - GIA CẦM">GIA SÚC - GIA CẦM</option>
+                                    </select>
                                 ) : (
-                                    <p className="w-full p-2 border rounded-lg">{editableProduct.category}</p>
+                                    <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.category}</p>
                                 )}
                             </div>
                         </div>
@@ -113,14 +227,14 @@ export default function DetailProduct({ product, onClose }) {
                             <div className="w-1/2">
                                 <label className="p-2 block text-sm font-medium text-gray-700">Nơi sản xuất</label>
                                 {isEditing ? (
-                                        <input
+                                    <input
                                         type="text"
                                         value={editableProduct.origin}
                                         onChange={(e) => handleInputChange("origin", e.target.value)}
-                                        className="w-full p-2 border rounded-lg"
+                                        className="w-full p-2 border rounded-lg min-h-[40px]"
                                     />
                                 ) : (
-                                    <p className="w-full p-2 border rounded-lg">{product.origin}</p>
+                                    <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.origin}</p>
                                 )}
                             </div>
                             <div className="w-1/2">
@@ -133,11 +247,10 @@ export default function DetailProduct({ product, onClose }) {
                                         className="w-full p-2 border rounded-lg"
                                     />
                                 ) : (
-                                    <p className="w-full p-2 border rounded-lg">{`${product.price} VNĐ`}</p>
+                                    <p className="w-full p-2 border rounded-lg">{`${editableProduct.price} `}</p>
                                 )}
                             </div>
                         </div>
-
                         <div>
                             <label className="p-2 block text-sm font-medium text-gray-700">Công dụng</label>
                             {isEditing ? (
@@ -156,12 +269,12 @@ export default function DetailProduct({ product, onClose }) {
                             <label className="p-2 block text-sm font-medium text-gray-700">Hướng dẫn sử dụng</label>
                             {isEditing ? (
                                 <textarea
-                                    value={editableProduct.instructions}
-                                    onChange={(e) => handleInputChange("instructions", e.target.value)}
+                                    value={editableProduct.guideline}
+                                    onChange={(e) => handleInputChange("guideline", e.target.value)}
                                     className="w-full p-2 border rounded-lg h-20 overflow-auto"
                                 />
                             ) : (
-                                <p className="w-full p-2 border rounded-lg h-20 overflow-auto">{product.instructions}</p>
+                                <p className="w-full p-2 border rounded-lg h-20 overflow-auto">{editableProduct.guideline}</p>
                             )}
                         </div>
                     </div>
@@ -170,7 +283,15 @@ export default function DetailProduct({ product, onClose }) {
                     {isEditing ? (
                         <>
                             <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={handleSave}>LƯU</button>
-                            <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setIsEditing(false)}>HỦY</button>
+                            <button
+                                className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg"
+                                onClick={async () => {
+                                    await fetchProductDetails();
+                                    setIsEditing(false);
+                                }}
+                            >
+                                HỦY
+                            </button>
                         </>
                     ) : (
                         <>

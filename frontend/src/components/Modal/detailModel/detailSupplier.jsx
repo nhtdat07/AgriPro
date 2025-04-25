@@ -61,7 +61,6 @@ export default function ViewSupplier(props) {
   
       fetchSupplierDetails();
       setIsEditing(false);
-  
       if (props.refreshSuppliers) {
         props.refreshSuppliers();
       }
@@ -184,7 +183,15 @@ export default function ViewSupplier(props) {
               ) : (
                 <>
                   <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={handleSave}>LƯU</button>
-                  <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setIsEditing(false)}>THOÁT</button>
+                  <button
+                    className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg"
+                    onClick={async () => {
+                      await fetchSupplierDetails();
+                      setIsEditing(false);
+                    }}
+                  >
+                    HỦY
+                  </button>
                 </>
               )}
             </div>
