@@ -54,7 +54,7 @@ export const validateAddSalesInvoiceData = (req, res, next) => {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing quantity' });
         }
         quantity = parseInt(quantity, consts.DECIMAL_BASE);
-        if (!Number.isInteger(quantity)) {
+        if (!Number.isInteger(quantity) || quantity < consts.MIN_VALID_QUANTITY) {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid quantity' });
         }
         product.quantity = quantity;
@@ -63,7 +63,7 @@ export const validateAddSalesInvoiceData = (req, res, next) => {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing out-price' });
         }
         outPrice = parseInt(outPrice, consts.DECIMAL_BASE);
-        if (!Number.isInteger(outPrice)) {
+        if (!Number.isInteger(outPrice) || outPrice < consts.MIN_VALID_PRICE) {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid out-price' });
         }
         product.outPrice = outPrice;
