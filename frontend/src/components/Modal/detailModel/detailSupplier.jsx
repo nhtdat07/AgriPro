@@ -86,10 +86,24 @@ export default function ViewSupplier(props) {
       await axiosInstance.delete(`/suppliers/${props.code}`);
       setShowDeleteModal(false);
       setShowModal(false);
+      if (props.refreshSuppliers) {
+        props.refreshSuppliers();
+      }
     } catch (error) {
-      console.error("Failed to delete supplier", error);
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bad Request!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 404) {
+          alert("Nhà cung cấp này hiện không tồn tại!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
     }
-  };
+  };  
 
   useEffect(() => {
     if (showModal) {
@@ -185,7 +199,12 @@ export default function ViewSupplier(props) {
               Bạn có muốn xóa nhà cung cấp này?
             </p>
             <div className="flex justify-center gap-4 p-4">
-              <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => { setShowDeleteModal(false); setShowModal(false); }}>XÁC NHẬN</button>
+              <button
+                className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg"
+                onClick={handleDelete}
+              >
+                XÁC NHẬN
+              </button>
               <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowDeleteModal(false)}>TRỞ LẠI</button>
             </div>
           </div>
