@@ -61,7 +61,7 @@ export const validateAddPurchaseOrderData = (req, res, next) => {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing quantity' });
         }
         quantity = parseInt(quantity, consts.DECIMAL_BASE);
-        if (!Number.isInteger(quantity)) {
+        if (!Number.isInteger(quantity) || quantity < consts.MIN_VALID_QUANTITY) {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid quantity' });
         }
         product.quantity = quantity;
@@ -70,7 +70,7 @@ export const validateAddPurchaseOrderData = (req, res, next) => {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing in-price' });
         }
         inPrice = parseInt(inPrice, consts.DECIMAL_BASE);
-        if (!Number.isInteger(inPrice)) {
+        if (!Number.isInteger(inPrice) || inPrice < consts.MIN_VALID_PRICE) {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid in-price' });
         }
         product.inPrice = inPrice;

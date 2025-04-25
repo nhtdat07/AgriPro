@@ -48,7 +48,7 @@ export const validateAddProductData = (req, res, next) => {
         return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing out-price' });
     }
     outPrice = parseInt(outPrice, consts.DECIMAL_BASE);
-    if (!Number.isInteger(outPrice)) {
+    if (!Number.isInteger(outPrice) || outPrice < consts.MIN_VALID_PRICE) {
         return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid out-price' });
     }
     req.body.outPrice = outPrice;
@@ -90,7 +90,7 @@ export const validateEditProductDetailsData = (req, res, next) => {
 
     if (outPrice) {
         outPrice = parseInt(outPrice, consts.DECIMAL_BASE);
-        if (!Number.isInteger(outPrice)) {
+        if (!Number.isInteger(outPrice) || outPrice < consts.MIN_VALID_PRICE) {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid out-price' });
         }
         req.body.outPrice = outPrice;
