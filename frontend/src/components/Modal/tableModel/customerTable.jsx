@@ -3,7 +3,7 @@ import Datatables from "../../Datatables/Table";
 import TableCell from "../../Datatables/TableCell";
 import ViewCustomer from "../detailModel/detailCustomer";
 
-function CustomerTable({ loading, dataHeader, data, handleDelete }) {
+function CustomerTable({ loading, dataHeader, data, handleDelete, refreshCustomers }) {
   return (
     <Datatables loading={loading} dataHeader={dataHeader}>
       {data?.map((row, index) => (
@@ -27,7 +27,7 @@ function CustomerTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.email}</p>
           </TableCell>
           <TableCell>
-            <ViewCustomer name={row.customerName} address={row.address} phone={row.phoneNumber} email={row.email}/>
+            <ViewCustomer code={row.customerId} refreshCustomers={refreshCustomers} />
           </TableCell>
         </tr>
       ))}

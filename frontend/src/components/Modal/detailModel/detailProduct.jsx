@@ -41,11 +41,11 @@ export default function DetailProduct({ product, onClose }) {
                     <div className="w-1/4 flex flex-col items-center">
                         <label className="p-2 block text-sm font-medium text-gray-700">Ảnh sản phẩm</label>
                         <div className="border p-2 flex items-center justify-center rounded-lg">
-                            {editableProduct.imagePath ? (
+                            {editableProduct.photo ? (
                                 <img
-                                    src={editableProduct.imagePath}
+                                    src={editableProduct.photo}
                                     className="object-cover w-40 h-48"
-                                    alt={editableProduct.productName}
+                                    alt={editableProduct.name}
                                 />
                             ) : (
                                 <div className="flex items-center justify-center w-40 h-48 bg-gray-200">
@@ -73,12 +73,12 @@ export default function DetailProduct({ product, onClose }) {
                             {isEditing ? (
                                 <input
                                     type="text"
-                                    value={editableProduct.productName}
+                                    value={editableProduct.name}
                                     onChange={(e) => handleInputChange("name", e.target.value)}
                                     className="w-full p-2 border rounded-lg"
                                 />
                             ) : (
-                                <p className="w-full p-2 border rounded-lg">{editableProduct.productName}</p>
+                                <p className="w-full p-2 border rounded-lg">{editableProduct.name}</p>
                             )}
                         </div>
                         <div className="flex gap-4">

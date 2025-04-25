@@ -92,6 +92,29 @@ function InventoryPurchase() {
     fetchData();
   }, []);  
 
+  const fetchSuppliers = async () => {
+    try {
+      const suppliersRes = await axiosInstance.get("/suppliers");
+      const suppliersArray = suppliersRes.data.data.suppliers;
+      setSuppliersData(suppliersArray);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bad Request!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, []);
+
   const handleDelete = () => { };
 
   return (
@@ -268,7 +291,8 @@ function InventoryPurchase() {
                       loading={loading}
                       dataHeader={dataHeaderSupplier}
                       data={suppliersData}
-                      handleDelete={handleDelete}
+                      handleDelete={handleDelete} 
+                      refreshSuppliers={fetchSuppliers}
                     />
                   </div>
                 </div>

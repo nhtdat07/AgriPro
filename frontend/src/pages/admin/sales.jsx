@@ -63,7 +63,30 @@ function Sales() {
     };
   
     fetchData();
-  }, []);  
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      const customersRes = await axiosInstance.get("/customers");
+      const customersArray = customersRes.data.data.customers;
+      setCustomersData(customersArray);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bad Request!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
 
   const handleDelete = () => { };
 
@@ -155,6 +178,7 @@ function Sales() {
                       dataHeader={dataHeaderCustomer}
                       data={customersData}
                       handleDelete={handleDelete}
+                      refreshCustomers={fetchCustomers}
                     />
                   </div>
                 </div>

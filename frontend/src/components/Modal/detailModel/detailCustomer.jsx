@@ -1,20 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axiosInstance from "../../../utils/axiosInstance";
 
 export default function ViewCustomer(props) {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [supplierData, setSupplierData] = useState({
-    name: props.name,
-    address: props.address,
-    phone: props.phone,
-    email: props.email,
+  const [customerData, setCustomerData] = useState({
+    name: "",
+    address: "",
+    phone: "",
+    email: "",
   });
 
+  const fetchCustomerDetails = async () => {
+    try {
+      const customerRes = await axiosInstance.get(`/customers/${props.code}`);
+      const data = customerRes.data.data;
+      setCustomerData({
+        name: data.customerName,
+        address: data.address,
+        phone: data.phoneNumber.trim(),
+        email: data.email,
+      });
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bad Request!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 404) {
+          alert("Khách hàng này hiện không tồn tại!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };
+
+  const handleSave = async () => {
+    if (!customerData.name || !customerData.address || !customerData.phone) {
+      alert("Tên khách hàng, địa chỉ và số điện thoại không được để trống!");
+      return;
+    }
+  
+    if (customerData.phone.length !== 10 || !/^\d{10}$/.test(customerData.phone)) {
+      alert("Số điện thoại phải có 10 chữ số!");
+      return;
+    }
+  
+    try {
+      await axiosInstance.patch(`/customers/${props.code}`, {
+        customerName: customerData.name,
+        address: customerData.address,
+        phoneNumber: customerData.phone,
+        email: customerData.email,
+      });
+  
+      fetchCustomerDetails();
+      setIsEditing(false);
+  
+      if (props.refreshCustomers) {
+        props.refreshCustomers();
+      }
+    } catch (error) {
+      console.error("Failed to update customer", error);
+    }
+  };  
+
+  const handleDelete = async () => {
+    try {
+      await axiosInstance.delete(`/customers/${props.code}`);
+      setShowDeleteModal(false);
+      setShowModal(false);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bad Request!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 404) {
+          alert("Khách hàng này hiện không tồn tại!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };
+
+  useEffect(() => {
+    if (showModal) {
+      fetchCustomerDetails();
+    }
+  }, [showModal]);
+
   const handleChange = (e) => {
-    setSupplierData({ ...supplierData, [e.target.name]: e.target.value });
+    setCustomerData({ ...customerData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -34,7 +118,7 @@ export default function ViewCustomer(props) {
                 <input
                   type="text"
                   name="name"
-                  value={supplierData.name}
+                  value={customerData.name}
                   onChange={handleChange}
                   disabled={!isEditing}
                   className="w-full p-2 border rounded-lg"
@@ -45,7 +129,7 @@ export default function ViewCustomer(props) {
                 <input
                   type="text"
                   name="address"
-                  value={supplierData.address}
+                  value={customerData.address}
                   onChange={handleChange}
                   disabled={!isEditing}
                   className="w-full p-2 border rounded-lg"
@@ -57,7 +141,7 @@ export default function ViewCustomer(props) {
                   <input
                     type="text"
                     name="phone"
-                    value={supplierData.phone}
+                    value={customerData.phone}
                     onChange={handleChange}
                     disabled={!isEditing}
                     className="w-full p-2 border rounded-lg"
@@ -68,7 +152,7 @@ export default function ViewCustomer(props) {
                   <input
                     type="email"
                     name="email"
-                    value={supplierData.email}
+                    value={customerData.email}
                     onChange={handleChange}
                     disabled={!isEditing}
                     className="w-full p-2 border rounded-lg"
@@ -85,7 +169,7 @@ export default function ViewCustomer(props) {
                 </>
               ) : (
                 <>
-                  <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setIsEditing(false)}>LƯU</button>
+                  <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={handleSave}>LƯU</button>
                   <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setIsEditing(false)}>THOÁT</button>
                 </>
               )}
@@ -98,10 +182,10 @@ export default function ViewCustomer(props) {
           <div className="bg-white rounded-lg shadow-md w-[500px] p-6">
             <h3 className="text-2xl font-semibold text-center">Lưu ý</h3>
             <p className="my-4 text-gray-700 text-lg leading-relaxed text-center">
-              Bạn có muốn xóa nhà cung cấp này?
+              Bạn có muốn xóa khách hàng này?
             </p>
             <div className="flex justify-center gap-4 p-4">
-              <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => { setShowDeleteModal(false); setShowModal(false); }}>XÁC NHẬN</button>
+              <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={handleDelete}>XÁC NHẬN</button>
               <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowDeleteModal(false)}>TRỞ LẠI</button>
             </div>
           </div>

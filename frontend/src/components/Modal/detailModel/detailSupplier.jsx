@@ -1,17 +1,101 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axiosInstance from "../../../utils/axiosInstance";
 
 export default function ViewSupplier(props) {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [supplierData, setSupplierData] = useState({
-    name: props.name,
-    address: props.address,
-    phone: props.phone,
-    email: props.email,
+    name: "",
+    address: "",
+    phone: "",
+    email: "",
   });
+
+  const fetchSupplierDetails = async () => {
+    try {
+      const supplierRes = await axiosInstance.get(`/suppliers/${props.code}`);
+      const data = supplierRes.data.data;
+      setSupplierData({
+        name: data.supplierName,
+        address: data.address,
+        phone: data.phoneNumber.trim(),
+        email: data.email,
+      });
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bad Request!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 404) {
+          alert("Nhà cung cấp này hiện không tồn tại!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };
+
+  const handleSave = async () => {
+    if (!supplierData.name || !supplierData.address || !supplierData.phone) {
+      alert("Tên nhà cung cấp, địa chỉ và số điện thoại không được để trống!");
+      return;
+    }
+  
+    if (supplierData.phone.length !== 10 || !/^\d{10}$/.test(supplierData.phone)) {
+      alert("Số điện thoại phải có 10 chữ số!");
+      return;
+    }
+  
+    try {
+      await axiosInstance.patch(`/suppliers/${props.code}`, {
+        supplierName: supplierData.name,
+        address: supplierData.address,
+        phoneNumber: supplierData.phone,
+        email: supplierData.email,
+      });
+  
+      fetchSupplierDetails();
+      setIsEditing(false);
+  
+      if (props.refreshSuppliers) {
+        props.refreshSuppliers();
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Bad Request!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 404) {
+          alert("Nhà cung cấp này hiện không tồn tại!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };  
+
+  const handleDelete = async () => {
+    try {
+      await axiosInstance.delete(`/suppliers/${props.code}`);
+      setShowDeleteModal(false);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Failed to delete supplier", error);
+    }
+  };
+
+  useEffect(() => {
+    if (showModal) {
+      fetchSupplierDetails();
+    }
+  }, [showModal]);
 
   const handleChange = (e) => {
     setSupplierData({ ...supplierData, [e.target.name]: e.target.value });
@@ -85,7 +169,7 @@ export default function ViewSupplier(props) {
                 </>
               ) : (
                 <>
-                  <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setIsEditing(false)}>LƯU</button>
+                  <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={handleSave}>LƯU</button>
                   <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setIsEditing(false)}>THOÁT</button>
                 </>
               )}

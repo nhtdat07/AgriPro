@@ -30,7 +30,6 @@ const RegisterIndex = () => {
       confirmPassword: data.confirmPassword
     };
   
-    let response;
     if (data.password !== data.confirmPassword) {
       alert("Mật khẩu không khớp!");
       return;

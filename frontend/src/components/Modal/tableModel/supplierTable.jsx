@@ -3,7 +3,7 @@ import Datatables from "../../Datatables/Table";
 import TableCell from "../../Datatables/TableCell";
 import ViewSupplier from "../detailModel/detailSupplier";
 
-function SupplierTable({ loading, dataHeader, data, handleDelete }) {
+function SupplierTable({ loading, dataHeader, data, handleDelete, refreshSuppliers }) {
   return (
     <Datatables loading={loading} dataHeader={dataHeader}>
       {data?.map((row, index) => (
@@ -27,7 +27,7 @@ function SupplierTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.email}</p>
           </TableCell>
           <TableCell>
-            <ViewSupplier name={row.supplierName} address={row.address} phone={row.phoneNumber} email={row.email}/>
+            <ViewSupplier code={row.supplierId} refreshSuppliers={refreshSuppliers} />
           </TableCell>
         </tr>
       ))}
