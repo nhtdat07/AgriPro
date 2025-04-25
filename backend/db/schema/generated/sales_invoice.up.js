@@ -34,7 +34,9 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE TRIGGER set_sales_invoice_id
 BEFORE INSERT ON sales_invoice
 FOR EACH ROW
-EXECUTE FUNCTION set_custom_sales_invoice_id();`;
+EXECUTE FUNCTION set_custom_sales_invoice_id();
+
+CREATE UNIQUE INDEX IF NOT EXISTS sales_invoice_id_idx ON sales_invoice (agency_id, id);`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {

@@ -28,7 +28,7 @@ export const getListCustomersService = async (pool, user, query) => {
             offset
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get list customers') };
+            throw new errors.InternalError('Failed to get list customers');
         }
 
         // Transform to return data
@@ -51,6 +51,9 @@ export const getListCustomersService = async (pool, user, query) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

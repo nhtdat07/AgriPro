@@ -24,13 +24,13 @@ export const signInService = async (pool, userData) => {
         const result = await getUserByEmail(pool, { email });
 
         if (!result || result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UnauthorizedError('Email does not exist') };
+            throw new errors.UnauthorizedError('Email does not exist');
         }
 
         // Validate password
         const isMatch = await bcrypt.compare(password, result[consts.FIRST_IDX_ARRAY].password_hash)
         if (!isMatch) {
-            return { error: new errors.UnauthorizedError('Incorrect password') };
+            throw new errors.UnauthorizedError('Incorrect password');
         }
 
         // Generate JWT token
@@ -43,7 +43,10 @@ export const signInService = async (pool, userData) => {
             data: { token: jwtToken }
         };
     } catch (error) {
-        console.log(error)
+        if (error.statusCode) {
+            return { error };
+        }
+        console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }
 };

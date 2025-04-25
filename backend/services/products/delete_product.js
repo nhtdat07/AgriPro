@@ -16,14 +16,17 @@ export const deleteProductService = async (pool, user, params) => {
             id: params.productId
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to delete product') };
+            throw new errors.InternalError('Database failed to delete product');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Product not found') };
+            throw new errors.UndefinedError('Product not found');
         }
 
         return { message: 'Delete product successfully' };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

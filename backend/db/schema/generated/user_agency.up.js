@@ -11,7 +11,7 @@ export async function createTableUserAgency(pool, params = {}) {
   "agency_name" varchar(100) NOT NULL DEFAULT '',
   "owner_name" varchar(100) NOT NULL DEFAULT '',
   "phone" char(10) NOT NULL DEFAULT '',
-  "profile_photo_path" varchar(100),
+  "profile_photo_path" TEXT,
   "tax_code" varchar(20),
   "address" varchar(255),
   "email" varchar(50) UNIQUE NOT NULL,
@@ -30,7 +30,8 @@ BEFORE INSERT ON user_agency
 FOR EACH ROW
 EXECUTE FUNCTION set_custom_user_agency_id();
 
-CREATE UNIQUE INDEX IF NOT EXISTS user_agency_email_idx ON user_agency ("email");
+CREATE UNIQUE INDEX IF NOT EXISTS user_agency_email_idx ON user_agency (email);
+CREATE UNIQUE INDEX IF NOT EXISTS user_agency_id_idx ON user_agency (id);
 
 COMMENT ON COLUMN user_agency."password_hash" IS 'Eksblowfish hash string of password';`;
         const { rows } = await pool.query(query, Object.values(params));

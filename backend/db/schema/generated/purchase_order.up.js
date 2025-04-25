@@ -33,7 +33,9 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE TRIGGER set_purchase_order_id
 BEFORE INSERT ON purchase_order
 FOR EACH ROW
-EXECUTE FUNCTION set_custom_purchase_order_id();`;
+EXECUTE FUNCTION set_custom_purchase_order_id();
+
+CREATE UNIQUE INDEX IF NOT EXISTS purchase_order_id_idx ON purchase_order (agency_id, id);`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {

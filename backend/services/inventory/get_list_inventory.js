@@ -37,7 +37,7 @@ export const getListInventoryService = async (pool, user, query) => {
             offset
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to get inventory') };
+            throw new errors.InternalError('Database failed to get inventory');
         }
 
         // Transform to return data
@@ -61,10 +61,10 @@ export const getListInventoryService = async (pool, user, query) => {
             }
         };
     } catch (error) {
-        console.log(error)
-        if (error instanceof errors.InternalError) {
+        if (error.statusCode) {
             return { error };
         }
+        console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }
 };

@@ -1,5 +1,6 @@
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
+import * as dbUtils from '../../utils/db.js';
 import { formatTimestamp } from '../../utils/format.js';
 import { addNotification } from '../../db/queries/generated/notification.js';
 import { addProductForSalesInvoice, addSalesInvoice, updateInventory } from '../../db/queries/generated/selling.js';
@@ -15,6 +16,9 @@ export const addSalesInvoiceService = async (pool, user, data) => {
     const agencyId = user.userAgencyId;
 
     try {
+        // Start DB transaction
+        await dbUtils.startTransaction(pool);
+
         let totalPayment = consts.DEFAULT_TOTAL_PAYMENT;
         let result;
         let timestamp = formatTimestamp(new Date());
@@ -30,7 +34,7 @@ export const addSalesInvoiceService = async (pool, user, data) => {
                 quantity
             });
             if (!result) {
-                return { error: new errors.InternalError(`Database failed to update inventory with product ${productId}`) };
+                throw new errors.InternalError(`Database failed to update inventory with product ${productId}`);
             }
 
             // Calculate total payment
@@ -47,7 +51,7 @@ export const addSalesInvoiceService = async (pool, user, data) => {
             total_payment: totalPayment
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to add sales invoice') };
+            throw new errors.InternalError('Database failed to add sales invoice');
         }
 
         // Add products for sales invoice
@@ -64,11 +68,9 @@ export const addSalesInvoiceService = async (pool, user, data) => {
                 imported_timestamp: product.imported_timestamp
             })
             if (!result) {
-                return {
-                    error: new errors.InternalError(`
-                        Database failed to add product ${product.productId} for sales invoice ${salesInvoiceId}
-                    `)
-                };
+                throw new errors.InternalError(`
+                    Database failed to add product ${product.productId} for sales invoice ${salesInvoiceId}
+                `);
             }
         }
 
@@ -82,11 +84,20 @@ Mã khách hàng: ${customerId}
 Thời gian ghi nhận: ${timestamp}`
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to add notification') };
+            throw new errors.InternalError('Database failed to add notification');
         }
+
+        // Commit DB transaction
+        await dbUtils.commitTransaction(pool);
 
         return { message: 'Add sales invoice successfully' };
     } catch (error) {
+        // Rollback DB transaction
+        await dbUtils.rollbackTransaction(pool);
+
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

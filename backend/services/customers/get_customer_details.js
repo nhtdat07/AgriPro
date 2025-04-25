@@ -16,10 +16,10 @@ export const getCustomerDetailsService = async (pool, user, params) => {
             id: params.customerId
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get customer details from the database') };
+            throw new errors.InternalError('Failed to get customer details from the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Customer not found') };
+            throw new errors.UndefinedError('Customer not found');
         }
         const customerDetails = result[consts.FIRST_IDX_ARRAY];
 
@@ -34,6 +34,9 @@ export const getCustomerDetailsService = async (pool, user, params) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

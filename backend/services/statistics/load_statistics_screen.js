@@ -18,7 +18,7 @@ export const loadStatisticsScreenService = async (pool, user, query) => {
             end_date: endDate
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get total benefits from the database') };
+            throw new errors.InternalError('Failed to get total benefits from the database');
         }
         const totalBenefit = result[consts.FIRST_IDX_ARRAY].total_benefit;
 
@@ -29,7 +29,7 @@ export const loadStatisticsScreenService = async (pool, user, query) => {
             end_date: endDate
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get purchasing summary from the database') };
+            throw new errors.InternalError('Failed to get purchasing summary from the database');
         }
         const purchasingSummary = result[consts.FIRST_IDX_ARRAY];
 
@@ -40,7 +40,7 @@ export const loadStatisticsScreenService = async (pool, user, query) => {
             end_date: endDate
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get selling summary from the database') };
+            throw new errors.InternalError('Failed to get selling summary from the database');
         }
         const sellingSummary = result[consts.FIRST_IDX_ARRAY];
 
@@ -55,6 +55,9 @@ export const loadStatisticsScreenService = async (pool, user, query) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

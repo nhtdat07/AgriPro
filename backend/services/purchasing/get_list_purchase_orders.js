@@ -22,7 +22,7 @@ export const getListPurchaseOrdersService = async (pool, user, query) => {
             offset
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get list purchase orders') };
+            throw new errors.InternalError('Failed to get list purchase orders');
         }
 
         // Transform to return data
@@ -43,6 +43,9 @@ export const getListPurchaseOrdersService = async (pool, user, query) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

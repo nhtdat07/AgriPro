@@ -16,10 +16,10 @@ export const getSupplierDetailsService = async (pool, user, params) => {
             id: params.supplierId
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get supplier details from the database') };
+            throw new errors.InternalError('Failed to get supplier details from the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Supplier not found') };
+            throw new errors.UndefinedError('Supplier not found');
         }
         const supplierDetails = result[consts.FIRST_IDX_ARRAY];
 
@@ -34,6 +34,9 @@ export const getSupplierDetailsService = async (pool, user, params) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

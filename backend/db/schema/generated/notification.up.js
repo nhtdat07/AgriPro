@@ -37,7 +37,9 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE TRIGGER set_notification_id
 BEFORE INSERT ON notification
 FOR EACH ROW
-EXECUTE FUNCTION set_custom_notification_id();`;
+EXECUTE FUNCTION set_custom_notification_id();
+
+CREATE UNIQUE INDEX IF NOT EXISTS notification_id_idx ON notification (agency_id, id);`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {

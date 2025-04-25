@@ -26,7 +26,9 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE TRIGGER set_supplier_id
 BEFORE INSERT ON supplier
 FOR EACH ROW
-EXECUTE FUNCTION set_custom_supplier_id();`;
+EXECUTE FUNCTION set_custom_supplier_id();
+
+CREATE UNIQUE INDEX IF NOT EXISTS supplier_id_idx ON supplier (agency_id, id);`;
         const { rows } = await pool.query(query, Object.values(params));
         return rows;
     } catch (error) {

@@ -16,10 +16,10 @@ export const getProductDetailsService = async (pool, user, params) => {
             id: params.productId
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get product details from the database') };
+            throw new errors.InternalError('Failed to get product details from the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Product not found') };
+            throw new errors.UndefinedError('Product not found');
         }
         const productDetails = result[consts.FIRST_IDX_ARRAY];
 
@@ -52,6 +52,9 @@ export const getProductDetailsService = async (pool, user, params) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

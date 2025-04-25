@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS product (
   "id" char(6) UNIQUE NOT NULL,
   "agency_id" char(6) NOT NULL,
   "name" varchar(100) NOT NULL,
-  "image_path" varchar(100),
+  "image_path" TEXT,
   "brand" varchar(100) NOT NULL,
   "category" product_type NOT NULL,
   "out_price" integer NOT NULL,
@@ -38,3 +38,5 @@ CREATE OR REPLACE TRIGGER set_product_id
 BEFORE INSERT ON product
 FOR EACH ROW
 EXECUTE FUNCTION set_custom_product_id();
+
+CREATE UNIQUE INDEX IF NOT EXISTS product_id_idx ON product (agency_id, id);

@@ -23,14 +23,17 @@ export const editCustomerDetailsService = async (pool, user, params, data) => {
             id: params.customerId
         })
         if (!result) {
-            return { error: new errors.InternalError('Failed to update customer details to the database') };
+            throw new errors.InternalError('Failed to update customer details to the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Customer not found') };
+            throw new errors.UndefinedError('Customer not found');
         }
 
         return { message: 'Update customer successfully' };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

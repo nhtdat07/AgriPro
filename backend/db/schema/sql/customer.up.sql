@@ -21,3 +21,5 @@ CREATE OR REPLACE TRIGGER set_customer_id
 BEFORE INSERT ON customer
 FOR EACH ROW
 EXECUTE FUNCTION set_custom_customer_id();
+
+CREATE UNIQUE INDEX IF NOT EXISTS customer_id_idx ON customer (agency_id, id);

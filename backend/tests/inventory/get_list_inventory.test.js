@@ -5,6 +5,7 @@ import * as dbTest from '../test_util.js';
 import { getListInventoryService } from '../../services/inventory/get_list_inventory.js';
 
 let pool;
+const realDate = Date;
 
 beforeAll(async () => {
     pool = await dbTest.setupTestDb();
@@ -35,6 +36,14 @@ beforeAll(async () => {
         console.error('Error insert data:', error);
         throw error;
     }
+    global.Date = class extends Date {
+        constructor(...args) {
+            if (args.length === 0) {
+                return new realDate('2025-04-07 12:00:00');
+            }
+            return new realDate(...args);
+        }
+    };
 });
 
 afterAll(async () => {
@@ -44,6 +53,7 @@ afterAll(async () => {
         TRUNCATE TABLE configuration;
     `);
     await dbTest.teardownTestDb(pool);
+    global.Date = realDate;
 });
 
 test("Happy case: should return inventory successfully with no constraints", async () => {
