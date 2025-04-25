@@ -16,10 +16,10 @@ export const getSalesInvoiceDetailsService = async (pool, user, params) => {
             id: params.invoiceId
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get sales invoice details from the database') };
+            throw new errors.InternalError('Failed to get sales invoice details from the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Sales invoice not found') };
+            throw new errors.UndefinedError('Sales invoice not found');
         }
         const invoiceDetails = result[consts.FIRST_IDX_ARRAY];
 
@@ -29,7 +29,7 @@ export const getSalesInvoiceDetailsService = async (pool, user, params) => {
             id: params.invoiceId
         });
         if (!result) {
-            return { error: new errors.InternalError(`Failed to get products for sales invoice ${params.invoiceId} from the database`) };
+            throw new errors.InternalError(`Failed to get products for sales invoice ${params.invoiceId} from the database`);
         }
 
         // Transform products to return
@@ -53,6 +53,9 @@ export const getSalesInvoiceDetailsService = async (pool, user, params) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

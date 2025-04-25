@@ -2,6 +2,7 @@ import { addProduct } from '../../db/queries/generated/products.js';
 import { addNotification } from '../../db/queries/generated/notification.js';
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
+import * as dbUtils from '../../utils/db.js';
 
 /**
  * Handles AddProduct logic.
@@ -15,9 +16,12 @@ export const addProductService = async (pool, user, data) => {
     } = data;
 
     try {
+        // Start DB transaction
+        await dbUtils.startTransaction(pool);
+
         // Validate product category
         if (!consts.PRODUCT_TYPES.includes(category)) {
-            return { error: new errors.ValidationError('Invalid product category') };
+            throw new errors.ValidationError('Invalid product category');
         }
 
         // Add product to database
@@ -34,7 +38,7 @@ export const addProductService = async (pool, user, data) => {
         });
 
         if (!result) {
-            return { error: new errors.InternalError('Database failed to add product') };
+            throw new errors.InternalError('Database failed to add product');
         }
 
         // Add notification of successfully recording product
@@ -48,11 +52,20 @@ Loại sản phẩm: ${category}
 Nơi sản xuất: ${productionPlace}`
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to add notification') };
+            throw new errors.InternalError('Database failed to add notification');
         }
+
+        // Commit DB transaction
+        await dbUtils.commitTransaction(pool);
 
         return { message: 'Add product successfully' };
     } catch (error) {
+        // Rollback DB transaction
+        await dbUtils.rollbackTransaction(pool);
+
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

@@ -1,5 +1,6 @@
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
+import * as dbUtils from '../../utils/db.js';
 import { addCustomer } from '../../db/queries/generated/customers.js';
 import { addNotification } from '../../db/queries/generated/notification.js';
 
@@ -13,6 +14,9 @@ export const addCustomerService = async (pool, user, data) => {
     const { customerName, address, phoneNumber, email } = data;
 
     try {
+        // Start DB transaction
+        await dbUtils.startTransaction(pool);
+
         // Add customer to database
         let result = await addCustomer(pool, {
             agency_id: user.userAgencyId,
@@ -22,7 +26,7 @@ export const addCustomerService = async (pool, user, data) => {
             email
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to add customer') };
+            throw new errors.InternalError('Database failed to add customer');
         }
 
         // Add notification of successfully recording customer
@@ -36,11 +40,20 @@ Tên khách hàng: ${customerName}
 Số điện thoại: ${phoneNumber}`
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to add notification') };
+            throw new errors.InternalError('Database failed to add notification');
         }
+
+        // Commit DB transaction
+        await dbUtils.commitTransaction(pool);
 
         return { message: 'Add customer successfully' };
     } catch (error) {
+        // Rollback DB transaction
+        await dbUtils.rollbackTransaction(pool);
+
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

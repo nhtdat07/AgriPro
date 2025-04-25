@@ -13,14 +13,14 @@ export const getProfileAndSettingsService = async (pool, user) => {
         // Get user profile from database
         let result = await getUserById(pool, { id: user.userAgencyId });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get user profile from the database') };
+            throw new errors.InternalError('Failed to get user profile from the database');
         }
         const userProfile = result[consts.FIRST_IDX_ARRAY];
 
         // Get settings parameters from database
         result = await getSettings(pool, { agency_id: user.userAgencyId });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get settings parameters from the database') };
+            throw new errors.InternalError('Failed to get settings parameters from the database');
         }
 
         // Transform to return
@@ -49,6 +49,9 @@ export const getProfileAndSettingsService = async (pool, user) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

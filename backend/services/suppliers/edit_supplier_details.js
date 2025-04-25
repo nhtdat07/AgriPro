@@ -23,14 +23,17 @@ export const editSupplierDetailsService = async (pool, user, params, data) => {
             id: params.supplierId
         })
         if (!result) {
-            return { error: new errors.InternalError('Failed to update supplier details to the database') };
+            throw new errors.InternalError('Failed to update supplier details to the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Supplier not found') };
+            throw new errors.UndefinedError('Supplier not found');
         }
 
         return { message: 'Update supplier successfully' };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

@@ -17,10 +17,10 @@ export const readNotificationService = async (pool, user, params) => {
             id: params.notificationId
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to mark notification as read from the database') };
+            throw new errors.InternalError('Failed to mark notification as read from the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Notification not found') };
+            throw new errors.UndefinedError('Notification not found');
         }
         const notificationDetails = result[consts.FIRST_IDX_ARRAY];
 
@@ -34,6 +34,9 @@ export const readNotificationService = async (pool, user, params) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

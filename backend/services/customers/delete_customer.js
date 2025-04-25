@@ -16,14 +16,17 @@ export const deleteCustomerService = async (pool, user, params) => {
             id: params.customerId
         });
         if (!result) {
-            return { error: new errors.InternalError('Database failed to delete customer') };
+            throw new errors.InternalError('Database failed to delete customer');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Customer not found') };
+            throw new errors.UndefinedError('Customer not found');
         }
 
         return { message: 'Delete customer successfully' };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

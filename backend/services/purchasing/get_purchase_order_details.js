@@ -17,10 +17,10 @@ export const getPurchaseOrderDetailsService = async (pool, user, params) => {
             id: params.orderId
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get purchase order details from the database') };
+            throw new errors.InternalError('Failed to get purchase order details from the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Purchase order not found') };
+            throw new errors.UndefinedError('Purchase order not found');
         }
         const orderDetails = result[consts.FIRST_IDX_ARRAY];
 
@@ -30,7 +30,7 @@ export const getPurchaseOrderDetailsService = async (pool, user, params) => {
             id: params.orderId
         });
         if (!result) {
-            return { error: new errors.InternalError(`Failed to get products for purchase order ${params.orderId} from the database`) };
+            throw new errors.InternalError(`Failed to get products for purchase order ${params.orderId} from the database`);
         }
 
         // Transform products to return
@@ -55,6 +55,9 @@ export const getPurchaseOrderDetailsService = async (pool, user, params) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

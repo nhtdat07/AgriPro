@@ -28,7 +28,7 @@ export const getListSuppliersService = async (pool, user, query) => {
             offset
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get list suppliers') };
+            throw new errors.InternalError('Failed to get list suppliers');
         }
 
         // Transform to return data
@@ -51,6 +51,9 @@ export const getListSuppliersService = async (pool, user, query) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

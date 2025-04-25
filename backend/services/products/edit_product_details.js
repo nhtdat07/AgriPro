@@ -17,7 +17,7 @@ export const editProductDetailsService = async (pool, user, params, data) => {
     try {
         // Validate product category
         if (category && !consts.PRODUCT_TYPES.includes(category)) {
-            return { error: new errors.ValidationError('Invalid product category') };
+            throw new errors.ValidationError('Invalid product category');
         }
 
         // Update product details to database
@@ -34,14 +34,17 @@ export const editProductDetailsService = async (pool, user, params, data) => {
             id: params.productId
         })
         if (!result) {
-            return { error: new errors.InternalError('Failed to update product details to the database') };
+            throw new errors.InternalError('Failed to update product details to the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            return { error: new errors.UndefinedError('Product not found') };
+            throw new errors.UndefinedError('Product not found');
         }
 
         return { message: 'Update product successfully' };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
     }

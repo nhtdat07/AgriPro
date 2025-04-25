@@ -15,7 +15,7 @@ export const getListProductsService = async (pool, user, query) => {
     try {
         // Validate product category
         if (category && !consts.PRODUCT_TYPES.includes(category)) {
-            return { error: new errors.ValidationError('Invalid product category') };
+            throw new errors.ValidationError('Invalid product category');
         }
 
         // Transform usage to pattern
@@ -31,7 +31,7 @@ export const getListProductsService = async (pool, user, query) => {
             offset
         });
         if (!result) {
-            return { error: new errors.InternalError('Failed to get list products') };
+            throw new errors.InternalError('Failed to get list products');
         }
 
         // Transform to return data
@@ -54,6 +54,9 @@ export const getListProductsService = async (pool, user, query) => {
             }
         };
     } catch (error) {
+        if (error.statusCode) {
+            return { error };
+        }
         console.log(error)
         return { error: new errors.InternalError('Internal server error') };
     }

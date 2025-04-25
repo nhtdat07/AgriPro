@@ -1,5 +1,6 @@
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
+import * as dbUtils from '../../utils/db.js';
 import { updateConfig, updateProfile } from '../../db/queries/generated/config.js';
 
 /**
@@ -12,6 +13,9 @@ export const updateProfileAndSettingsService = async (pool, user, data) => {
     const { userProfile, settings } = data;
 
     try {
+        // Start DB transaction
+        await dbUtils.startTransaction(pool);
+
         let result;
 
         // Update user profile to database
@@ -27,7 +31,7 @@ export const updateProfileAndSettingsService = async (pool, user, data) => {
                 agency_id: user.userAgencyId
             })
             if (!result) {
-                return { error: new errors.InternalError('Failed to update user profile to the database') };
+                throw new errors.InternalError('Failed to update user profile to the database');
             }
         }
 
@@ -36,7 +40,7 @@ export const updateProfileAndSettingsService = async (pool, user, data) => {
                 const { category, key, value } = param;
 
                 if (!consts.CONFIG_TYPES.includes(category)) {
-                    return { error: new errors.ValidationError(`Invalid config category: ${category}`) };
+                    throw new errors.ValidationError(`Invalid config category: ${category}`);
                 }
 
                 result = await updateConfig(pool, {
@@ -46,15 +50,24 @@ export const updateProfileAndSettingsService = async (pool, user, data) => {
                     value
                 });
                 if (!result) {
-                    return { error: new errors.InternalError('Failed to update settings to the database') };
+                    throw new errors.InternalError('Failed to update settings to the database');
                 }
             }
         }
 
+        // Commit DB transaction
+        await dbUtils.commitTransaction(pool);
+
         return { message: 'Update profile & settings successfully' };
     } catch (error) {
+        // Rollback DB transaction
+        await dbUtils.rollbackTransaction(pool);
+
         if (error.code === consts.SQL_UNIQUE_ERROR_CODE) {
             return { error: new errors.ConflictError('Email already exists') };
+        }
+        if (error.statusCode) {
+            return { error };
         }
         console.log(error);
         return { error: new errors.InternalError('Internal server error') };
