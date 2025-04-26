@@ -79,7 +79,4 @@ test("Happy case: should add notifications successfully", async () => {
     await checkInventory(pool);
     const { rows } = await pool.query(`SELECT * FROM notification ORDER BY timestamp;`);
     expect(rows).toMatchObject(expectedNotifications);
-    for (const noti of rows) {
-        console.log(noti.content, '\n')
-    }
 });
