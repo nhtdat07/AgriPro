@@ -3,7 +3,7 @@ import * as consts from '../../consts/consts.js';
 import { getNextPagination } from '../../utils/pagination.js';
 import { formatTimestamp } from '../../utils/format.js';
 import { getInventory } from '../../db/queries/generated/inventory.js';
-import { getConfig } from '../../db/queries/generated/config.js';
+import { getLastExpiredDateWarning, getMaxQuantityWarning } from '../../utils/config.js';
 
 /**
  * Handles GetListInventory logic.
@@ -64,33 +64,7 @@ export const getListInventoryService = async (pool, user, query) => {
         if (error.statusCode) {
             return { error };
         }
-        console.log(error);
+        console.error(error);
         return { error: new errors.InternalError('Internal server error') };
     }
-};
-
-const getLastExpiredDateWarning = async (pool, userAgencyId) => {
-    const result = await getConfig(pool, {
-        agency_id: userAgencyId,
-        keys: [consts.CONFIG_KEYS.WARNING_EXPIRED]
-    });
-    if (!result) {
-        throw new errors.InternalError('Database failed to get config warning expired');
-    }
-
-    let date = new Date();
-    date.setDate(date.getDate() + result[consts.FIRST_IDX_ARRAY].value);
-    return formatTimestamp(date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY];
-};
-
-const getMaxQuantityWarning = async (pool, userAgencyId) => {
-    const result = await getConfig(pool, {
-        agency_id: userAgencyId,
-        keys: [consts.CONFIG_KEYS.WARNING_OUT_OF_STOCK]
-    });
-    if (!result) {
-        throw new errors.InternalError('Database failed to get config warning out of stock');
-    }
-
-    return result[consts.FIRST_IDX_ARRAY].value;
 };

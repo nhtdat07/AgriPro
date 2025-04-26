@@ -46,6 +46,7 @@ export const DEFAULT_TOKEN_EXPIRED_TIME = '20h';
 export const DECIMAL_BASE = 10;
 export const PATTERN_LIKE_SIGN = '%';
 export const COMMA = ',';
+export const DEFAULT_START_COUNT = 1;
 
 export const MIN_LIMIT = 1;
 export const DEFAULT_LIMIT = 20;
@@ -94,5 +95,7 @@ export const CONFIG_TYPES = [
 
 // Noti types
 export const NOTI_TYPES = {
-    SUCCESSFULLY_RECORDED: 'GHI NHẬN THÀNH CÔNG'
+    SUCCESSFULLY_RECORDED: 'GHI NHẬN THÀNH CÔNG',
+    WARNING_EXPIRED: 'CẢNH BÁO HẾT HẠN SỬ DỤNG',
+    WARNING_OUT_OF_STOCK: 'CẢNH BÁO HẾT HÀNG'
 }
