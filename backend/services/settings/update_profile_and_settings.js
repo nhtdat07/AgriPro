@@ -69,7 +69,7 @@ export const updateProfileAndSettingsService = async (pool, user, data) => {
         if (error.statusCode) {
             return { error };
         }
-        console.log(error);
+        console.error(error);
         return { error: new errors.InternalError('Internal server error') };
     }
 };

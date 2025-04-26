@@ -30,3 +30,18 @@ RETURNING *;`;
     }
 }
 
+/**
+ * Executes the 'getAllUserAgencyId' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getAllUserAgencyId(pool, params = {}) {
+    try {
+        const query = `SELECT id FROM user_agency;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
