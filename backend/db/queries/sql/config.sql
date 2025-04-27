@@ -37,3 +37,9 @@ UPDATE configuration
 SET value = $4
 WHERE agency_id = $1 AND category = $2 AND key = $3
 RETURNING *;
+
+-- name: updatePassword
+UPDATE user_agency
+SET password_hash = $2
+WHERE id = $1
+RETURNING *;

@@ -42,3 +42,18 @@ export const validateUpdateProfileAndSettingsData = (req, res, next) => {
 
     next();
 };
+
+// Middleware to validate ChangePassword request data.
+export const validateChangePasswordData = (req, res, next) => {
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing old password' });
+    }
+
+    if (!newPassword) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing new password' });
+    }
+
+    next();
+};
