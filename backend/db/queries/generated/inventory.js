@@ -31,3 +31,42 @@ LIMIT $7 OFFSET $8;`;
     }
 }
 
+/**
+ * Executes the 'getProductsAboutToExpire' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getProductsAboutToExpire(pool, params = {}) {
+    try {
+        const query = `SELECT inventory_product.product_id AS id, product.name AS name, 
+    inventory_product.imported_timestamp AS imported_timestamp, inventory_product.expired_date AS expired_date
+FROM inventory_product JOIN product ON inventory_product.product_id = product.id 
+WHERE inventory_product.agency_id = $1 AND product.agency_id = $1 AND product.is_deleted = false
+    AND DATE(inventory_product.expired_date) <= $2::DATE AND inventory_product.quantity > 0;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
+ * Executes the 'getProductsAboutToBeOutOfStock' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function getProductsAboutToBeOutOfStock(pool, params = {}) {
+    try {
+        const query = `SELECT inventory_product.product_id AS id, product.name AS name, 
+    SUM(inventory_product.quantity)::INTEGER AS total_quantity
+FROM inventory_product JOIN product ON inventory_product.product_id = product.id 
+WHERE inventory_product.agency_id = $1 AND product.agency_id = $1 AND product.is_deleted = false
+GROUP BY inventory_product.product_id, product.name
+HAVING SUM(inventory_product.quantity) <= $2;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+

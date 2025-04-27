@@ -52,7 +52,7 @@ function Sales() {
         if (error.response) {
           const { status } = error.response;
           if (status === 400) {
-            alert("Bad Request!");
+            alert("Tải thông tin thất bại!");
           } else if (status === 401) {
             alert("Bạn không có quyền truy cập vào trang này!");
           } else if (status === 500) {
@@ -65,6 +65,29 @@ function Sales() {
     fetchData();
   }, []);
 
+  const fetchInvoices = async () => {
+    try {
+      const invoicesRes = await axiosInstance.get("/sales-invoices");
+      const invoicesArray = invoicesRes.data.data.salesInvoices;
+      setInvoicesData(invoicesArray);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };
+
+  useEffect(() => {
+    fetchInvoices();
+  }, []);
+
   const fetchCustomers = async () => {
     try {
       const customersRes = await axiosInstance.get("/customers");
@@ -74,7 +97,7 @@ function Sales() {
       if (error.response) {
         const { status } = error.response;
         if (status === 400) {
-          alert("Bad Request!");
+          alert("Tải thông tin thất bại!");
         } else if (status === 401) {
           alert("Bạn không có quyền truy cập vào trang này!");
         } else if (status === 500) {
@@ -138,7 +161,9 @@ function Sales() {
                     <button className="p-2 w-1/5">
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>
-                    <AddInvoice/>
+                    <AddInvoice
+                      refreshInvoices={fetchInvoices}
+                    />
                   </div>
                   <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
                     <InvoiceTable
@@ -170,7 +195,9 @@ function Sales() {
                     <button className="p-2 w-1/5">
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>
-                    <AddCustomer/>
+                    <AddCustomer 
+                      refreshCustomers={fetchCustomers}
+                    />
                   </div>
                   <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
                     <CustomerTable

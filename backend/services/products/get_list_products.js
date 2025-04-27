@@ -57,7 +57,7 @@ export const getListProductsService = async (pool, user, query) => {
         if (error.statusCode) {
             return { error };
         }
-        console.log(error)
+        console.error(error)
         return { error: new errors.InternalError('Internal server error') };
     }
 };

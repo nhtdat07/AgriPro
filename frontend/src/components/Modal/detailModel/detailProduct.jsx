@@ -28,7 +28,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
             if (error.response) {
                 const { status } = error.response;
                 if (status === 400) {
-                    alert("Bad Request!");
+                    alert("Tải thông tin thất bại!");
                 } else if (status === 401) {
                     alert("Bạn không có quyền truy cập vào trang này!");
                 } else if (status === 404) {
@@ -82,7 +82,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
             if (error.response) {
                 const { status } = error.response;
                 if (status === 400) {
-                    alert("Bad Request!");
+                    alert("Cập nhật thông tin thất bại!");
                 } else if (status === 401) {
                     alert("Bạn không có quyền truy cập vào trang này!");
                 } else if (status === 404) {
@@ -119,7 +119,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
             if (error.response) {
                 const { status } = error.response;
                 if (status === 400) {
-                    alert("Bad Request!");
+                    alert("Xóa thông tin thất bại!");
                 } else if (status === 401) {
                     alert("Bạn không có quyền truy cập vào trang này!");
                 } else if (status === 404) {

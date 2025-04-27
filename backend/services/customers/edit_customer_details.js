@@ -34,7 +34,7 @@ export const editCustomerDetailsService = async (pool, user, params, data) => {
         if (error.statusCode) {
             return { error };
         }
-        console.log(error);
+        console.error(error);
         return { error: new errors.InternalError('Internal server error') };
     }
 };

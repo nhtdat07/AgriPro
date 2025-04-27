@@ -79,7 +79,7 @@ function InventoryPurchase() {
         if (error.response) {
           const { status } = error.response;
           if (status === 400) {
-            alert("Bad Request!");
+            alert("Tải thông tin thất bại!");
           } else if (status === 401) {
             alert("Bạn không có quyền truy cập vào trang này!");
           } else if (status === 500) {
@@ -90,18 +90,18 @@ function InventoryPurchase() {
     };
   
     fetchData();
-  }, []);  
+  }, []);
 
-  const fetchSuppliers = async () => {
+  const fetchOrders = async () => {
     try {
-      const suppliersRes = await axiosInstance.get("/suppliers");
-      const suppliersArray = suppliersRes.data.data.suppliers;
-      setSuppliersData(suppliersArray);
+      const purchasesRes = await axiosInstance.get("/purchase-orders");
+      const purchasesArray = purchasesRes.data.data.purchaseOrders;
+      setPurchasesData(purchasesArray);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
         if (status === 400) {
-          alert("Bad Request!");
+          alert("Tải thông tin thất bại!");
         } else if (status === 401) {
           alert("Bạn không có quyền truy cập vào trang này!");
         } else if (status === 500) {
@@ -112,7 +112,7 @@ function InventoryPurchase() {
   };
 
   useEffect(() => {
-    fetchSuppliers();
+    fetchOrders();
   }, []);
 
   const fetchProducts = async () => {
@@ -124,7 +124,7 @@ function InventoryPurchase() {
       if (error.response) {
         const { status } = error.response;
         if (status === 400) {
-          alert("Bad Request!");
+          alert("Tải thông tin thất bại!");
         } else if (status === 401) {
           alert("Bạn không có quyền truy cập vào trang này!");
         } else if (status === 500) {
@@ -136,6 +136,29 @@ function InventoryPurchase() {
 
   useEffect(() => {
     fetchProducts();
+  }, []);
+
+  const fetchSuppliers = async () => {
+    try {
+      const suppliersRes = await axiosInstance.get("/suppliers");
+      const suppliersArray = suppliersRes.data.data.suppliers;
+      setSuppliersData(suppliersArray);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
+    }
+  };
+
+  useEffect(() => {
+    fetchSuppliers();
   }, []);
 
   const handleDelete = () => { };
@@ -243,7 +266,9 @@ function InventoryPurchase() {
                     <button className="p-2 w-1/5">
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>
-                    <AddOrder/>
+                    <AddOrder
+                      refreshOrders={fetchOrders}
+                    />
                   </div>
                   <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
                     <PurchaseTable
@@ -308,7 +333,9 @@ function InventoryPurchase() {
                     <button className="p-2 w-1/5">
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>
-                    <AddSupplier/>
+                    <AddSupplier
+                      refreshSuppliers={fetchSuppliers}
+                    />
                   </div>
                   <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
                     <SupplierTable
