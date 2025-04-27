@@ -12,3 +12,8 @@ router.get('/', authenticateUser, settingsControllers.getProfileAndSettingsContr
 router.patch('/',
     authenticateUser, settingsMiddlewares.validateUpdateProfileAndSettingsData, settingsControllers.updateProfileAndSettingsController
 );
+
+// PATCH /settings/password
+router.patch('/password',
+    authenticateUser, settingsMiddlewares.validateChangePasswordData, settingsControllers.changePasswordController
+);

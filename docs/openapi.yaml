@@ -1895,6 +1895,49 @@ paths:
         "500":
           description: Internal server error.
 
+  /settings/password:
+    patch:
+      tags:
+        - Profile & Settings
+      summary: Change password
+      description: Change password for a user.
+      operationId: ChangePassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                  description: Old password of the user
+                  example: "@01Abcde"
+                newPassword:
+                  type: string
+                  description: New password to be updated
+                  example: "@01Abcdf"
+              required:
+                - oldPassword
+                - newPassword
+      responses:
+        "200":
+          description: Password changed successfully
+        "400":
+          description: Bad request due to validation errors or missing fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+        "401":
+          description: Unauthorized request due to missing or invalid token.
+        "500":
+          description: Internal server error.
+
 components:
   schemas:
     ProductCategory:
