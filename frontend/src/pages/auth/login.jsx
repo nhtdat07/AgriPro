@@ -1,8 +1,8 @@
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance.js"
+import axiosInstance from "../../utils/axiosInstance.js";
 
 import background from '../../assets/images/background.png';
 import exitIcon from "../../assets/images/exit.svg";
@@ -13,6 +13,7 @@ const LoginIndex = () => {
     email: "",
     password: ""
   });
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,7 +85,7 @@ const LoginIndex = () => {
                 <FontAwesomeIcon icon={faLock} />
               </span>
               <input
-                type="password"
+                type={passwordVisible ? "text" : "password"}  // Toggle between 'text' and 'password'
                 name="password"
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
@@ -92,6 +93,12 @@ const LoginIndex = () => {
                 required
                 className="w-full px-10 py-2 border rounded-lg"
               />
+              <span
+                onClick={() => setPasswordVisible(!passwordVisible)}  // Toggle password visibility
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400"
+              >
+                <FontAwesomeIcon icon={passwordVisible ? faEyeSlash : faEye} />
+              </span>
             </div>
           </div>
 

@@ -21,8 +21,8 @@ export default function AddSupplier(props) {
             return;
         }
 
-        if (supplierData.phone.length !== 10 || !/^\d{10}$/.test(supplierData.phone)) {
-            alert("Số điện thoại phải có 10 chữ số!");
+        if (supplierData.phone.length !== 10 || !/^0\d{9}$/.test(supplierData.phone)) {
+            alert("Số điện thoại không hợp lệ!");
             return;
         }
 

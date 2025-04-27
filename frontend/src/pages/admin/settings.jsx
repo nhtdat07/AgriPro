@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/Navbar/header";
 import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance.js"
 
 import ava from "../../assets/images/avatar_black.svg";
 
@@ -10,6 +11,9 @@ function Settings() {
   const [footerToggle] = useOutletContext();
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  const [avatar, setAvatar] = useState(ava);
+  const [tempAvatar, setTempAvatar] = useState(null);
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -34,12 +38,12 @@ function Settings() {
   ];
   
   const [data, setData] = useState({
-    agencyName: "Đại lý vật tư nông nghiệp Quốc Thạnh",
-    ownerName: "Phạm Huỳnh Quốc Thạnh",
-    address: "193, Tân Bình Thạnh, H. Chợ Gạo, T. Tiền Giang",
-    taxCode: "1234567890",
-    phone: "0397151736",
-    email: "thanh.phamhuynh2806@gmail.com",
+    agencyName: "",
+    ownerName: "",
+    address: "",
+    taxCode: "",
+    phone: "",
+    email: "",
     warningDays: 5,
     warningStock: 5,
     marginLeft: 3,
@@ -51,13 +55,79 @@ function Settings() {
 
   const [editData, setEditData] = useState({ ...data });
 
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axiosInstance.get("/settings");
+        const resData = res.data.data;
+  
+        const { userProfile, settings } = resData;
+  
+        const settingMap = {};
+        settings.forEach((item) => {
+          if (item.category === "INVENTORY_PARAMS") {
+            if (item.key === "warning_expired") {
+              settingMap.warningDays = parseInt(item.value, 10);
+            } else if (item.key === "warning_out_of_stock") {
+              settingMap.warningStock = parseInt(item.value, 10);
+            }
+          } else if (item.category === "PRINT_FORMAT") {
+            if (item.key === "left_margin") {
+              settingMap.marginLeft = parseFloat(item.value);
+            } else if (item.key === "right_margin") {
+              settingMap.marginRight = parseFloat(item.value);
+            } else if (item.key === "top_margin") {
+              settingMap.marginTop = parseFloat(item.value);
+            } else if (item.key === "bottom_margin") {
+              settingMap.marginBottom = parseFloat(item.value);
+            } else if (item.key === "font_size") {
+              settingMap.fontSize = parseInt(item.value, 10);
+            }
+          }
+        });
+  
+        const newData = {
+          agencyName: userProfile.agencyName || "",
+          ownerName: userProfile.ownerName || "",
+          address: userProfile.address || "",
+          taxCode: userProfile.taxCode || "",
+          phone: userProfile.phoneNumber || "",
+          email: userProfile.email || "",
+          ...settingMap,
+        };
+  
+        setData(newData);
+        setEditData(newData);
+  
+        if (userProfile.profilePicturePath) {
+          setAvatar(userProfile.profilePicturePath);
+        }
+      } catch (error) {
+        if (error.response) {
+          const { status } = error.response;
+          if (status === 401) {
+            alert("Bạn không có quyền truy cập vào trang này!");
+          } else if (status === 500) {
+            alert("Vui lòng tải lại trang!");
+          }
+        }  
+      }
+    };
+  
+    fetchSettings();
+  }, []);  
+
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => {
     setData(editData);
+    if (tempAvatar !== null) {
+      setAvatar(tempAvatar);
+    }
     setIsEditing(false);
   };
   const handleCancel = () => {
     setEditData({ ...data });
+    setTempAvatar(null);
     setIsEditing(false);
   };
 
@@ -78,6 +148,21 @@ function Settings() {
     }
     alert("Mật khẩu đã được thay đổi thành công");
     setIsChangingPassword(false);
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setTempAvatar(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDeleteImage = () => {
+    setTempAvatar(null);
   };
 
   return (
@@ -151,8 +236,34 @@ function Settings() {
                   <div className="flex items-start gap-6">
                     <div className="flex flex-col items-center">
                       <p className="font-semibold mb-2">Ảnh đại diện</p>
-                      <img src={ava} className="rounded-full w-28 border" alt="profile" />
+                      <div className="relative flex flex-col items-center">
+                        <img
+                          src={isEditing ? (tempAvatar || avatar) : avatar}
+                          className="rounded-full w-28 h-28 object-cover border"
+                          alt="profile"
+                        />
+                        {isEditing && (
+                          <div className="flex flex-col items-center gap-2 mt-2">
+                            <label className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-3 py-1 rounded-lg text-sm cursor-pointer">
+                              THÊM ẢNH
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="hidden"
+                              />
+                            </label>
+                            <button
+                              className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-3 py-1 rounded-lg text-sm"
+                              onClick={handleDeleteImage}
+                            >
+                              XÓA ẢNH
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
+
                     <div className="grid grid-cols-2 gap-4 flex-1">
                       {fields.slice(0, 6).map(({ key, label }) => (
                         <div key={key}>
@@ -172,6 +283,7 @@ function Settings() {
                       ))}
                     </div>
                   </div>
+
                   {!isEditing && (
                     <div className="flex justify-center mt-6">
                       <button
@@ -183,7 +295,7 @@ function Settings() {
                     </div>
                   )}
                 </div>
-      
+                
                 <div className="bg-white p-6 rounded-lg shadow-md relative mb-6">
                   <h3 className="text-xl font-semibold">Cài đặt thông báo</h3>
                   <div className="grid grid-cols-2 gap-4 mt-4">

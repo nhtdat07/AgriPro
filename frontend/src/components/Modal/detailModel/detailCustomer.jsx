@@ -46,8 +46,8 @@ export default function ViewCustomer(props) {
       return;
     }
   
-    if (customerData.phone.length !== 10 || !/^\d{10}$/.test(customerData.phone)) {
-      alert("Số điện thoại phải có 10 chữ số!");
+    if (customerData.phone.length !== 10 || !/^0\d{9}$/.test(customerData.phone)) {
+      alert("Số điện thoại không hợp lệ!");
       return;
     }
   

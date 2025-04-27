@@ -57,6 +57,7 @@ function InventoryPurchase() {
   const [purchasesData, setPurchasesData] = useState([]);
   const [productsData, setProductsData] = useState([]);
   const [suppliersData, setSuppliersData] = useState([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,6 +98,7 @@ function InventoryPurchase() {
       const purchasesRes = await axiosInstance.get("/purchase-orders");
       const purchasesArray = purchasesRes.data.data.purchaseOrders;
       setPurchasesData(purchasesArray);
+      setRefreshTrigger(prev => prev + 1)
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -120,6 +122,7 @@ function InventoryPurchase() {
       const productsRes = await axiosInstance.get("/products");
       const productsArray = productsRes.data.data.products;
       setProductsData(productsArray);
+      setRefreshTrigger(prev => prev + 1)
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -143,6 +146,7 @@ function InventoryPurchase() {
       const suppliersRes = await axiosInstance.get("/suppliers");
       const suppliersArray = suppliersRes.data.data.suppliers;
       setSuppliersData(suppliersArray);
+      setRefreshTrigger(prev => prev + 1)
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -166,7 +170,7 @@ function InventoryPurchase() {
   return (
     <>
       <main className="flex flex-col min-h-screen">
-        <Header toggle={headerToggle} />
+        <Header toggle={headerToggle} refreshTrigger={refreshTrigger} />
 
         <div className="flex-grow">
           <h2 className="pt-4 pl-4 text-2xl font-bold mb-4">Quản lý kho & nhập hàng</h2>

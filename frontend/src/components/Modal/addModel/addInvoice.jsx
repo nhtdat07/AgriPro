@@ -24,7 +24,16 @@ export default function AddInvoice(props) {
       const response = await axiosInstance.get("/customers");
       setCustomersList(response.data.data.customers || []);
     } catch (error) {
-      console.error("Failed to fetch customers:", error);
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
     }
   };
 
@@ -33,7 +42,16 @@ export default function AddInvoice(props) {
       const response = await axiosInstance.get("/products");
       setProductsList(response.data.data.products || []);
     } catch (error) {
-      console.error("Failed to fetch products:", error);
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
     }
   };
 

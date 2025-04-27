@@ -1,8 +1,8 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/Navbar/header";
 import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance.js"
+import axiosInstance from "../../utils/axiosInstance.js";
 
 import InvoiceTable from "../../components/Modal/tableModel/invoiceTable";
 import CustomerTable from "../../components/Modal/tableModel/customerTable";
@@ -17,25 +17,26 @@ function Sales() {
   const [loading] = useState(false);
   const [activeTab, setActiveTab] = useState('sale');
 
-  const dataHeaderInvoice = 
-  [ {key: "id", label: "STT"},
-    {key: "code", label: "Mã số"},
-    {key: "timestamp", label: "Thời gian bán hàng"},
-    {key: "customer", label: "Khách hàng"},
-    {key: "action", label: ""},
-  ];
-
-  const dataHeaderCustomer = 
-  [ {key: "id", label: "STT"},
-    {key: "name", label: "Tên khách hàng"},
-    {key: "address", label: "Địa chỉ"},
-    {key: "phone", label: "Số điện thoại"},
-    {key: "email", label: "Email"},
-    {key: "action", label: ""},
-  ];
-  
   const [invoicesData, setInvoicesData] = useState([]);
   const [customersData, setCustomersData] = useState([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const dataHeaderInvoice = [
+    { key: "id", label: "STT" },
+    { key: "code", label: "Mã số" },
+    { key: "timestamp", label: "Thời gian bán hàng" },
+    { key: "customer", label: "Khách hàng" },
+    { key: "action", label: "" },
+  ];
+
+  const dataHeaderCustomer = [
+    { key: "id", label: "STT" },
+    { key: "name", label: "Tên khách hàng" },
+    { key: "address", label: "Địa chỉ" },
+    { key: "phone", label: "Số điện thoại" },
+    { key: "email", label: "Email" },
+    { key: "action", label: "" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +46,7 @@ function Sales() {
 
         const invoicesArray = invoicesRes.data.data.salesInvoices;
         const customersArray = customersRes.data.data.customers;
-  
+
         setInvoicesData(invoicesArray);
         setCustomersData(customersArray);
       } catch (error) {
@@ -58,10 +59,10 @@ function Sales() {
           } else if (status === 500) {
             alert("Vui lòng tải lại trang!");
           }
-        }  
+        }
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -70,6 +71,7 @@ function Sales() {
       const invoicesRes = await axiosInstance.get("/sales-invoices");
       const invoicesArray = invoicesRes.data.data.salesInvoices;
       setInvoicesData(invoicesArray);
+      setRefreshTrigger(prev => prev + 1);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -80,19 +82,16 @@ function Sales() {
         } else if (status === 500) {
           alert("Vui lòng tải lại trang!");
         }
-      }  
+      }
     }
   };
-
-  useEffect(() => {
-    fetchInvoices();
-  }, []);
 
   const fetchCustomers = async () => {
     try {
       const customersRes = await axiosInstance.get("/customers");
       const customersArray = customersRes.data.data.customers;
       setCustomersData(customersArray);
+      setRefreshTrigger(prev => prev + 1);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -103,20 +102,16 @@ function Sales() {
         } else if (status === 500) {
           alert("Vui lòng tải lại trang!");
         }
-      }  
+      }
     }
   };
-
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
 
   const handleDelete = () => { };
 
   return (
     <>
       <main className="flex flex-col min-h-screen">
-        <Header toggle={headerToggle} />
+        <Header toggle={headerToggle} refreshTrigger={refreshTrigger} />
 
         <div className="flex-grow">
           <h2 className="pt-4 pl-4 text-2xl font-bold mb-4">Quản lý bán hàng</h2>

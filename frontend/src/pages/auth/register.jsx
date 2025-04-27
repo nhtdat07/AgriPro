@@ -29,7 +29,16 @@ const RegisterIndex = () => {
       password: data.password,
       confirmPassword: data.confirmPassword
     };
-  
+    
+    if (data.phone.length !== 10 || !/^0\d{9}$/.test(data.phone)) {
+      alert("Số điện thoại không hợp lệ!");
+      return;
+    }
+
+    if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+        alert("Email không hợp lệ!");
+        return;
+    }
     if (data.password !== data.confirmPassword) {
       alert("Mật khẩu không khớp!");
       return;
