@@ -1,3 +1,5 @@
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import Header from "../../components/Navbar/header";
 import Footer from "../../components/Navbar/footer";
@@ -13,13 +15,26 @@ function Settings() {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const [avatar, setAvatar] = useState(ava);
-  const [tempAvatar, setTempAvatar] = useState(null);
+  const [tempAvatar, setTempAvatar] = useState(ava);
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+
+  const [showPassword, setShowPassword] = useState({
+    currentPassword: false,
+    newPassword: false,
+    confirmPassword: false,
+  });
+  
+  const toggleShowPassword = (field) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };  
 
   const fields = [
     { key: "agencyName", label: "Tên đại lý" },
@@ -118,13 +133,62 @@ function Settings() {
   }, []);  
 
   const handleEdit = () => setIsEditing(true);
-  const handleSave = () => {
-    setData(editData);
-    if (tempAvatar !== null) {
-      setAvatar(tempAvatar);
+  
+  const handleSave = async () => {
+    try {
+      const userProfile = {
+        agencyName: editData.agencyName,
+        ownerName: editData.ownerName,
+        address: editData.address,
+        taxCode: editData.taxCode,
+        phoneNumber: editData.phone,
+        email: editData.email,
+        profilePicturePath: tempAvatar !== null ? tempAvatar : avatar, 
+      };
+  
+      const settings = [
+        { category: "INVENTORY_PARAMS", key: "warning_expired", value: editData.warningDays },
+        { category: "INVENTORY_PARAMS", key: "warning_out_of_stock", value: editData.warningStock },
+        { category: "PRINT_FORMAT", key: "left_margin", value: editData.marginLeft },
+        { category: "PRINT_FORMAT", key: "right_margin", value: editData.marginRight },
+        { category: "PRINT_FORMAT", key: "top_margin", value: editData.marginTop },
+        { category: "PRINT_FORMAT", key: "bottom_margin", value: editData.marginBottom },
+        { category: "PRINT_FORMAT", key: "font_size", value: editData.fontSize }
+      ];      
+  
+      const requestBody = { userProfile, settings };
+      
+      if (editData.phone.length !== 10 || !/^0\d{9}$/.test(editData.phone)) {
+        alert("Số điện thoại không hợp lệ!");
+        return;
+      }
+      if (editData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editData.email)) {
+          alert("Email không hợp lệ!");
+          return;
+      }
+      
+      await axiosInstance.patch("/settings", requestBody);
+  
+      setData(editData);
+      if (tempAvatar !== null) {
+        setAvatar(ava);
+      }
+      setIsEditing(false);
+      alert("Cập nhật thông tin thành công!");
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }
     }
-    setIsEditing(false);
   };
+
   const handleCancel = () => {
     setEditData({ ...data });
     setTempAvatar(null);
@@ -133,22 +197,65 @@ function Settings() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditData((prev) => ({ ...prev, [name]: value }));
-  };
+    const numericFields = [
+      "warningDays",
+      "warningStock",
+      "marginLeft",
+      "marginRight",
+      "marginTop",
+      "marginBottom",
+      "fontSize"
+    ];
+  
+    let newValue = value;
+  
+    if (numericFields.includes(name)) {
+      newValue = parseFloat(value);
+      if (isNaN(newValue) || newValue < 1) {
+        return;
+      }
+    }
+  
+    setEditData((prev) => ({ ...prev, [name]: newValue }));
+  };  
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert("Mật khẩu mới và xác nhận mật khẩu không khớp");
+      alert("Mật khẩu không khớp");
       return;
     }
-    alert("Mật khẩu đã được thay đổi thành công");
-    setIsChangingPassword(false);
-  };
+  
+    try {
+        await axiosInstance.patch("/settings/password", {
+        oldPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      });
+  
+      alert("Mật khẩu đã được thay đổi thành công");
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setIsChangingPassword(false);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Mật khẩu không hợp lệ"); 
+        } else if (status === 401) {
+          alert("Mật khẩu hiện tại không đúng");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }
+    }
+  };  
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -178,38 +285,59 @@ function Settings() {
               <div className="bg-white rounded-lg shadow-md w-full p-6 mb-6">
                 <h3 className="text-xl font-semibold mb-4">Đổi mật khẩu</h3>
                 <div className="grid grid-cols-1 gap-4">
-                  <div>
+                  <div className="relative">
                     <label className="p-2 block text-sm font-medium text-gray-700">Mật khẩu hiện tại</label>
                     <input
-                      type="password"
+                      type={showPassword.currentPassword ? "text" : "password"}
                       name="currentPassword"
                       placeholder="Mật khẩu hiện tại"
                       value={passwordData.currentPassword}
                       onChange={handlePasswordChange}
-                      className="w-full p-2 border rounded-lg"
+                      className="w-full p-2 border rounded-lg pr-10"
                     />
+                    <button
+                      type="button"
+                      onClick={() => toggleShowPassword("currentPassword")}
+                      className="absolute top-11 right-3"
+                    >
+                      <FontAwesomeIcon icon={showPassword.currentPassword ? faEyeSlash : faEye} />
+                    </button>
                   </div>
-                  <div>
+                  <div className="relative">
                     <label className="p-2 block text-sm font-medium text-gray-700">Mật khẩu mới</label>
                     <input
-                      type="password"
+                      type={showPassword.newPassword ? "text" : "password"}
                       name="newPassword"
                       placeholder="Mật khẩu mới"
                       value={passwordData.newPassword}
                       onChange={handlePasswordChange}
-                      className="w-full p-2 border rounded-lg"
+                      className="w-full p-2 border rounded-lg pr-10"
                     />
+                    <button
+                      type="button"
+                      onClick={() => toggleShowPassword("newPassword")}
+                      className="absolute top-11 right-3"
+                    >
+                      <FontAwesomeIcon icon={showPassword.newPassword ? faEyeSlash : faEye} />
+                    </button>
                   </div>
-                  <div>
+                  <div className="relative">
                     <label className="p-2 block text-sm font-medium text-gray-700">Xác nhận mật khẩu mới</label>
                     <input
-                      type="password"
+                      type={showPassword.confirmPassword ? "text" : "password"}
                       name="confirmPassword"
                       placeholder="Xác nhận mật khẩu mới"
                       value={passwordData.confirmPassword}
                       onChange={handlePasswordChange}
-                      className="w-full p-2 border rounded-lg"
+                      className="w-full p-2 border rounded-lg pr-10"
                     />
+                    <button
+                      type="button"
+                      onClick={() => toggleShowPassword("confirmPassword")}
+                      className="absolute top-11 right-3"
+                    >
+                      <FontAwesomeIcon icon={showPassword.confirmPassword ? faEyeSlash : faEye} />
+                    </button>
                   </div>
                   <div className="flex gap-4 justify-center">
                     <button

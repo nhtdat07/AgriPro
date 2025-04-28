@@ -304,7 +304,9 @@ function InventoryPurchase() {
                     <button className="p-2 w-1/5">
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>
-                    <AddProduct/>
+                    <AddProduct
+                      refreshProducts={fetchProducts}
+                    />
                   </div>
                   <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
                     <ProductTable

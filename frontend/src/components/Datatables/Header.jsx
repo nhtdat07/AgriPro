@@ -9,8 +9,6 @@ function HeaderSort({ tkey, label, field, direction, handleSort }) {
       >
         <span>{label}</span>
 
-        {/* Sorter Icon */}
-        {/* DESC Icon */}
         {field === tkey && direction === "desc" && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +26,6 @@ function HeaderSort({ tkey, label, field, direction, handleSort }) {
           </svg>
         )}
 
-        {/* ASC Icon */}
         {field === tkey && direction === "asc" && (
           <svg
             xmlns="http://www.w3.org/2000/svg"

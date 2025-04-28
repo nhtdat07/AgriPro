@@ -124,7 +124,7 @@ export default function AddInvoice(props) {
           className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 inline-flex items-center rounded-lg"
           onClick={() => setShowModal(true)}
         >
-          <span>THÊM ĐƠN NHẬP</span>
+          <span>THÊM HÓA ĐƠN</span>
         </button>
       </div>
 

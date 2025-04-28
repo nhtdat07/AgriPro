@@ -85,7 +85,7 @@ const LoginIndex = () => {
                 <FontAwesomeIcon icon={faLock} />
               </span>
               <input
-                type={passwordVisible ? "text" : "password"}  // Toggle between 'text' and 'password'
+                type={passwordVisible ? "text" : "password"}
                 name="password"
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
@@ -94,7 +94,7 @@ const LoginIndex = () => {
                 className="w-full px-10 py-2 border rounded-lg"
               />
               <span
-                onClick={() => setPasswordVisible(!passwordVisible)}  // Toggle password visibility
+                onClick={() => setPasswordVisible(!passwordVisible)}
                 className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400"
               >
                 <FontAwesomeIcon icon={passwordVisible ? faEyeSlash : faEye} />

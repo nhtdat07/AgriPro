@@ -1,4 +1,4 @@
-import { faEnvelope, faLock, faPhone, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock, faPhone, faUser, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,24 +17,19 @@ const RegisterIndex = () => {
     confirmPassword: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const requestData = {
-      agencyName: data.agencyName,
-      ownerName: data.ownerName,
-      email: data.email,
-      phone: data.phone,
-      password: data.password,
-      confirmPassword: data.confirmPassword
-    };
+    const requestData = { ...data };
     
     if (data.phone.length !== 10 || !/^0\d{9}$/.test(data.phone)) {
       alert("Số điện thoại không hợp lệ!");
       return;
     }
-
     if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
         alert("Email không hợp lệ!");
         return;
@@ -43,7 +38,7 @@ const RegisterIndex = () => {
       alert("Mật khẩu không khớp!");
       return;
     }
-    else{
+    else {
       try {
         const response = await axiosInstance.post('/auth/sign-up', requestData);
         if (response.status === 201) {
@@ -83,7 +78,7 @@ const RegisterIndex = () => {
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h3 className="text-2xl font-semibold text-center">Đăng ký</h3>
         <h3 className="text-sm font-medium text-center">Tạo một tài khoản ngay!</h3>
-        <form onSubmit={(e) => handleSubmit(e)} className="p-4">
+        <form onSubmit={handleSubmit} className="p-4">
           <div className="mb-4">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-black">
@@ -158,7 +153,7 @@ const RegisterIndex = () => {
                 <FontAwesomeIcon icon={faLock} />
               </span>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
@@ -166,6 +161,12 @@ const RegisterIndex = () => {
                 required
                 className="w-full px-10 py-3 border rounded-lg bg-white bg-opacity-75 text-black"
               />
+              <span
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-black"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </span>
             </div>
           </div>
 
@@ -175,7 +176,7 @@ const RegisterIndex = () => {
                 <FontAwesomeIcon icon={faLock} />
               </span>
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={data.confirmPassword}
                 onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
@@ -183,10 +184,18 @@ const RegisterIndex = () => {
                 required
                 className="w-full px-10 py-3 border rounded-lg bg-white bg-opacity-75 text-black"
               />
+              <span
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-black"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+              </span>
             </div>
           </div>
 
-          <button type="submit" className="w-full px-6 py-2 text-white bg-[#2c9e4b] hover:bg-[#0c5c30] rounded-lg focus:outline-none">XÁC NHẬN</button>
+          <button type="submit" className="w-full px-6 py-2 text-white bg-[#2c9e4b] hover:bg-[#0c5c30] rounded-lg focus:outline-none">
+            XÁC NHẬN
+          </button>
         </form>
 
         <div className="text-center mt-4 text-sm text-gray-600">
