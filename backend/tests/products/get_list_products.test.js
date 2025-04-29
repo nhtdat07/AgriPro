@@ -53,14 +53,16 @@ test("Happy case: should return products successfully with no constraints", asyn
                     productName: 'Hạt giống cải mầm Phú Nông',
                     imagePath: '/products/PR0003',
                     category: 'HẠT GIỐNG - CÂY TRỒNG',
-                    outPrice: 9000
+                    outPrice: 9000,
+                    usage: 'Hạt giống cải mầm Phú Nông có hạt to, cây sinh trưởng khoẻ mạnh và tỉ lệ nảy mầm đồng đều. Cải mầm Phú Nông có vị cay nồng, ăn ngon. Chu kì sinh trưởng từ 5 - 7 ngày.'
                 },
                 {
                     productId: 'PR0001',
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     imagePath: '/products/PR0001',
                     category: 'THUỐC BẢO VỆ THỰC VẬT',
-                    outPrice: 17000
+                    outPrice: 17000,
+                    usage: 'Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào.'
                 }
             ],
             pagination: { offset: 2 }
@@ -87,7 +89,8 @@ test("Happy case: should return products successfully with offset + limit", asyn
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     imagePath: '/products/PR0001',
                     category: 'THUỐC BẢO VỆ THỰC VẬT',
-                    outPrice: 17000
+                    outPrice: 17000,
+                    usage: 'Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào.'
                 }
             ],
             pagination: { offset: 2 }
@@ -115,7 +118,8 @@ test("Happy case: should return products successfully with query of productId", 
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     imagePath: '/products/PR0001',
                     category: 'THUỐC BẢO VỆ THỰC VẬT',
-                    outPrice: 17000
+                    outPrice: 17000,
+                    usage: 'Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào.'
                 }
             ],
             pagination: { offset: 1 }
@@ -143,7 +147,8 @@ test("Happy case: should return products successfully with query of category", a
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     imagePath: '/products/PR0001',
                     category: 'THUỐC BẢO VỆ THỰC VẬT',
-                    outPrice: 17000
+                    outPrice: 17000,
+                    usage: 'Phòng trừ nấm bệnh, rỉ sắt, đóm đen trên các loại cây trồng, cây kiểng. Đặc biệt là hoa hồng, cây mai, đào.'
                 }
             ],
             pagination: { offset: 1 }
@@ -171,7 +176,8 @@ test("Happy case: should return products successfully with query of usage", asyn
                     productName: 'Hạt giống cải mầm Phú Nông',
                     imagePath: '/products/PR0003',
                     category: 'HẠT GIỐNG - CÂY TRỒNG',
-                    outPrice: 9000
+                    outPrice: 9000,
+                    usage: 'Hạt giống cải mầm Phú Nông có hạt to, cây sinh trưởng khoẻ mạnh và tỉ lệ nảy mầm đồng đều. Cải mầm Phú Nông có vị cay nồng, ăn ngon. Chu kì sinh trưởng từ 5 - 7 ngày.'
                 }
             ],
             pagination: { offset: 1 }
