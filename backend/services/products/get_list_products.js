@@ -42,7 +42,8 @@ export const getListProductsService = async (pool, user, query) => {
                 productName: product.name,
                 imagePath: product.image_path,
                 category: product.category,
-                outPrice: product.out_price
+                outPrice: product.out_price,
+                usage: product.usages
             });
         });
 
