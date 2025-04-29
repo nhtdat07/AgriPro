@@ -48,7 +48,7 @@ function NotiTable({ notifications, setNotifications }) {
           >
             <div>
               <p className="font-medium text-sm">{noti.message}</p>
-              <p className="text-xs text-gray-500">{noti.time}</p>
+              <p className="text-xs text-right text-gray-500">{noti.time}</p>
               {activeId === noti.id && (
                 <DetailNoti data={noti} />
               )}

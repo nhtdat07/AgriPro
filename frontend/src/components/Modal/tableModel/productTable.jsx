@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DetailProduct from "../detailModel/detailProduct";
 
-function ProductCard({ row, onClick, refreshProducts }) {
+function ProductCard({ row, onClick }) {
   return (
     <div className="bg-[#efffef] border rounded-lg shadow-md p-4 mb-4 flex-shrink-0 overflow-hidden flex flex-col justify-between">
       <div
