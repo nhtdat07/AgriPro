@@ -6,5 +6,6 @@ import { checkInventory } from './check_inventory.js';
     console.log('[CRON] Running inventory check...');
     await checkInventory(pool);
     console.log('[CRON] Finish inventory check');
+    await pool.end();
     process.exit(0);
 })();
