@@ -26,7 +26,11 @@ export default function AddInvoice(props) {
     taxCode: "",
     phoneNumber: "",
   });
-
+  const [detailCustomer, setDetailCustomer] = useState({
+    customerName: "",
+    addressCustomer: "",
+    phoneCustomer: "",
+  });  
   const dataInvoice = {
     codeInvoice: "",
     customerName: "",
@@ -58,10 +62,16 @@ export default function AddInvoice(props) {
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchDetailCustomers = async () => {
     try {
-      const response = await axiosInstance.get("/products");
-      setProductsList(response.data.data.products || []);
+      const response = await axiosInstance.get(`/customers/${selectedCustomerId}`);
+      const data = response.data.data;
+  
+      setDetailCustomer({
+        customerName: data.customerName || "",
+        addressCustomer: data.address || "",
+        phoneCustomer: data.phoneNumber || "",
+      });
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -72,9 +82,54 @@ export default function AddInvoice(props) {
         } else if (status === 500) {
           alert("Vui lòng tải lại trang!");
         }
-      }  
+      }
     }
   };
+  
+  const fetchProducts = async () => {
+    try {
+      const response = await axiosInstance.get("/products", {
+        params: {
+          limit: Number.MAX_SAFE_INTEGER,
+        },
+      });
+  
+      const products = response.data.data.products || [];
+      const productsWithQuantity = await Promise.all(
+        products.map(async (product) => {
+          try {
+            const detailResponse = await axiosInstance.get(`/products/${product.productId}`);
+            const availableQuantity = detailResponse.data.data.availableQuantity;
+  
+            return {
+              ...product,
+              availableQuantity,
+            };
+          } catch (detailError) {
+            console.error(`Lỗi khi lấy chi tiết sản phẩm ${product.productId}:`, detailError);
+            return null;
+          }
+        })
+      );
+  
+      const filteredProducts = productsWithQuantity.filter(
+        (p) => p && p.availableQuantity > 0
+      );
+  
+      setProductsList(filteredProducts);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }
+    }
+  };  
 
   const addProduct = () => {
     setProducts([
@@ -124,11 +179,12 @@ export default function AddInvoice(props) {
     };
 
     try {
-      await axiosInstance.post("/sales-invoices", invoiceData);console.log("Submitting products:", invoiceData);
+      await axiosInstance.post("/sales-invoices", invoiceData);
       setShowSaveModal(false);
       setShowModal(false);
       setSavedInvoice({ code: dataInvoice.codeInvoice, products });
       setShowInvoiceModal(true);
+      fetchDetailCustomers();
       resetForm();
 
       if (props.refreshInvoices) {
@@ -320,6 +376,9 @@ export default function AddInvoice(props) {
                           <input
                             type="number"
                             min="0"
+                            max={
+                              productsList.find((p) => p.productId === product.productId)?.availableQuantity || 0
+                            }
                             className="w-full p-2 border rounded-lg"
                             value={product.quantity}
                             onChange={(e) => handleProductChange(product.id, "quantity", e.target.value)}
@@ -416,13 +475,13 @@ export default function AddInvoice(props) {
               <div style={{ display: 'flex', gap: '150px' }}>
                 <div>
                   <p><strong>Mã số:</strong> {dataInvoice.codeInvoice}</p>
-                  <p><strong>Tên khách hàng:</strong> {dataInvoice.customerName}</p>
-                  <p><strong>Địa chỉ:</strong> {dataInvoice.addressCustomer}</p>
+                  <p><strong>Tên khách hàng:</strong> {detailCustomer.customerName}</p>
+                  <p><strong>Địa chỉ:</strong> {detailCustomer.addressCustomer}</p>
                 </div>
                 <div>
                   <p><br></br></p>
                   <p><strong>Thời gian:</strong> {dataInvoice.timestamp}</p>
-                  <p><strong>Số điên thoại:</strong> {dataInvoice.phoneCustomer}</p>
+                  <p><strong>Số điên thoại:</strong> {detailCustomer.phoneCustomer}</p>
                 </div>
               </div>
 
