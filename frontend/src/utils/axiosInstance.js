@@ -1,14 +1,7 @@
 import axios from "axios";
 
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
-
 const axiosInstance = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: process.env.REACT_APP_BACKEND_URL,
   headers: {
     'Content-Type': 'application/json',
   },

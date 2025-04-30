@@ -31,13 +31,10 @@ export default function AddInvoice(props) {
     addressCustomer: "",
     phoneCustomer: "",
   });  
-  const dataInvoice = {
+  const [dataInvoice, setDataInvoice] = useState({
     codeInvoice: "",
-    customerName: "",
-    addressCustomer: "",
     timestamp: "",
-    phoneCustomer: "",
-  };
+  });
 
   useEffect(() => {
     fetchCustomers();
@@ -46,7 +43,11 @@ export default function AddInvoice(props) {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axiosInstance.get("/customers");
+      const response = await axiosInstance.get("/customers", {
+        params: {
+          limit: Number.MAX_SAFE_INTEGER,
+        },
+      });
       setCustomersList(response.data.data.customers || []);
     } catch (error) {
       if (error.response) {
@@ -66,7 +67,6 @@ export default function AddInvoice(props) {
     try {
       const response = await axiosInstance.get(`/customers/${selectedCustomerId}`);
       const data = response.data.data;
-  
       setDetailCustomer({
         customerName: data.customerName || "",
         addressCustomer: data.address || "",
@@ -85,6 +85,28 @@ export default function AddInvoice(props) {
       }
     }
   };
+
+  const fetchInvoices = async () => {
+    try {
+      const res = await axiosInstance.get("/sales-invoices");
+      const invoices = res.data.data.salesInvoices || [];
+      setDataInvoice({
+        codeInvoice: invoices[0].salesInvoiceId || "",
+        timestamp: invoices[0].recordedTimestamp || "",
+      });
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }
+    }
+  };  
   
   const fetchProducts = async () => {
     try {
@@ -93,7 +115,6 @@ export default function AddInvoice(props) {
           limit: Number.MAX_SAFE_INTEGER,
         },
       });
-  
       const products = response.data.data.products || [];
       const productsWithQuantity = await Promise.all(
         products.map(async (product) => {
@@ -115,7 +136,6 @@ export default function AddInvoice(props) {
       const filteredProducts = productsWithQuantity.filter(
         (p) => p && p.availableQuantity > 0
       );
-  
       setProductsList(filteredProducts);
     } catch (error) {
       if (error.response) {
@@ -185,6 +205,7 @@ export default function AddInvoice(props) {
       setSavedInvoice({ code: dataInvoice.codeInvoice, products });
       setShowInvoiceModal(true);
       fetchDetailCustomers();
+      fetchInvoices();
       resetForm();
 
       if (props.refreshInvoices) {

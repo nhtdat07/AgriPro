@@ -21,7 +21,11 @@ export default function AddOrder(props) {
 
   const fetchSuppliers = async () => {
     try {
-      const response = await axiosInstance.get("/suppliers");
+      const response = await axiosInstance.get("/suppliers", {
+        params: {
+          limit: Number.MAX_SAFE_INTEGER,
+        },
+      });
       setSuppliersList(response.data.data.suppliers || []);
     } catch (error) {
       if (error.response) {
@@ -39,7 +43,11 @@ export default function AddOrder(props) {
 
   const fetchProducts = async () => {
     try {
-      const response = await axiosInstance.get("/products");
+      const response = await axiosInstance.get("/products", {
+        params: {
+          limit: Number.MAX_SAFE_INTEGER,
+        },
+      });
       setProductsList(response.data.data.products || []);
     } catch (error) {
       if (error.response) {
