@@ -6,7 +6,7 @@ import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance.js"
 
-import ava from "../../assets/images/avatar_black.svg";
+import ava from "../../assets/images/avatar_white.svg";
 
 function Settings() {
   const [headerToggle] = useOutletContext();
@@ -15,7 +15,7 @@ function Settings() {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const [avatar, setAvatar] = useState(ava);
-  const [tempAvatar, setTempAvatar] = useState(ava);
+  const [avatarOrigin, setAvatarOrigin] = useState(ava);
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -116,6 +116,7 @@ function Settings() {
   
         if (userProfile.profilePicturePath) {
           setAvatar(userProfile.profilePicturePath);
+          setAvatarOrigin(userProfile.profilePicturePath);
         }
       } catch (error) {
         if (error.response) {
@@ -143,7 +144,7 @@ function Settings() {
         taxCode: editData.taxCode,
         phoneNumber: editData.phone,
         email: editData.email,
-        profilePicturePath: tempAvatar !== null ? tempAvatar : avatar, 
+        profilePicturePath: avatar, 
       };
   
       const settings = [
@@ -170,11 +171,9 @@ function Settings() {
       await axiosInstance.patch("/settings", requestBody);
   
       setData(editData);
-      if (tempAvatar !== null) {
-        setAvatar(ava);
-      }
+      setAvatar(avatar);
+      setAvatarOrigin(avatar);
       setIsEditing(false);
-      alert("Cập nhật thông tin thành công!");
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -190,10 +189,10 @@ function Settings() {
   };
 
   const handleCancel = () => {
-    setEditData({ ...data });
-    setTempAvatar(null);
     setIsEditing(false);
-  };
+    setEditData(data);
+    setAvatar(avatarOrigin);
+  };  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -257,19 +256,29 @@ function Settings() {
     }
   };  
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setTempAvatar(e.target.result);
-      };
-      reader.readAsDataURL(file);
+  const handleImageChange = (input) => {
+    if (input?.target?.files) {
+      const file = input.target.files[0];
+      if (file) {
+        setAvatar(URL.createObjectURL(file));
+      }
+    } else if (typeof input === 'string') {
+      const url = input.trim();
+      if (url !== "") {
+        const img = new Image();
+        img.onload = () => {
+          setAvatar(url);
+        };
+        img.onerror = () => {
+          alert("URL không hợp lệ hoặc không phải ảnh!");
+        };
+        img.src = url;
+      }
     }
   };
 
   const handleDeleteImage = () => {
-    setTempAvatar(null);
+    setAvatar(null);
   };
 
   return (
@@ -366,7 +375,7 @@ function Settings() {
                       <p className="font-semibold mb-2">Ảnh đại diện</p>
                       <div className="relative flex flex-col items-center">
                         <img
-                          src={isEditing ? (tempAvatar || avatar) : avatar}
+                          src={avatar || ava}
                           className="rounded-full w-28 h-28 object-cover border"
                           alt="profile"
                         />
@@ -376,11 +385,17 @@ function Settings() {
                               THÊM ẢNH
                               <input
                                 type="file"
-                                accept="image/*"
                                 onChange={handleImageChange}
                                 className="hidden"
                               />
                             </label>
+
+                            <input
+                              type="text"
+                              onChange={(e) => setAvatar(e.target.value)}
+                              placeholder="Hoặc dán URL ảnh..."
+                              className="p-1 border rounded text-sm w-40"
+                            />
                             <button
                               className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-3 py-1 rounded-lg text-sm"
                               onClick={handleDeleteImage}

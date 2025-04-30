@@ -1,19 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
 import HTMLtoDOCX from 'html-docx-js/dist/html-docx';
+import axiosInstance from "../../../utils/axiosInstance.js"
 
 import plus from "../../../assets/images/plus.png";
 import minus from "../../../assets/images/minus.png";
-
-const agencyInfo = {
-    agencyName: "Đại lý vật tư nông nghiệp Quốc Thạnh",
-    ownerName: "Phạm Huỳnh Quốc Thạnh",
-    address: "193, Tân Bình Thạnh, H. Chợ Gạo, T. Tiền Giang",
-    taxCode: "1234567890",
-    phone: "0397151736",
-};
 
 const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -33,6 +26,13 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
     const [includeTopProductsQty, setIncludeTopProductsQty] = useState("có");
     const [includeTopCustomersValue, setIncludeTopCustomersValue] = useState("có");
     const [format, setFormat] = useState("PDF");
+    const [agencyInfo, setAgencyInfo] = useState({
+        agencyName: "",
+        ownerName: "",
+        address: "",
+        taxCode: "",
+        phoneNumber: "",
+    });
 
     const toggleIcon = (index) => {
       setIconStates(prev => prev.map((state, i) => (i === index ? !state : state)));
@@ -98,6 +98,36 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
     const valuePurchase = summaryData.find(item => item.title === "Nhập hàng")?.value || "0";
     const numSale = summaryData.find(item => item.title === "Bán hàng")?.numSale || "0";
     const valueSale = summaryData.find(item => item.title === "Bán hàng")?.value || "0";
+    
+    const fetchSettings = async () => {
+        try {
+          const response = await axiosInstance.get("/settings");
+          const data = response.data.data.userProfile;
+      
+          setAgencyInfo({
+            agencyName: data.agencyName,
+            ownerName: data.ownerName,
+            address: data.address,
+            taxCode: data.taxCode,
+            phoneNumber: data.phoneNumber,
+          });
+        } catch (error) {
+            if (error.response) {
+              const { status } = error.response;
+              if (status === 400) {
+                alert("Tải thông tin thất bại!");
+              } else if (status === 401) {
+                alert("Bạn không có quyền truy cập vào trang này!");
+              } else if (status === 500) {
+                alert("Vui lòng tải lại trang!");
+              }
+            }
+        }
+    };
+    
+    useEffect(() => {
+        fetchSettings();
+    }, []); 
 
     return (
         <>
@@ -211,9 +241,9 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
                             </div>
 
                             <div id="report-preview" className="w-1/2 overflow-y-auto p-4 text-[13px]">
-                                <h3 className="font-bold text-center uppercase">{agencyInfo.agencyName}</h3>
+                                <h3 className="font-bold text-center uppercase">Đại lý Vật tư nông nghiệp {agencyInfo.agencyName}</h3>
                                 <p className="text-center">Địa chỉ: {agencyInfo.address}</p>
-                                <p className="text-center">Số điện thoại: {agencyInfo.phone}</p>
+                                <p className="text-center">Số điện thoại: {agencyInfo.phoneNumber}</p>
                                 <p className="text-center mb-6">Mã số thuế: {agencyInfo.taxCode}</p>
                                 <h2 className="text-xxl font-bold text-center">BÁO CÁO KẾT QUẢ HOẠT ĐỘNG KINH DOANH</h2>
                                 <p className="text-center">(Thời gian: {dateRange})</p>

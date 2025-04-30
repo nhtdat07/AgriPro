@@ -434,28 +434,28 @@ function InventoryPurchase() {
                   <div className="flex items-center gap-2 mb-2">
                     <input
                       placeholder="Tên sản phẩm"
-                      className="border rounded-lg p-2 outline-none w-5/6"
+                      className="border rounded-lg p-2 outline-none w-full"
                       value={productSearch.name}
                       onChange={(e) => setProductSearch({ ...productSearch, name: e.target.value })}
                     />
                     <select
-                      className="border rounded-lg p-2 outline-none w-3/5"
+                      className="border rounded-lg p-2 outline-none w-5/6"
                       value={productSearch.category}
                       onChange={(e) => setProductSearch({ ...productSearch, category: e.target.value })}
                     >
-                      <option className="text-blue" disabled value="">Phân loại</option>
+                      <option disabled value="">Phân loại</option>
                       <option value="THUỐC BẢO VỆ THỰC VẬT">THUỐC BẢO VỆ THỰC VẬT</option>
                       <option value="PHÂN BÓN - ĐẤT TRỒNG">PHÂN BÓN - ĐẤT TRỒNG</option>
                       <option value="HẠT GIỐNG - CÂY TRỒNG">HẠT GIỐNG - CÂY TRỒNG</option>
                       <option value="NÔNG CỤ">NÔNG CỤ</option>
                       <option value="GIA SÚC - GIA CẦM">GIA SÚC - GIA CẦM</option>                      
                     </select>
-                    {/* <input
+                    <input
                       placeholder="Công dụng"
-                      className="border rounded-lg p-2 outline-none w-full"
+                      className="border rounded-lg p-2 outline-none w-3/5"
                       value={productSearch.usage}
                       onChange={(e) => setProductSearch({ ...productSearch, usage: e.target.value })}
-                    /> */}
+                    />
                     <button type="button" onClick={handleSearchProduct} className="p-2 w-1/5">
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>

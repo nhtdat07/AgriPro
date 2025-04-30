@@ -2,30 +2,64 @@ import { useState, useEffect } from "react";
 import { faBars, faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NotiTable from "../Modal/tableModel/notiTable";
-import ava from "../../assets/images/avatar_white.svg";
 import axiosInstance from "../../utils/axiosInstance";
+
+import ava from "../../assets/images/avatar_white.svg";
 
 function Header({ toggle, refreshTrigger }) {
   const [showNoti, setShowNoti] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  
-    const fetchNotifications = async () => {
-      try {
-        const response = await axiosInstance.get("/notifications");
-        const fetchedNotifications = response.data.data.notifications.map((noti) => ({
-          id: noti.notificationId,
-          message: noti.category,
-          time: noti.timestamp,
-          isRead: noti.isRead,
-        }));
-        setNotifications(fetchedNotifications);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
+  const [agencyName, setAgencyName] = useState("");
+  const [profilePicture, setProfilePicture] = useState(ava);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await axiosInstance.get("/notifications");
+      const fetchedNotifications = response.data.data.notifications.map((noti) => ({
+        id: noti.notificationId,
+        message: noti.category,
+        time: noti.timestamp,
+        isRead: noti.isRead,
+      }));
+      setNotifications(fetchedNotifications);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
       }
-    };
-    
+    }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const response = await axiosInstance.get("/settings");
+      const profile = response.data.data.userProfile;
+
+      setAgencyName(profile.agencyName);
+      setProfilePicture(profile.profilePicturePath || ava);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          alert("Tải thông tin thất bại!");
+        } else if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     fetchNotifications();
+    fetchSettings();
   }, []);
 
   useEffect(() => {
@@ -75,7 +109,7 @@ function Header({ toggle, refreshTrigger }) {
               <li>
                 <img
                   className="rounded-full h-9 w-9 border cursor-pointer"
-                  src={ava}
+                  src={profilePicture}
                   alt="Avatar"
                 />
               </li>
@@ -83,7 +117,7 @@ function Header({ toggle, refreshTrigger }) {
                 <span className="text-white font-light">Tài khoản</span>
                 <br />
                 <span className="text-white font-medium">
-                  Phạm Huỳnh Quốc Thạnh
+                  {agencyName}
                 </span>
               </li>
             </ul>

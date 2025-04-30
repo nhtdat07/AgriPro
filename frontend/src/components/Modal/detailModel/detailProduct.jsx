@@ -5,6 +5,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
     const [isEditing, setIsEditing] = useState(false);
     const [editableProduct, setEditableProduct] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [image, setImage] = useState(null);
 
     const fetchProductDetails = async () => {
         try {
@@ -24,6 +25,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
             };
 
             setEditableProduct(mappedData);
+            setImage(data.imagePath);
         } catch (error) {
             if (error.response) {
                 const { status } = error.response;
@@ -94,19 +96,29 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
         }
     };    
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setEditableProduct({ ...editableProduct, photo: e.target.result });
+    const handleImageChange = (input) => {
+        if (input?.target?.files) {
+          const file = input.target.files[0];
+          if (file) {
+            setEditableProduct({ ...editableProduct, photo: URL.createObjectURL(file) });
+          }
+        } else if (typeof input === 'string') {
+          const url = input.trim();
+          if (url !== "") {
+            const img = new Image();
+            img.onload = () => {
+                setEditableProduct({ ...editableProduct, photo: URL.createObjectURL(url) });
             };
-            reader.readAsDataURL(file);
+            img.onerror = () => {
+              alert("URL không hợp lệ hoặc không phải ảnh!");
+            };
+            img.src = url;
+          }
         }
     };
 
-    const handleImageDelete = () => {
-        setEditableProduct({ ...editableProduct, photo: "" });
+    const handleDeleteImage = () => {
+        setEditableProduct({ ...editableProduct, photo: image });
     };
 
     const handleDeleteConfirm = async () => {
@@ -156,17 +168,29 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                             )}
                         </div>
                         {isEditing && (
-                            <div className="flex gap-2 mt-2">
-                                <label htmlFor="image-upload" className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg cursor-pointer">THAY ĐỔI</label>
-                                <input
-                                    id="image-upload"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                    className="hidden"
-                                />
-                                <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-4 py-2 rounded-lg" onClick={handleImageDelete}>XÓA ẢNH</button>
-                            </div>
+                          <div className="flex flex-col items-center gap-2 mt-2">
+                            <label className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-3 py-1 rounded-lg text-sm cursor-pointer">
+                              THÊM ẢNH
+                              <input
+                                type="file"
+                                onChange={handleImageChange}
+                                className="hidden"
+                              />
+                            </label>
+
+                            <input
+                              type="text"
+                              onChange={(e) => setEditableProduct({ ...editableProduct, photo: e.target.value })}
+                              placeholder="Hoặc dán URL ảnh..."
+                              className="p-1 border rounded text-sm w-40"
+                            />
+                            <button
+                              className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-3 py-1 rounded-lg text-sm"
+                              onClick={handleDeleteImage}
+                            >
+                              XÓA ẢNH
+                            </button>
+                          </div>
                         )}
                     </div>
                     <div className="w-3/4">

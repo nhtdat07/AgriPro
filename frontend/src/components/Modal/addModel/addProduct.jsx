@@ -20,13 +20,27 @@ export default function AddProduct(props) {
     });
 
     const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
-            setProductData({ ...productData, imagePath: "" });
+        if (event?.target?.files) {
+            const file = event.target.files[0];
+            if (file) {
+                setImage(URL.createObjectURL(file));
+                setProductData({ ...productData, imagePath: URL.createObjectURL(file) });
+            }
+        } else if (typeof event === 'string') {
+            const url = event.trim();
+            if (url !== "") {
+                const img = new Image();
+                img.onload = () => {
+                    setImage(url);
+                    setProductData({ ...productData, imagePath: url });
+                };
+                img.onerror = () => {
+                    alert("URL không hợp lệ hoặc không phải ảnh!");
+                };
+                img.src = url;
+            }
         }
-    };
+    };    
 
     const handleChange = (e) => {
         setProductData({ ...productData, [e.target.name]: e.target.value });
@@ -103,15 +117,32 @@ export default function AddProduct(props) {
                                         <img src={image || addPhoto} className="object-cover w-40 h-48" alt="upload" />
                                     </div>
                                     <input type="file" className="hidden" id="imageUpload" onChange={handleImageUpload} />
-                                    <div className="flex justify-center gap-4 p-4">
-                                        <button 
-                                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700" 
-                                            onClick={(e) => { 
-                                                e.preventDefault(); 
-                                                document.getElementById('imageUpload').click(); 
-                                            }}
-                                        >
+                                    <div className="flex flex-col items-center gap-2 mt-2">
+                                        <label className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-3 py-1 rounded-lg text-sm cursor-pointer">
                                             THÊM ẢNH
+                                            <input
+                                                type="file"
+                                                onChange={handleImageUpload}
+                                                className="hidden"
+                                                id="imageUpload"
+                                            />
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            placeholder="Hoặc dán URL ảnh..."
+                                            className="p-1 border rounded text-sm w-40"
+                                            onChange={(e) => handleImageUpload(e.target.value)}
+                                        />
+
+                                        <button
+                                            onClick={() => {
+                                            setImage(null);
+                                            setProductData({ ...productData, imagePath: "" });
+                                            }}
+                                            className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-3 py-1 rounded-lg text-sm"
+                                        >
+                                            XÓA ẢNH
                                         </button>
                                     </div>
                                 </div>
