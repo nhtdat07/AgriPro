@@ -170,13 +170,14 @@ export default function AddInvoice(props) {
               ...product,
               [field]: value,
               ...(field === "productId" && {
-                productName: productsList.find(p => p.productId === value)?.productName || ""
+                productName: productsList.find(p => p.productId === value)?.productName || "",
+                outPrice: productsList.find(p => p.productId === value)?.outPrice || 0
               })
             }
           : product
       )
     );
-  };  
+  };    
 
   const resetForm = () => {
     setSelectedCustomerId("");
@@ -406,14 +407,17 @@ export default function AddInvoice(props) {
                           />
                         </td>
                         <td className="p-2">
-                          <input
-                            type="number"
-                            min="0"
-                            className="w-full p-2 border rounded-lg"
-                            value={product.outPrice}
-                            onChange={(e) => handleProductChange(product.id, "outPrice", e.target.value)}
-                          />
-                        </td>
+  <input
+    type="number"
+    min="0"
+    className="w-full p-2 border rounded-lg"
+    value={product.outPrice}
+    onChange={(e) =>
+      handleProductChange(product.id, "outPrice", Number(e.target.value))
+    }
+  />
+</td>
+
                         <td className="p-2 text-center">
                           {(product.quantity * product.outPrice).toLocaleString()}
                         </td>
