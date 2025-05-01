@@ -8,7 +8,7 @@
 }
 
 .mainWrapper{
-    @apply flex flex-1 flex-col overflow-x-hidden overflow-y-scroll;
+    @apply flex flex-1 flex-col overflow-x-hidden;
 }
 
 .mainCard{

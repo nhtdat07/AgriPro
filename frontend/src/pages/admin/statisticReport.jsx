@@ -29,10 +29,14 @@ function StatisticReport() {
   const [endDate, setEndDate] = useState(today);
   const [applieRange, setApplieRange] = useState(`${formatDate(today)} - ${formatDate(today)}`);
   const [loading, setLoading] = useState(false);
-
   const [summaryData, setSummaryData] = useState([]);
   const [dataBestSell, setDataBestSell] = useState([]);
   const [dataTopCustomer, setDataTopCustomer] = useState([]);
+  const [searchProduct, setSearchProduct] = useState("");
+  const [searchCustomer, setSearchCustomer] = useState("");
+  const [originalBestSell, setOriginalBestSell] = useState([]);
+  const [originalTopCustomer, setOriginalTopCustomer] = useState([]);
+
 
   const dataHeaderBestSell = [
     { key: "id", label: "STT" },
@@ -85,21 +89,21 @@ function StatisticReport() {
         },
       ]);
 
-      setDataBestSell(
-        bestSellersData.map((item, index) => ({
-          id: index + 1,
-          name: item.productName,
-          quantity: item.soldQuantity,
-        }))
-      );
-
-      setDataTopCustomer(
-        activeCustomersData.map((item, index) => ({
-          id: index + 1,
-          name: item.customerName,
-          value: formatCurrency(item.buyingAmount),
-        }))
-      );
+    const bestSellMapped = bestSellersData.map((item, index) => ({
+      id: index + 1,
+      name: item.productName,
+      quantity: item.soldQuantity,
+    }));
+    setOriginalBestSell(bestSellMapped);
+    setDataBestSell(bestSellMapped);
+      
+    const topCustomerMapped = activeCustomersData.map((item, index) => ({
+      id: index + 1,
+      name: item.customerName,
+      value: formatCurrency(item.buyingAmount),
+    }));
+    setOriginalTopCustomer(topCustomerMapped);
+    setDataTopCustomer(topCustomerMapped);      
 
     } catch (error) {
       console.error("Error fetching statistics:", error);
@@ -114,6 +118,20 @@ function StatisticReport() {
     setApplieRange(`${formattedStart} - ${formattedEnd}`);
     fetchStatistics();
   };
+
+  const handleSearchProduct = () => {
+    const filtered = originalBestSell.filter(item =>
+      item.name.toLowerCase().includes(searchProduct.toLowerCase())
+    );
+    setDataBestSell(filtered);
+  };
+  
+  const handleSearchCustomer = () => {
+    const filtered = originalTopCustomer.filter(item =>
+      item.name.toLowerCase().includes(searchCustomer.toLowerCase())
+    );
+    setDataTopCustomer(filtered);
+  };  
 
   const handleDelete = () => { };
 
@@ -188,9 +206,15 @@ function StatisticReport() {
                 <h3 className="text-xl font-bold mb-2">Sản phẩm bán chạy</h3>
                 <div className="flex items-center mb-2">
                   <div className="flex items-center border rounded-lg px-2 w-full">
-                    <input type="text" placeholder="Tên sản phẩm" className="w-full p-2 outline-none" />
+                    <input
+                      type="text"
+                      placeholder="Tên sản phẩm"
+                      className="w-full p-2 outline-none"
+                      value={searchProduct}
+                      onChange={(e) => setSearchProduct(e.target.value)}
+                    />
                   </div>
-                  <button className="ml-2 p-2">
+                  <button onClick={handleSearchProduct} className="ml-2 p-2">
                     <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                   </button>
                 </div>
@@ -208,9 +232,15 @@ function StatisticReport() {
                 <h3 className="text-xl font-bold mb-2">Khách hàng mua nhiều</h3>
                 <div className="flex items-center mb-2">
                   <div className="flex items-center border rounded-lg px-2 w-full">
-                    <input type="text" placeholder="Tên khách hàng" className="w-full p-2 outline-none" />
+                    <input
+                      type="text"
+                      placeholder="Tên khách hàng"
+                      className="w-full p-2 outline-none"
+                      value={searchCustomer}
+                      onChange={(e) => setSearchCustomer(e.target.value)}
+                    />
                   </div>
-                  <button className="ml-2 p-2">
+                  <button onClick={handleSearchCustomer} className="ml-2 p-2">
                     <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                   </button>
                 </div>

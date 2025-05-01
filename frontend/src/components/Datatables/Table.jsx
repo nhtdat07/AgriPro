@@ -10,7 +10,7 @@ function Table({
   children,
 } = {}) {
   return (
-    <div className="overflow-x-auto max-h-[60vh] overflow-y-auto">
+    <div className="overflow-x-auto">
       <table
         className={`block md:table w-full text-sm text-center text-gray-500`}
       >
