@@ -11,12 +11,19 @@ import { router as sellingRoutes } from './routes/selling.js';
 import { router as statisticsRoutes } from './routes/statistics.js';
 import cors from "cors";
 
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, './.env') });
+
 export const app = express();
 
 app.use(express.json()); // Enable JSON parsing
 app.use(
     cors({
-        origin: ["http://localhost:3000"],
+        origin: [process.env.FRONTEND_URL],
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true,
     })
