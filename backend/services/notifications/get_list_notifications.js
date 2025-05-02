@@ -25,6 +25,10 @@ export const getListNotificationsService = async (pool, user, query) => {
 
         // Transform to return data
         let notificationList = [];
+        let hasUnreadNotification = false;
+        if (result.length > consts.ZERO_LENGTH) {
+            hasUnreadNotification = result[consts.FIRST_IDX_ARRAY].all_read;
+        }
         result.forEach(notification => {
             notificationList.push({
                 notificationId: notification.id,
@@ -38,7 +42,7 @@ export const getListNotificationsService = async (pool, user, query) => {
             message: 'Get list notifications successfully',
             data: {
                 notifications: notificationList,
-                hasUnreadNotification: result[consts.FIRST_IDX_ARRAY].all_read,
+                hasUnreadNotification,
                 pagination: getNextPagination(limit, offset, result.length)
             }
         };
