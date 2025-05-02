@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../../components/Navbar/header";
 import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
@@ -19,7 +19,6 @@ function InventoryPurchase() {
   const [footerToggle] = useOutletContext();
   const [loading] = useState(false);
   const [activeTab, setActiveTab] = useState('inventory');
-
   const dataHeaderInventory = 
   [ {key: "id", label: "STT"},
     {key: "name", label: "Tên sản phẩm"},
@@ -28,7 +27,6 @@ function InventoryPurchase() {
     {key: "exp", label: "Hạn dùng"},
     {key: "import_price", label: "Giá nhập"}
   ];
-
   const dataHeaderPurchase = 
   [ {key: "id", label: "STT"},
     {key: "code", label: "Mã số"},
@@ -36,14 +34,12 @@ function InventoryPurchase() {
     {key: "supplier", label: "Nhà cung cấp"},
     {key: "action", label: ""},
   ];
-
   const dataHeaderProduct = 
   [ {key: "photo", label: "Link ảnh"},
     {key: "name", label: "Tên sản phẩm"},
     {key: "category", label: "Phân loại"},
     {key: "price", label: "Giá bán"}
   ];
-
   const dataHeaderSupplier = 
   [ {key: "id", label: "STT"},
     {key: "name", label: "Tên nhà cung cấp"},
@@ -52,13 +48,11 @@ function InventoryPurchase() {
     {key: "email", label: "Email"},
     {key: "action", label: ""},
   ];
-
   const [inventoryData, setInventoryData] = useState([]);
   const [purchasesData, setPurchasesData] = useState([]);
   const [productsData, setProductsData] = useState([]);
   const [suppliersData, setSuppliersData] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-
   const [inventorySearch, setInventorySearch] = useState({
     name: "",
     importDate: "",
@@ -66,29 +60,37 @@ function InventoryPurchase() {
     warningExpired: false,
     warningStock: false,
   });
-  
   const [purchaseSearch, setPurchaseSearch] = useState({
     code: "",
     date: "",
     supplier: "",
   });
-
   const [productSearch, setProductSearch] = useState({
     name: "",
     category: "",
     usage: "",
   });
-  
   const [supplierSearch, setSupplierSearch] = useState({
     name: "",
     phone: "",
     address: "",
   });
-
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [filteredPurchases, setFilteredPurchases] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filteredSuppliers, setFilteredSuppliers] = useState([]);
+  const [inventoryOffset, setInventoryOffset] = useState(0);
+  const [hasMoreInventory, setHasMoreInventory] = useState(true);
+  const [purchaseOffset, setPurchaseOffset] = useState(0);
+  const [hasMorePurchases, setHasMorePurchases] = useState(true);
+  const [productOffset, setProductOffset] = useState(0);
+  const [hasMoreProducts, setHasMoreProducts] = useState(true);
+  const [supplierOffset, setSupplierOffset] = useState(0);
+  const [hasMoreSuppliers, setHasMoreSuppliers] = useState(true);
+  const inventoryContainerRef = useRef(null);
+  const purchaseContainerRef = useRef(null);
+  const productContainerRef = useRef(null);
+  const supplierContainerRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,13 +126,64 @@ function InventoryPurchase() {
     fetchData();
   }, []);
 
-  const fetchOrders = async () => {
+  const fetchInventory = async (offset = 0, append = false) => {
     try {
-      const res = await axiosInstance.get("/purchase-orders");
-      const data = res.data.data.purchaseOrders;
-      setPurchasesData(data);
-      setFilteredPurchases(data);
-      setRefreshTrigger(prev => prev + 1)
+      const res = await axiosInstance.get("/inventory", {
+        params: { offset, limit: 20 }
+      });
+      const newData = res.data.data.inventory;
+      setInventoryData(prev => append ? [...prev, ...newData] : newData);
+      setFilteredInventory(prev => append ? [...prev, ...newData] : newData);
+      setRefreshTrigger(prev => prev + 1);
+  
+      if (newData.length < 20) {
+        setHasMoreInventory(false);
+      } else {
+        setHasMoreInventory(true);
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const container = inventoryContainerRef.current;
+    if (!container) return;
+    
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
+        if (isBottom && hasMoreInventory) {
+          const newOffset = inventoryOffset + 20;
+          fetchInventory(newOffset, true);
+          setInventoryOffset(newOffset);
+        }
+      };
+    
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [inventoryOffset, hasMoreInventory]);
+
+  const fetchOrders = async (offset = 0, append = false) => {
+    try {
+      const res = await axiosInstance.get("/purchase-orders", {
+        params: { offset, limit: 20 }
+      });
+      const newData = res.data.data.purchaseOrders;
+      setPurchasesData(prev => append ? [...prev, ...newData] : newData);
+      setFilteredPurchases(prev => append ? [...prev, ...newData] : newData);
+      setRefreshTrigger(prev => prev + 1);
+      
+      if (newData.length < 20) {
+        setHasMorePurchases(false);
+      } else {
+        setHasMorePurchases(true);
+      }
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -145,13 +198,40 @@ function InventoryPurchase() {
     fetchOrders();
   }, []);
 
-  const fetchProducts = async () => {
+  useEffect(() => {
+    if (activeTab !== 'purchase') return;
+    const container = purchaseContainerRef.current;
+    if (!container) return;
+    
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
+        if (isBottom && hasMorePurchases) {
+          const newOffset = purchaseOffset + 20;
+          fetchOrders(newOffset, true);
+          setPurchaseOffset(newOffset);
+        }
+      };
+    
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }, [activeTab, purchaseOffset, hasMorePurchases]);
+
+  const fetchProducts = async (offset = 0, append = false) => {
     try {
-      const res = await axiosInstance.get("/products");
-      const data = res.data.data.products;
-      setProductsData(data);
-      setFilteredProducts(data);
-      setRefreshTrigger(prev => prev + 1)
+      const res = await axiosInstance.get("/products", {
+        params: { offset, limit: 20 }
+      });
+      const newData = res.data.data.products;
+      setProductsData(prev => append ? [...prev, ...newData] : newData);
+      setFilteredProducts(prev => append ? [...prev, ...newData] : newData);
+      setRefreshTrigger(prev => prev + 1);
+        
+      if (newData.length < 20) {
+        setHasMoreProducts(false);
+      } else {
+        setHasMoreProducts(true);
+      }
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -166,13 +246,40 @@ function InventoryPurchase() {
     fetchProducts();
   }, []);
 
-  const fetchSuppliers = async () => {
+  useEffect(() => {
+    if (activeTab !== 'product') return;
+    const container = productContainerRef.current;
+    if (!container) return;
+    
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
+        if (isBottom && hasMoreProducts) {
+          const newOffset = productOffset + 20;
+          fetchProducts(newOffset, true);
+          setProductOffset(newOffset);
+        }
+      };
+    
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [activeTab, productOffset, hasMoreProducts]);
+
+  const fetchSuppliers = async (offset = 0, append = false) => {
     try {
-      const res = await axiosInstance.get("/suppliers");
-      const data = res.data.data.suppliers;
-      setSuppliersData(data);
-      setFilteredSuppliers(data);
-      setRefreshTrigger(prev => prev + 1)
+      const res = await axiosInstance.get("/suppliers", {
+        params: { offset, limit: 20 }
+      });
+      const newData = res.data.data.suppliers;
+      setSuppliersData(prev => append ? [...prev, ...newData] : newData);
+      setFilteredSuppliers(prev => append ? [...prev, ...newData] : newData);
+      setRefreshTrigger(prev => prev + 1);
+          
+      if (newData.length < 20) {
+        setHasMoreSuppliers(false);
+      } else {
+        setHasMoreSuppliers(true);
+      }
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -186,6 +293,25 @@ function InventoryPurchase() {
   useEffect(() => {
     fetchSuppliers();
   }, []);
+
+  useEffect(() => {
+    if (activeTab !== 'supplier') return;
+    const container = supplierContainerRef.current;
+    if (!container) return;
+    
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
+        if (isBottom && hasMoreSuppliers) {
+          const newOffset = supplierOffset + 20;
+          fetchSuppliers(newOffset, true);
+          setSupplierOffset(newOffset);
+        }
+      };
+    
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [activeTab, supplierOffset, hasMoreSuppliers]);
 
   const [dayExpired, setDayExpired] = useState(null);
   const [dayOutOfStock, setDayOutOfStock] = useState(null);
@@ -372,7 +498,10 @@ function InventoryPurchase() {
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>
                   </div>
-                  <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                  <div
+                    ref={inventoryContainerRef}
+                    className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg overflow-y-auto max-h-[500px]"
+                  >
                     <InventoryTable
                       loading={loading}
                       dataHeader={dataHeaderInventory}
@@ -416,7 +545,10 @@ function InventoryPurchase() {
                     </button>
                     <AddOrder refreshOrders={fetchOrders} />
                   </div>
-                  <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                  <div
+                    ref={purchaseContainerRef}
+                    className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg overflow-y-auto max-h-[500px]"
+                  >
                     <PurchaseTable
                       loading={loading}
                       dataHeader={dataHeaderPurchase}
@@ -461,7 +593,10 @@ function InventoryPurchase() {
                     </button>
                     <AddProduct refreshProducts={fetchProducts} />
                   </div>
-                  <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                  <div
+                    ref={productContainerRef}
+                    className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg overflow-y-auto max-h-[500px]"
+                  >
                     <ProductTable
                       loading={loading}
                       dataHeader={dataHeaderProduct}
@@ -501,7 +636,10 @@ function InventoryPurchase() {
                       </button>
                       <AddSupplier refreshSuppliers={fetchSuppliers} />
                     </div>
-                    <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                    <div
+                      ref={supplierContainerRef}
+                      className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg overflow-y-auto max-h-[500px]"
+                    >
                       <SupplierTable
                         loading={loading}
                         dataHeader={dataHeaderSupplier}

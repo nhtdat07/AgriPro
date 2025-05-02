@@ -12,11 +12,6 @@ function Homepage() {
   const [headerToggle] = useOutletContext();
   const [footerToggle] = useOutletContext();
   const navigate = useNavigate();
-  
-  const data = {
-    name: "Thạnh",
-  };
-
   const blockContents = [
     {
       image: block1,
@@ -41,7 +36,7 @@ function Homepage() {
         <Header toggle={headerToggle} />
 
         <div className="flex-grow">
-          <h2 className="pt-4 pl-4 text-2xl font-bold">Chào {data.name}!</h2>
+          <h2 className="pt-4 pl-4 text-2xl font-bold">Chào mừng bạn!</h2>
           <p className="pl-4 text-xl font-regular">Chúc bạn một ngày tốt lành!</p>
           <div className="px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6 flex-grow">
             {blockContents.map((block, index) => (

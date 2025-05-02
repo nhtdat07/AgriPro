@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../../components/Navbar/header";
 import Footer from "../../components/Navbar/footer";
 import { useOutletContext } from "react-router-dom";
@@ -16,7 +16,6 @@ function Sales() {
   const [footerToggle] = useOutletContext();
   const [loading] = useState(false);
   const [activeTab, setActiveTab] = useState('sale');
-
   const dataHeaderInvoice = 
   [ {key: "id", label: "STT"},
     {key: "code", label: "Mã số"},
@@ -24,7 +23,6 @@ function Sales() {
     {key: "customer", label: "Khách hàng"},
     {key: "action", label: ""},
   ];
-
   const dataHeaderCustomer = 
   [ {key: "id", label: "STT"},
     {key: "name", label: "Tên khách hàng"},
@@ -33,25 +31,27 @@ function Sales() {
     {key: "email", label: "Email"},
     {key: "action", label: ""},
   ];
-
   const [invoicesData, setInvoicesData] = useState([]);
   const [customersData, setCustomersData] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-
   const [invoiceSearch, setInvoiceSearch] = useState({
     code: "",
     date: "",
     customer: "",
   });
-
   const [customerSearch, setCustomerSearch] = useState({
     name: "",
     phone: "",
     address: "",
   });
-
   const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [invoiceOffset, setInvoiceOffset] = useState(0);
+  const [hasMoreInvoices, setHasMoreInvoices] = useState(true);
+  const [customerOffset, setCustomerOffset] = useState(0);
+  const [hasMoreCustomers, setHasMoreCustomers] = useState(true);
+  const invoiceContainerRef = useRef(null);
+  const customerContainerRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,13 +79,64 @@ function Sales() {
     fetchData();
   }, []);
 
-  const fetchInvoices = async () => {
+  const fetchInvoices = async (offset = 0, append = false) => {
     try {
-      const res = await axiosInstance.get("/sales-invoices");
-      const data = res.data.data.salesInvoices;
-      setInvoicesData(data);
-      setFilteredInvoices(data);
+      const res = await axiosInstance.get("/sales-invoices", {
+        params: { offset, limit: 20 }
+      });
+      const newData = res.data.data.salesInvoices;
+      setInvoicesData(prev => append ? [...prev, ...newData] : newData);
+      setFilteredInvoices(prev => append ? [...prev, ...newData] : newData);
       setRefreshTrigger(prev => prev + 1);
+  
+      if (newData.length < 20) {
+        setHasMoreInvoices(false);
+      } else {
+        setHasMoreInvoices(true);
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
+  };  
+
+  useEffect(() => {
+    const container = invoiceContainerRef.current;
+    if (!container) return;
+  
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
+      if (isBottom && hasMoreInvoices) {
+        const newOffset = invoiceOffset + 20;
+        fetchInvoices(newOffset, true);
+        setInvoiceOffset(newOffset);
+      }
+    };
+  
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [invoiceOffset, hasMoreInvoices]);
+
+  const fetchCustomers = async (offset = 0, append = false) => {
+    try {
+      const res = await axiosInstance.get("/customers", {
+        params: { offset, limit: 20 }
+      });
+      const newData = res.data.data.customers;
+      setCustomersData(prev => append ? [...prev, ...newData] : newData);
+      setFilteredCustomers(prev => append ? [...prev, ...newData] : newData);
+      setRefreshTrigger(prev => prev + 1);
+      
+      if (newData.length < 20) {
+        setHasMoreCustomers(false);
+      } else {
+        setHasMoreCustomers(true);
+      }
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -96,22 +147,24 @@ function Sales() {
     }
   };
 
-  const fetchCustomers = async () => {
-    try {
-      const res = await axiosInstance.get("/customers");
-      const data = res.data.data.customers;
-      setCustomersData(data);
-      setFilteredCustomers(data);
-      setRefreshTrigger(prev => prev + 1);
-    } catch (error) {
-      if (error.response) {
-        const { status } = error.response;
-        if (status === 400) alert("Tải thông tin thất bại!");
-        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
-        else if (status === 500) alert("Vui lòng tải lại trang!");
+  useEffect(() => {
+    if (activeTab !== 'customer') return;
+    const container = customerContainerRef.current;
+    if (!container) return;
+  
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
+      if (isBottom && hasMoreCustomers) {
+        const newOffset = customerOffset + 20;
+        fetchCustomers(newOffset, true);
+        setCustomerOffset(newOffset);
       }
-    }
-  };
+    };
+  
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [activeTab, customerOffset, hasMoreCustomers]);
 
   const handleSearchInvoice = () => {
     const result = invoicesData.filter((item) => {
@@ -190,7 +243,10 @@ function Sales() {
                       </button>
                       <AddInvoice refreshInvoices={fetchInvoices} />
                     </div>
-                    <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                    <div
+                      ref={invoiceContainerRef}
+                      className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg overflow-y-auto max-h-[500px]"
+                    >
                       <InvoiceTable
                         loading={loading}
                         dataHeader={dataHeaderInvoice}
@@ -229,7 +285,10 @@ function Sales() {
                       </button>
                       <AddCustomer refreshCustomers={fetchCustomers} />
                     </div>
-                    <div className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg">
+                    <div
+                      ref={customerContainerRef}
+                      className="border w-full border-gray-200 bg-white py-4 px-4 rounded-lg overflow-y-auto max-h-[500px]"
+                    >
                       <CustomerTable
                         loading={loading}
                         dataHeader={dataHeaderCustomer}

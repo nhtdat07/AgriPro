@@ -14,7 +14,11 @@ function Header({ toggle, refreshTrigger }) {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axiosInstance.get("/notifications");
+      const response = await axiosInstance.get("/notifications", {
+        params: {
+          limit: Number.MAX_SAFE_INTEGER,
+        },
+      });
       const fetchedNotifications = response.data.data.notifications.map((noti) => ({
         id: noti.notificationId,
         message: noti.category,
