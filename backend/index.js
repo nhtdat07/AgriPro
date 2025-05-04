@@ -2,6 +2,7 @@ import { app } from './app.js';
 import * as consts from './consts/consts.js';
 import { pool } from './db.js';
 import './jobs/cron.js';
+import './jobs/run_cron.js';
 
 // Test DB connection on startup
 const startServer = async () => {
