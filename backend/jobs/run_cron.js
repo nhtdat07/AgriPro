@@ -2,6 +2,7 @@ import { pool } from '../db.js';
 import { checkInventory } from './check_inventory.js';
 import { app } from '../app.js';
 import { CRON_SECRET_KEY } from '../consts/consts.js';
+import cors from "cors";
 
 import dotenv from 'dotenv';
 import path from 'path';
