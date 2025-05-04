@@ -16,6 +16,7 @@ export const HTTP_STATUS = {
 // Request handling
 export const AUTHORIZATION_KEY = 'authorization';
 export const TOKEN_PREFIX = 'Bearer ';
+export const CRON_SECRET_KEY = 'x-cron-secret';
 
 // Regex
 export const REGEX = {
