@@ -35,6 +35,7 @@ import { createTableProduct } from './db/schema/generated/product.up.js';
 import { createTablePurchaseOrder } from './db/schema/generated/purchase_order.up.js';
 import { createTableSalesInvoice } from './db/schema/generated/sales_invoice.up.js';
 import { createTableSupplier } from './db/schema/generated/supplier.up.js';
+import { addForeignKeyConstraints } from './db/schema/generated/foreign_keys.js';
 
 // Init schema
 const initSchema = async (pool) => {
@@ -48,6 +49,7 @@ const initSchema = async (pool) => {
         await createTablePurchaseOrder(pool);
         await createTableSalesInvoice(pool);
         await createTableSupplier(pool);
+        await addForeignKeyConstraints(pool);
         console.log('All tables initialized');
     } catch (err) {
         console.error('Error initializing schema:', err);
