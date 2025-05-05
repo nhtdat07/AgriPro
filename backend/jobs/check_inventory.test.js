@@ -18,7 +18,10 @@ beforeAll(async () => {
     await createTableNotification(pool);
     try {
         await pool.query(`
-            INSERT INTO user_agency (email, password_hash) VALUES ('test1@example.com', '123');
+            INSERT INTO user_agency (email, password_hash) 
+            VALUES 
+                ('test1@example.com', '123'),
+                ('test2@example.com', '123');
 
             INSERT INTO product (agency_id, name, brand, category, out_price, production_place, usages, guidelines, is_deleted)
             VALUES
@@ -36,7 +39,9 @@ beforeAll(async () => {
             INSERT INTO configuration (agency_id, category, key, value)
             VALUES
                 ('UA0001', 'INVENTORY_PARAMS', 'warning_expired', '5'),
-                ('UA0001', 'INVENTORY_PARAMS', 'warning_out_of_stock', '5');
+                ('UA0001', 'INVENTORY_PARAMS', 'warning_out_of_stock', '5'),
+                ('UA0002', 'INVENTORY_PARAMS', 'warning_expired', '5'),
+                ('UA0002', 'INVENTORY_PARAMS', 'warning_out_of_stock', '5');
         `);
     } catch (error) {
         console.error('Error insert data:', error);

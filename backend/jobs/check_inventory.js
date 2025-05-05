@@ -32,6 +32,9 @@ const checkExpire = async (pool, userAgencyId, lastExpiredDateWarning) => {
         agency_id: userAgencyId,
         warning_expired: lastExpiredDateWarning
     });
+    if (products.length == consts.ZERO_LENGTH) {
+        return;
+    }
 
     let notiContent = `Bạn có sản phẩm sắp hết hạn sử dụng!\n`;
     let count = consts.DEFAULT_START_COUNT;
@@ -58,6 +61,9 @@ const checkOutOfStock = async (pool, userAgencyId, maxQuantityWarning) => {
         agency_id: userAgencyId,
         warning_out_of_stock: maxQuantityWarning
     });
+    if (products.length == consts.ZERO_LENGTH) {
+        return;
+    }
 
     let notiContent = `Bạn có sản phẩm sắp hết hàng trong kho!\n`;
     let count = consts.DEFAULT_START_COUNT;
