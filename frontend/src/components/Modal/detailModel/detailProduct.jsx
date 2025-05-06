@@ -195,7 +195,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                     </div>
                     <div className="w-3/4">
                         <div className="flex gap-4">
-                            <div className="w-3/4">
+                            <div className="w-full">
                                 <label className="p-2 block text-sm font-medium text-gray-700">Tên sản phẩm</label>
                                 {isEditing ? (
                                     <input
@@ -207,10 +207,6 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                                 ) : (
                                     <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.name}</p>
                                 )}
-                            </div>
-                            <div className="w-1/4">
-                            <label className="p-2 block text-sm font-medium text-gray-700">Số lượng hiện có</label>
-                                <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.quantity}</p>
                             </div>
                         </div>
                         <div className="flex gap-4">
@@ -261,7 +257,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                                     <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.origin}</p>
                                 )}
                             </div>
-                            <div className="w-1/2">
+                            <div className="w-1/4">
                                 <label className="p-2 block text-sm font-medium text-gray-700">Giá bán</label>
                                 {isEditing ? (
                                     <input
@@ -273,6 +269,10 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                                 ) : (
                                     <p className="w-full p-2 border rounded-lg">{`${editableProduct.price} `}</p>
                                 )}
+                            </div>
+                            <div className="w-1/4">
+                            <label className="p-2 block text-sm font-medium text-gray-700">Số lượng hiện có</label>
+                                <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.quantity}</p>
                             </div>
                         </div>
                         <div>

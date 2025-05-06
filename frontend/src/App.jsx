@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 
 import AuthLayout from "./components/Layout/AuthLayout";
+import ProtectedRoute from "./protectedRoute";
 
 import Landing from "./pages/auth/landing";
 import Login from "./pages/auth/login";
@@ -29,19 +30,19 @@ function App() {
         <Route path="/verify" element={<Verify />}></Route>
         <Route path="/new-password" element={<NewPass />}></Route>
 
-        <Route path="/homepage" element={<AuthLayout menu={initadMenu} />}>
+        <Route path="/homepage" element={<ProtectedRoute><AuthLayout menu={initadMenu} /></ProtectedRoute>}>
           <Route path="/homepage/" element={<Homepage />}></Route>
         </Route>
-        <Route path="/inventoryPurchase" element={<AuthLayout menu={initadMenu} />}>
+        <Route path="/inventoryPurchase" element={<ProtectedRoute><AuthLayout menu={initadMenu} /></ProtectedRoute>}>
           <Route path="/inventoryPurchase/" element={<InventoryPurchase />}></Route>
         </Route>
-        <Route path="/sales" element={<AuthLayout menu={initadMenu} />}>
+        <Route path="/sales" element={<ProtectedRoute><AuthLayout menu={initadMenu} /></ProtectedRoute>}>
           <Route path="/sales/" element={<Sales />}></Route>
         </Route>
-        <Route path="/statisticReport" element={<AuthLayout menu={initadMenu} />}>
+        <Route path="/statisticReport" element={<ProtectedRoute><AuthLayout menu={initadMenu} /></ProtectedRoute>}>
           <Route path="/statisticReport/" element={<StatisticReport />}></Route>
         </Route>
-        <Route path="/settings" element={<AuthLayout menu={initadMenu} />}>
+        <Route path="/settings" element={<ProtectedRoute><AuthLayout menu={initadMenu} /></ProtectedRoute>}>
           <Route path="/settings/" element={<Settings />}></Route>
         </Route>
       </Routes>

@@ -9,7 +9,8 @@ function Sidebar({ ...props }) {
   const [menus] = useState(props.menu);
 
   const logout = () => {
-    navigate("/");
+    localStorage.removeItem("token"); // Xóa token
+    navigate("/"); // Điều hướng về trang login
   };
 
   return (
@@ -24,7 +25,12 @@ function Sidebar({ ...props }) {
 
           <div className="pt-2 border-t border-gray-300">
             <div className="py-2 px-2">
-              <button className="py-2 px-2 w-full text-[#c91e1e] justify-end font-medium" onClick={() => logout()}>ĐĂNG XUẤT</button>
+              <button
+                className="py-2 px-2 w-full text-[#c91e1e] justify-end font-medium"
+                onClick={logout}
+              >
+                ĐĂNG XUẤT
+              </button>
             </div>
           </div>
         </div>
