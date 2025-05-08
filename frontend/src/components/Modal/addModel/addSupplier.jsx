@@ -21,7 +21,7 @@ export default function AddSupplier(props) {
             return;
         }
 
-        if (supplierData.phone.length !== 10 || !/^0\d{9}$/.test(supplierData.phone)) {
+        if (!/^\d{8,12}$/.test(supplierData.phone)) {
             alert("Số điện thoại không hợp lệ!");
             return;
         }

@@ -159,7 +159,7 @@ function Settings() {
   
       const requestBody = { userProfile, settings };
       
-      if (editData.phone.length !== 10 || !/^0\d{9}$/.test(editData.phone)) {
+      if (!/^\d{8,12}$/.test(editData.phone)) {
         alert("Số điện thoại không hợp lệ!");
         return;
       }

@@ -26,7 +26,7 @@ const RegisterIndex = () => {
     e.preventDefault();
     const requestData = { ...data };
     
-    if (data.phone.length !== 10 || !/^0\d{9}$/.test(data.phone)) {
+    if (!/^\d{8,12}$/.test(data.phone)) {
       alert("Số điện thoại không hợp lệ!");
       return;
     }
