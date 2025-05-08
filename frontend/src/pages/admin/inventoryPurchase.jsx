@@ -575,7 +575,7 @@ function InventoryPurchase() {
                       value={productSearch.category}
                       onChange={(e) => setProductSearch({ ...productSearch, category: e.target.value })}
                     >
-                      <option disabled value="">Phân loại</option>
+                      <option value="">Phân loại</option>
                       <option value="THUỐC BẢO VỆ THỰC VẬT">THUỐC BẢO VỆ THỰC VẬT</option>
                       <option value="PHÂN BÓN - ĐẤT TRỒNG">PHÂN BÓN - ĐẤT TRỒNG</option>
                       <option value="HẠT GIỐNG - CÂY TRỒNG">HẠT GIỐNG - CÂY TRỒNG</option>

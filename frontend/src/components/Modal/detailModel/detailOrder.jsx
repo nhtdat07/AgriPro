@@ -46,6 +46,7 @@ export default function ViewOrder(props) {
     if (showModal) {
       fetchOrderDetails();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showModal]);
 
   const totalAmount = orderData

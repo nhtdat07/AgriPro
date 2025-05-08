@@ -40,6 +40,13 @@ export default function ViewSupplier(props) {
     }
   };
 
+  useEffect(() => {
+    if (showModal) {
+      fetchSupplierDetails();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
+
   const handleSave = async () => {
     if (!supplierData.name || !supplierData.address || !supplierData.phone) {
       alert("Tên nhà cung cấp, địa chỉ và số điện thoại không được để trống!");
@@ -103,12 +110,6 @@ export default function ViewSupplier(props) {
       }  
     }
   };  
-
-  useEffect(() => {
-    if (showModal) {
-      fetchSupplierDetails();
-    }
-  }, [showModal]);
 
   const handleChange = (e) => {
     setSupplierData({ ...supplierData, [e.target.name]: e.target.value });

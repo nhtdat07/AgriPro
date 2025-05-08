@@ -46,6 +46,7 @@ export default function ViewInvoice(props) {
     if (showModal) {
       fetchInvoiceDetails();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showModal]);
 
   return (

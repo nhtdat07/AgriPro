@@ -97,6 +97,7 @@ export default function ViewCustomer(props) {
     if (showModal) {
       fetchCustomerDetails();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showModal]);
 
   const handleChange = (e) => {

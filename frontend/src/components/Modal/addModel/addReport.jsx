@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import html2pdf from 'html2pdf.js/dist/html2pdf.min.js';
 import { saveAs } from "file-saver";
-import HTMLtoDOCX from 'html-docx-js/dist/html-docx';
+import html2docx from 'html-docx-js/dist/html-docx.js';
 import axiosInstance from "../../../utils/axiosInstance.js"
 
 import plus from "../../../assets/images/plus.png";
@@ -36,62 +35,179 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
 
     const toggleIcon = (index) => {
       setIconStates(prev => prev.map((state, i) => (i === index ? !state : state)));
-    };
+    }; 
 
-    const handleDownload = () => {
-        const element = document.getElementById("report-preview");
-
-        if (format === "PDF") {
-            const originalElement = document.getElementById("report-preview");
-            const cloned = originalElement.cloneNode(true);
-            cloned.style.position = "absolute";
-            cloned.style.top = "-9999px";
-            cloned.style.width = `${originalElement.offsetWidth}px`;
-            cloned.style.height = `${originalElement.scrollHeight}px`;
-            cloned.style.overflow = "visible";
-
-            cloned.querySelectorAll("*").forEach(el => {
-                el.style.fontSize = "10px";
-            });
-
-            document.body.appendChild(cloned);
-            html2canvas(cloned, { scale: 2, useCORS: true }).then((canvas) => {
-                const imgData = canvas.toDataURL("image/png");
-                const pdf = new jsPDF("p", "mm", "a4");
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const imgProps = pdf.getImageProperties(imgData);
-                const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-                let heightLeft = imgHeight;
-                let position = 0;
-
-                while (heightLeft > 0) {
-                    pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                    if (heightLeft > 0) {
-                        pdf.addPage();
-                        position = -imgHeight + heightLeft;
+    const handleDownload = async () => {
+        const reportElement = document.getElementById("report-preview");
+    
+        let fontSize = 13;
+        let marginTop = 2;
+        let marginRight = 2.5;
+        let marginBottom = 2;
+        let marginLeft = 2.5;
+    
+        try {
+            const res = await axiosInstance.get("/settings");
+            const settings = res.data.data.settings;
+    
+            settings.forEach((item) => {
+                if (item.category === "PRINT_FORMAT") {
+                    if (item.key === "left_margin") {
+                        marginLeft = parseFloat(item.value);
+                    } else if (item.key === "right_margin") {
+                        marginRight = parseFloat(item.value);
+                    } else if (item.key === "top_margin") {
+                        marginTop = parseFloat(item.value);
+                    } else if (item.key === "bottom_margin") {
+                        marginBottom = parseFloat(item.value);
+                    } else if (item.key === "font_size") {
+                        fontSize = parseInt(item.value, 10);
                     }
                 }
-
-                pdf.save("bao-cao.pdf");
-                document.body.removeChild(cloned);
             });
-        } else if (format === "Word") {
-            const html = `
-                <html>
+        } catch (error) {
+            if (error.response) {
+              const { status } = error.response;
+              if (status === 401) {
+                alert("Bạn không có quyền truy cập vào trang này!");
+              } else if (status === 500) {
+                alert("Vui lòng tải lại trang!");
+              }
+            }  
+        }
+    
+        const FONT_SIZE_PT = fontSize;
+        const MARGIN_TOP_CM = marginTop;
+        const MARGIN_RIGHT_CM = marginRight;
+        const MARGIN_BOTTOM_CM = marginBottom;
+        const MARGIN_LEFT_CM = marginLeft;
+    
+        const reportPdfHtml = `
+            <html>
                 <head>
                     <meta charset='utf-8'>
-                    <style> body { font-family: Arial, sans-serif; } </style>
+                    <style>
+                        body {
+                            font-family: Times New Roman, serif;
+                            font-size: ${FONT_SIZE_PT}pt;
+                        }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                        }
+                        p.heading {
+                            text-align: center;
+                        }
+                        th {
+                            text-align: center;
+                        }
+                        td {
+                            text-align: left;
+                        }
+                        th, td {
+                            border: 1px solid black;
+                            font-size: ${FONT_SIZE_PT}pt;
+                            line-height: 1.75;
+                        }
+                    </style>
                 </head>
-                <body>${element.innerHTML}</body>
-                </html>
-            `;
-            const blob = HTMLtoDOCX.asBlob(html);
+                <body>${reportElement.innerHTML}</body>
+            </html>
+        `;
+    
+        const reportDocHtml = `
+            <html>
+                <head>
+                    <meta charset='utf-8'>
+                    <style>
+                        body {
+                            font-family: Times New Roman, serif;
+                            font-size: ${FONT_SIZE_PT}pt;
+                        }
+                        h2 {
+                            margin: 15px 0px 0px;
+                        }
+                        h2, h3 {
+                            text-align: center;
+                            text-transform: uppercase;
+                            margin: 0px;
+                        }
+                        p {
+                            text-align: left;
+                            margin: 5px 0px;
+                        }
+                        #heading {
+                            text-align: center;
+                        }
+                        #section {
+                            margin: 20px 0px 5px;
+                        }
+                        #signature-title {
+                            text-align: right;
+                            margin: 10px 75px 0px;
+                        }
+                        #signature-name {
+                            text-align: right;
+                            margin: 0px 75px;
+                        }
+                        hr {
+                            width: 50%
+                        }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                        }
+                        th, td {
+                            border: 1px solid black;
+                            font-size: ${FONT_SIZE_PT}pt;
+                            line-height: 1.25;
+                        }
+                        #row {
+                            font-family: Times New Roman, serif;
+                            font-size: ${FONT_SIZE_PT}pt;
+                            text-align: center;
+                        }
+                        #rowName {
+                            font-family: Times New Roman, serif;
+                            font-size: ${FONT_SIZE_PT}pt;
+                            text-align: left;
+                            margin: 0px 10px;
+                        }
+                    </style>
+                </head>
+                <body>${reportElement.innerHTML}</body>
+            </html>
+        `;
+    
+        if (format === "PDF") {
+            const opt = {
+                margin: [
+                    MARGIN_TOP_CM,
+                    MARGIN_LEFT_CM,
+                    MARGIN_BOTTOM_CM,
+                    MARGIN_RIGHT_CM
+                ],
+                filename: 'bao-cao.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+    
+            html2pdf().set(opt).from(reportPdfHtml).save();
+        } else if (format === "Word") {
+            const blob = html2docx.asBlob(reportDocHtml, {
+                orientation: 'portrait',
+                margins: {
+                    top: MARGIN_TOP_CM * 566.93,
+                    bottom: MARGIN_BOTTOM_CM * 566.93,
+                    left: MARGIN_LEFT_CM * 566.93,
+                    right: MARGIN_RIGHT_CM * 566.93,
+                }
+            });
             saveAs(blob, "bao-cao.docx");
         }
-    };
+    };           
 
     const totalProfit = summaryData.find(item => item.title === "Lợi nhuận")?.value || "0";
     const numPurchase = summaryData.find(item => item.title === "Nhập hàng")?.numPurchase || "0";
@@ -242,14 +358,15 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
 
                             <div id="report-preview" className="w-1/2 overflow-y-auto p-4 text-[13px]">
                                 <h3 className="font-bold text-center uppercase">Đại lý Vật tư nông nghiệp {agencyInfo.agencyName}</h3>
-                                <p className="text-center">Địa chỉ: {agencyInfo.address}</p>
-                                <p className="text-center">Số điện thoại: {agencyInfo.phoneNumber}</p>
-                                <p className="text-center mb-6">Mã số thuế: {agencyInfo.taxCode}</p>
+                                <p id="heading" className="text-center">Địa chỉ: {agencyInfo.address}</p>
+                                <p id="heading" className="text-center">Số điện thoại: {agencyInfo.phoneNumber}</p>
+                                <p id="heading" className="text-center">Mã số thuế: {agencyInfo.taxCode}</p>
+                                <br/>
                                 <h2 className="text-xxl font-bold text-center">BÁO CÁO KẾT QUẢ HOẠT ĐỘNG KINH DOANH</h2>
-                                <p className="text-center">(Thời gian: {dateRange})</p>
-                                <p className="text-center"><strong>Ngày xuất báo cáo:</strong> {formatDate(today)}</p>
-                                <hr className="my-2" />
-
+                                <p id="heading" className="text-center">(Thời gian: {dateRange})</p>
+                                <p id="heading" className="text-center"><strong>Ngày xuất báo cáo:</strong> {formatDate(today)}</p>
+                                <hr className="mx-auto mt-5 mb-2 w-1/2 border-t border-black" />
+                                
                                 {iconStates[0] && (<p><strong>Tổng lợi nhuận:</strong> {totalProfit}</p>)}
                                 {iconStates[1] && (<p><strong>Số đơn nhập hàng:</strong> {numPurchase}</p>)}
                                 {iconStates[3] && (<p><strong>Số hóa đơn:</strong> {numSale}</p>)}
@@ -258,26 +375,26 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
 
                                 {iconStates[5] && (
                                     <div className="mt-4">
-                                        <p><strong>Sản phẩm bán chạy:</strong></p>
+                                        <p id="section" className="mb-3"><strong>Sản phẩm bán chạy:</strong></p>
                                         {bestSellData && bestSellData.length > 0 ? (
                                         <table className="min-w-full text-sm border border-gray-300">
                                             <thead className="bg-gray-200">
                                             <tr>
-                                                <th className="px-2 py-1 border">STT</th>
-                                                <th className="px-2 py-1 border">Tên sản phẩm</th>
+                                                <th className="px-2 py-1 border"><p id="row">STT</p></th>
+                                                <th className="px-2 py-1 border"><p id="row">Tên sản phẩm</p></th>
                                                 {includeTopProductsQty === "có" && (
-                                                    <th className="px-2 py-1 border">Số lượng</th>
+                                                    <th className="px-2 py-1 border"><p id="row">Số lượng</p></th>
                                                 )}
                                             </tr>
                                             </thead>
                                             <tbody>
                                             {bestSellData.slice(0, topProductsCount).map((item, idx) => (
                                                 <tr key={idx}>
-                                                <td className="px-2 py-1 border text-center">{idx + 1}</td>
-                                                <td className="px-2 py-1 border">{item.name}</td>
-                                                {includeTopProductsQty === "có" && (
-                                                    <td className="px-2 py-1 border text-center">{item.quantity}</td>
-                                                )}
+                                                    <td className="px-2 py-1 border text-center"><p id="row">{idx + 1}</p></td>
+                                                    <td className="px-2 py-1 border"><p id="rowName">{item.name}</p></td>
+                                                    {includeTopProductsQty === "có" && (
+                                                        <td className="px-2 py-1 border text-center"><p id="row">{item.quantity}</p></td>
+                                                    )}
                                                 </tr>
                                             ))}
                                             </tbody>
@@ -290,25 +407,25 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
 
                                 {iconStates[6] && (
                                     <div className="mt-4">
-                                        <p><strong>Khách hàng mua nhiều:</strong></p>
+                                        <p id="section" className="mb-3"><strong>Khách hàng mua nhiều:</strong></p>
                                         {topCustomerData && topCustomerData.length > 0 ? (
                                         <table className="min-w-full text-sm border border-gray-300">
                                             <thead className="bg-gray-200">
                                             <tr>
-                                                <th className="px-2 py-1 border">STT</th>
-                                                <th className="px-2 py-1 border">Tên khách hàng</th>
+                                                <th className="px-2 py-1 border"><p id="row">STT</p></th>
+                                                <th className="px-2 py-1 border"><p id="row">Tên khách hàng</p></th>
                                                 {includeTopCustomersValue === "có" && (
-                                                    <th className="px-2 py-1 border">Tổng tiền mua hàng</th>
+                                                    <th className="px-2 py-1 border"><p id="row">Tổng tiền mua hàng</p></th>
                                                 )}
                                             </tr>
                                             </thead>
                                             <tbody>
                                             {topCustomerData.slice(0, topCustomersCount).map((item, idx) => (
                                                 <tr key={idx}>
-                                                <td className="px-2 py-1 border text-center">{idx + 1}</td>
-                                                <td className="px-2 py-1 border">{item.name}</td>
+                                                <td className="px-2 py-1 border text-center"><p id="row">{idx + 1}</p></td>
+                                                <td className="px-2 py-1 border"><p id="rowName">{item.name}</p></td>
                                                 {includeTopCustomersValue === "có" && (
-                                                    <td className="px-2 py-1 border text-center">{item.value}</td>
+                                                    <td className="px-2 py-1 border text-center"><p id="row">{item.value}</p></td>
                                                 )}
                                                 </tr>
                                             ))}
@@ -320,11 +437,12 @@ export default function ExportReport({ dateRange, bestSellData, topCustomerData,
                                     </div>
                                 )}
 
-
                                 <div className="mt-6 text-right pr-20">
-                                    <div className="inline-block text-center">
-                                        <p><strong>Chủ đại lý</strong></p>
-                                        <p>{agencyInfo.ownerName}</p>
+                                    <div className="mb-2 inline-block text-center">
+                                        <div class="signature-block">
+                                            <p id="signature-title"><strong>Chủ đại lý</strong></p>
+                                            <p id="signature-name">{agencyInfo.ownerName}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

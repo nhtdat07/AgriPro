@@ -46,6 +46,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
         if (code) {
             fetchProductDetails();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [code]);
 
     const handleInputChange = (field, value) => {
