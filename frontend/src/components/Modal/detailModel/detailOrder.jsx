@@ -15,7 +15,7 @@ export default function ViewOrder(props) {
       const products = order.products.map((product, index) => ({
         id: index + 1,
         name: product.productName,
-        exp_date: new Date(product.expiredDate).toLocaleDateString("vi-VN"),
+        exp_date: product.expiredDate ? new Date(product.expiredDate).toLocaleDateString("vi-VN") : "Không thời hạn",
         quantity: product.quantity,
         price: product.inPrice,
         total: product.totalPrice,

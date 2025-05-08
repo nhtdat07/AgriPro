@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import html2pdf from 'html2pdf.js/dist/html2pdf.min.js';
 import { saveAs } from "file-saver";
-import HTMLtoDOCX from 'html-docx-js/dist/html-docx';
-import axiosInstance from "../../../utils/axiosInstance";
+import html2docx from 'html-docx-js/dist/html-docx.js';
+import axiosInstance from "../../../utils/axiosInstance.js"
 
 import trashBin from "../../../assets/images/delete.png";
 import plus from "../../../assets/images/plus.png";
@@ -226,74 +225,169 @@ export default function AddInvoice(props) {
     }
   };
 
-  const handleDownload = (format) => {
+  const handleDownload = async (format) => {
     const element = document.getElementById("invoice-preview");
     const buttons = element.querySelector(".hidden-on-export");
-      
+
     if (buttons) buttons.style.display = "none";
-      
-    if (format === "PDF") {
-      const cloned = element.cloneNode(true);
-      cloned.style.position = "absolute";
-      cloned.style.top = "-9999px";
-      cloned.style.width = `${element.offsetWidth}px`;
-      cloned.style.height = `${element.scrollHeight}px`;
-      cloned.style.overflow = "visible";
-      
-      cloned.querySelectorAll("*").forEach(el => {
-        el.style.fontSize = "10px";
-      });
-      
-      document.body.appendChild(cloned);
-      
-      html2canvas(cloned, {
-        scale: 2,
-        useCORS: true
-      }).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgProps = pdf.getImageProperties(imgData);
-        const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      
-        let heightLeft = imgHeight;
-        let position = 0;
-      
-        while (heightLeft > 0) {
-          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-          heightLeft -= pageHeight;
-          if (heightLeft > 0) {
-            pdf.addPage();
-            position = -imgHeight + heightLeft;
+
+    let fontSize = 12;
+    let marginTop = 2;
+    let marginRight = 2;
+    let marginBottom = 2;
+    let marginLeft = 2;
+
+    try {
+      const res = await axiosInstance.get("/settings");
+      const settings = res.data.data.settings;
+
+      settings.forEach((item) => {
+        if (item.category === "PRINT_FORMAT") {
+          if (item.key === "left_margin") {
+            marginLeft = parseFloat(item.value);
+          } else if (item.key === "right_margin") {
+            marginRight = parseFloat(item.value);
+          } else if (item.key === "top_margin") {
+            marginTop = parseFloat(item.value);
+          } else if (item.key === "bottom_margin") {
+            marginBottom = parseFloat(item.value);
+          } else if (item.key === "font_size") {
+            fontSize = parseInt(item.value, 10);
           }
         }
-      
-        pdf.save("hoa-don.pdf");
-        document.body.removeChild(cloned);
-      }).finally(() => {
-        if (buttons) buttons.style.display = "flex";
       });
-    } else if (format === "Word") {
-      const html = `
-        <html>
-          <head>
-            <meta charset='utf-8'>
-            <style>
-              body {
-                font-family: Arial, sans-serif;
-              }
-            </style>
-          </head>
-          <body>${element.innerHTML}</body>
-        </html>
-      `;
-      
-      const blob = HTMLtoDOCX.asBlob(html);
-      saveAs(blob, "hoa-don.docx");
-      
-      if (buttons) buttons.style.display = "flex";
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 401) {
+          alert("Bạn không có quyền truy cập vào trang này!");
+        } else if (status === 500) {
+          alert("Vui lòng tải lại trang!");
+        }
+      }  
     }
+
+    const FONT_SIZE_PT = fontSize;
+    const MARGIN_TOP_CM = marginTop;
+    const MARGIN_RIGHT_CM = marginRight;
+    const MARGIN_BOTTOM_CM = marginBottom;
+    const MARGIN_LEFT_CM = marginLeft;
+    
+    const invoicePdfHtml = `
+        <html>
+            <head>
+                <meta charset='utf-8'>
+                <style>
+                    body {
+                        font-family: Times New Roman, serif;
+                        font-size: ${FONT_SIZE_PT}pt;
+                    }
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    p.heading {
+                        text-align: center;
+                    }
+                    th, td {
+                        border: 1px solid black;
+                        font-size: ${FONT_SIZE_PT}pt;
+                        line-height: 1.75;
+                        text-align: center;
+                    }
+                </style>
+            </head>
+            <body>${element.innerHTML}</body>
+        </html>
+    `;
+
+    const invoiceDocHtml = `
+        <html>
+            <head>
+                <meta charset='utf-8'>
+                <style>
+                    body {
+                        font-family: Times New Roman, serif;
+                        font-size: ${FONT_SIZE_PT}pt;
+                    }
+                    h2 {
+                        margin: 15px 0px 0px;
+                    }
+                    h2, h3 {
+                        text-align: center;
+                        text-transform: uppercase;
+                        margin: 0px;
+                    }
+                    p {
+                        text-align: left;
+                        margin: 5px 0px;
+                    }
+                    #heading {
+                        text-align: center;
+                    }
+                    #signature-title {
+                        text-align: right;
+                        margin: 10px 75px 0px;
+                    }
+                    #signature-name {
+                        text-align: right;
+                        margin: 0px 75px;
+                    }
+                    hr {
+                        width: 50%
+                    }
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    th, td {
+                        border: 1px solid black;
+                        font-size: ${FONT_SIZE_PT}pt;
+                        line-height: 1.25;
+                    }
+                    #row {
+                        font-family: Times New Roman, serif;
+                        font-size: ${FONT_SIZE_PT}pt;
+                        text-align: center;
+                    }
+                </style>
+            </head>
+            <body>${element.innerHTML}</body>
+        </html>
+    `;
+
+    if (format === "PDF") {
+        const opt = {
+          margin: [
+            MARGIN_TOP_CM,
+            MARGIN_LEFT_CM,
+            MARGIN_BOTTOM_CM,
+            MARGIN_RIGHT_CM
+          ],
+          filename: 'hoa-don.pdf',
+          image: { type: 'jpeg', quality: 1 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        html2pdf().set(opt).from(invoicePdfHtml).save();
+    } else if (format === "Word") {
+        const blob = html2docx.asBlob(invoiceDocHtml, {
+          orientation: 'portrait',
+          margins: {
+            top: MARGIN_TOP_CM * 566.93,
+            bottom: MARGIN_BOTTOM_CM * 566.93,
+            left: MARGIN_LEFT_CM * 566.93,
+            right: MARGIN_RIGHT_CM * 566.93,
+          }
+        });
+        saveAs(blob, "hoa-don.docx");
+    } else {
+        alert("Định dạng không hỗ trợ!");
+    }
+
+    if (buttons) buttons.style.display = "flex";
   };
 
   const fetchSettings = async () => {
@@ -325,7 +419,6 @@ export default function AddInvoice(props) {
   useEffect(() => {
       fetchSettings();
   }, []); 
-
 
   return (
     <>
@@ -488,15 +581,16 @@ export default function AddInvoice(props) {
       )}
       {showInvoiceModal && savedInvoice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-md w-[900px] max-h-[650px] overflow-y-auto p-6" id="invoice-preview">
-            <div className="text-[13px]">
+          <div className="bg-white rounded-lg shadow-md w-[900px] max-h-[650px] overflow-y-auto p-6">
+            <div className="text-[13px]" id="invoice-preview">
               <h3 className="font-bold text-center uppercase">Đại lý Vật tư nông nghiệp {agencyInfo.agencyName}</h3>
-              <p className="text-center">Địa chỉ: {agencyInfo.address}</p>
-              <p className="text-center">Số điện thoại: {agencyInfo.phoneNumber}</p>
-              <p className="text-center mb-6">Mã số thuế: {agencyInfo.taxCode}</p>
+              <p id="heading" className="text-center">Địa chỉ: {agencyInfo.address}</p>
+              <p id="heading" className="text-center">Số điện thoại: {agencyInfo.phoneNumber}</p>
+              <p id="heading" className="text-center mb-6">Mã số thuế: {agencyInfo.taxCode}</p>
+              <br/>
               <h2 className="text-xxl font-bold text-center">HÓA ĐƠN BÁN HÀNG</h2>
-              <hr className="my-2" />
-              <div style={{ display: 'flex', gap: '150px' }}>
+              <hr className="mx-auto mt-5 mb-2 w-1/2 border-t border-black" />
+              <div id="info" style={{ display: 'flex', gap: '150px' }}>
                 <div>
                   <p><strong>Mã số:</strong> {dataInvoice.codeInvoice}</p>
                   <p><strong>Tên khách hàng:</strong> {detailCustomer.customerName}</p>
@@ -512,38 +606,40 @@ export default function AddInvoice(props) {
               <table className="w-full border-collapse border mt-4">
                 <thead>
                   <tr className="bg-gray-200 text-center">
-                    <th className="border p-2">STT</th>
-                    <th className="border p-2">Tên sản phẩm</th>
-                    <th className="border p-2">Số lượng</th>
-                    <th className="border p-2">Giá bán</th>
-                    <th className="border p-2">Thành tiền</th>
+                    <th className="border p-2"><p id="row">STT</p></th>
+                    <th className="border p-2"><p id="row">Tên sản phẩm</p></th>
+                    <th className="border p-2"><p id="row">Số lượng</p></th>
+                    <th className="border p-2"><p id="row">Giá bán</p></th>
+                    <th className="border p-2"><p id="row">Thành tiền</p></th>
                   </tr>
                 </thead>
                 <tbody>
                   {savedInvoice.products.map((product, index) => (
                     <tr key={index} className="text-center">
-                      <td className="border p-2">{index + 1}</td>
-                      <td className="border p-2">{product.productName}</td>
-                      <td className="border p-2">{product.quantity}</td>
-                      <td className="border p-2">{Number(product.outPrice).toLocaleString()}</td>
-                      <td className="border p-2">{(product.quantity * product.outPrice).toLocaleString()}</td>
+                      <td className="border p-2"><p id="row">{index + 1}</p></td>
+                      <td className="border p-2"><p id="row">{product.productName}</p></td>
+                      <td className="border p-2"><p id="row">{product.quantity}</p></td>
+                      <td className="border p-2"><p id="row">{Number(product.outPrice).toLocaleString()}</p></td>
+                      <td className="border p-2"><p id="row">{(product.quantity * product.outPrice).toLocaleString()}</p></td>
                     </tr>
                   ))}
                     <tr className="text-center font-semibold">
-                      <td className="border p-2" colSpan={4}>TỔNG CỘNG</td>
+                      <td className="border p-2" colSpan={4}><p id="row">TỔNG CỘNG</p></td>
                       <td className="border p-2">
-                        {savedInvoice.products.reduce((sum, p) => sum + p.quantity * p.outPrice, 0).toLocaleString()}
+                        <p id="row">{savedInvoice.products.reduce((sum, p) => sum + p.quantity * p.outPrice, 0).toLocaleString()}</p>
                       </td>
                     </tr>
                 </tbody>
               </table>
-            <div className="mt-6 text-right pr-20">
-              <div className="inline-block text-center">
-                <p><strong>Người bán hàng</strong></p>
-                <p>{agencyInfo.ownerName}</p>
+              <div className="mt-6 text-right pr-20">
+                <div className="mb-2 inline-block text-center">
+                  <div class="signature-block">
+                    <p id="signature-title"><strong>Người bán hàng</strong></p>
+                    <p id="signature-name">{agencyInfo.ownerName}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
             <div className="flex justify-center mt-6 gap-4 hidden-on-export">
               <button
                 className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg"

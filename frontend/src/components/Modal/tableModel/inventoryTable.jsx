@@ -23,7 +23,7 @@ function InventoryTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.importDate}</p>
           </TableCell>
           <TableCell dataLabel="Hạn dùng" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.expiredDate}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.expiredDate ? row.expiredDate : "Không thời hạn"}</p>
           </TableCell>
           <TableCell dataLabel="Giá nhập" showLabel={true}>
             <p className="font-normal text-sm text-right md:text-center text-black">{row.inPrice}</p>

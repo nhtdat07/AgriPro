@@ -97,10 +97,10 @@ export default function AddOrder(props) {
       supplierId: selectedSupplierId,
       products: products.map((p) => ({
         productId: p.productId,
-        expiredDate: p.expiredDate,
+        expiredDate: p.expiredDate ? p.expiredDate : null,
         quantity: Number(p.quantity),
-        inPrice: Number(p.inPrice)
-      }))
+        inPrice: Number(p.inPrice),
+      })),
     };
 
     try {
@@ -111,6 +111,7 @@ export default function AddOrder(props) {
 
       if (props.refreshOrders) {
         props.refreshOrders();
+        props.refreshInventory();
       }
     } catch (error) {
         if (error.response) {
@@ -198,8 +199,8 @@ export default function AddOrder(props) {
                           <input
                             type="date"
                             className="w-full p-2 border rounded-lg"
-                            value={product.expiredDate}
-                            onChange={(e) => handleProductChange(product.id, "expiredDate", e.target.value)}
+                            value={product.expiredDate || ""}
+                            onChange={(e) => handleProductChange(product.id, "expiredDate", e.target.value || "")}
                           />
                         </td>
                         <td className="p-2">

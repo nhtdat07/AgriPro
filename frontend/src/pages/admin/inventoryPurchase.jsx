@@ -152,6 +152,10 @@ function InventoryPurchase() {
   };
 
   useEffect(() => {
+    fetchInventory();
+  }, []);
+
+  useEffect(() => {
     const container = inventoryContainerRef.current;
     if (!container) return;
     
@@ -543,7 +547,10 @@ function InventoryPurchase() {
                     <button type="button" onClick={handleSearchPurchase} className="p-2 w-1/5">
                       <img src={searchIcon} alt="Search" className="w-5 h-5 cursor-pointer" />
                     </button>
-                    <AddOrder refreshOrders={fetchOrders} />
+                    <AddOrder
+                      refreshOrders={fetchOrders}
+                      refreshInventory={fetchInventory}
+                    />
                   </div>
                   <div
                     ref={purchaseContainerRef}
