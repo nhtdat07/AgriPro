@@ -11,7 +11,7 @@ export async function createTableCustomer(pool, params = {}) {
   "agency_id" char(6) NOT NULL,
   "name" varchar(100) NOT NULL,
   "address" varchar(255) NOT NULL,
-  "phone" char(10) NOT NULL,
+  "phone" varchar(12) NOT NULL,
   "email" varchar(50),
   "is_deleted" bool NOT NULL DEFAULT false
 );
