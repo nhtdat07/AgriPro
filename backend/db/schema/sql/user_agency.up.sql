@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS user_agency (
   "id" char(6) UNIQUE NOT NULL,
   "agency_name" varchar(100) NOT NULL DEFAULT '',
   "owner_name" varchar(100) NOT NULL DEFAULT '',
-  "phone" char(10) NOT NULL DEFAULT '',
+  "phone" varchar(12) NOT NULL DEFAULT '',
   "profile_photo_path" TEXT,
   "tax_code" varchar(20),
   "address" varchar(255),
