@@ -50,10 +50,7 @@ export const validateAddPurchaseOrderData = (req, res, next) => {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing product ID' });
         }
 
-        if (!expiredDate) {
-            return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing expired date' });
-        }
-        if (isNaN(Date.parse(expiredDate))) {
+        if (expiredDate && isNaN(Date.parse(expiredDate))) {
             return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid expired date. Expected YYYY-MM-DD' });
         }
 
