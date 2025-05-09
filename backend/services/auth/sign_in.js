@@ -28,7 +28,7 @@ export const signInService = async (pool, userData) => {
         }
 
         // Validate password
-        const isMatch = await bcrypt.compare(password, result[consts.FIRST_IDX_ARRAY].password_hash)
+        const isMatch = await bcrypt.compare(password, result[consts.FIRST_IDX_ARRAY].password_hash);
         if (!isMatch) {
             throw new errors.UnauthorizedError('Incorrect password');
         }

@@ -45,3 +45,21 @@ export async function getAllUserAgencyId(pool, params = {}) {
     }
 }
 
+/**
+ * Executes the 'setNewPasswordByEmail' query.
+ * @param {Object} params - Parameters for the query.
+ * @returns {Promise<Array>} - Query result rows.
+ */
+export async function setNewPasswordByEmail(pool, params = {}) {
+    try {
+        const query = `UPDATE user_agency
+SET password_hash = $2
+WHERE email = $1
+RETURNING *;`;
+        const { rows } = await pool.query(query, Object.values(params));
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+

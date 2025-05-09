@@ -8,3 +8,9 @@ RETURNING *;
 
 -- name: getAllUserAgencyId
 SELECT id FROM user_agency;
+
+-- name: setNewPasswordByEmail
+UPDATE user_agency
+SET password_hash = $2
+WHERE email = $1
+RETURNING *;
