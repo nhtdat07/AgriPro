@@ -36,4 +36,52 @@ export const validateSignInData = (req, res, next) => {
     }
 
     next();
+};
+
+// Middleware to validate HandleForgottenPassword request data.
+export const validateHandleForgottenPasswordData = (req, res, next) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing email' });
+    }
+
+    next();
+};
+
+// Middleware to validate VerifyOtp request data.
+export const validateVerifyOtpData = (req, res, next) => {
+    const { email, inputOtp } = req.body;
+
+    if (!email) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing email' });
+    }
+
+    if (!inputOtp) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing input OTP' });
+    }
+    if (!consts.REGEX.OTP.test(inputOtp)) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Invalid input OTP' });
+    }
+
+    next();
+};
+
+// Middleware to validate ResetPassword request data.
+export const validateResetPasswordData = (req, res, next) => {
+    const { email, resetToken, newPassword } = req.body;
+
+    if (!email) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing email' });
+    }
+
+    if (!resetToken) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing reset token' });
+    }
+
+    if (!newPassword) {
+        return res.status(consts.HTTP_STATUS.BAD_REQUEST).json({ error: 'Missing new password' });
+    }
+
+    next();
 }; 

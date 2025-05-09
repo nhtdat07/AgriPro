@@ -37,7 +37,7 @@ export const changePasswordService = async (pool, user, data) => {
         const hashedPassword = await bcrypt.hash(newPassword, consts.PASSWORD_SALT);
 
         // Store new password hash
-        result = updatePassword(pool, {
+        result = await updatePassword(pool, {
             id: user.userAgencyId,
             password_hash: hashedPassword
         });

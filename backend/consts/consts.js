@@ -21,6 +21,7 @@ export const TOKEN_PREFIX = 'Bearer ';
 export const REGEX = {
     EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     PHONE: /^\d{8,12}$/,
+    OTP: /^\d{6}$/,
     UPPERCASE: /[A-Z]/,
     LOWERCASE: /[a-z]/,
     DIGIT: /\d/,
@@ -30,6 +31,18 @@ export const REGEX = {
 // Password
 export const MIN_LENGTH_PASSWORD = 8;
 export const PASSWORD_SALT = 10;
+export const RESET_TOKEN_EXPIRED_TIME = '1h';
+export const EXPIRED_RESET_TOKEN_ERROR_NAME = 'TokenExpiredError'
+
+// OTP
+export const MIN_OTP = 100000;
+export const OTP_STEP = 900000;
+export const OTP_SALT = 10;
+export const OTP_EXPIRED_TIME = 5 * 60 * 1000; // 5 minutes
+
+// Gmail
+export const MAIL_SERVICE = 'gmail';
+export const SEND_OTP_SUBJECT = 'Mã OTP để đặt lại mật khẩu cho AgriPro';
 
 // Error
 export const SQL_UNIQUE_ERROR_CODE = '23505';
