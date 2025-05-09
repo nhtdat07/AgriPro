@@ -23,7 +23,7 @@ export const sendOtp = async (email, otp) => {
         subject: consts.SEND_OTP_SUBJECT,
         text: `AgriPro xin chào bạn!
         
-Đây là mã OTP của bạn dùng để đặt lại mật khẩu cho tài khoản: ${otp}
+Đây là mã OTP dùng để đặt lại mật khẩu cho tài khoản của bạn: ${otp}
 
 (Mã OTP này có hiệu lực trong 5 phút kể từ lúc được gửi đi)
 
@@ -34,7 +34,7 @@ AgriPro`,
         html: `<div style="font-family: Arial, sans-serif; color: #333; font-size: 15px; line-height: 1.6; padding: 20px; max-width: 1000px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; background-color: #efffef;">
     <p><strong>AgriPro</strong> xin chào bạn!</p>
 
-    <p>Đây là mã OTP của bạn dùng để đặt lại mật khẩu cho tài khoản: <span style="display: inline-block; background-color: #e0f7fa; color: #00796b; font-weight: bold; padding: 4px 8px; border-radius: 4px;">${otp}</span><br/><span style="font-size: 13px; color: #666;"><em>(Mã OTP này có hiệu lực trong 5 phút kể từ lúc được gửi đi)</em></span></p>
+    <p>Đây là mã OTP dùng để đặt lại mật khẩu cho tài khoản của bạn: <span style="display: inline-block; background-color: #e0f7fa; color: #00796b; font-weight: bold; padding: 4px 8px; border-radius: 4px;">${otp}</span><br/><span style="font-size: 13px; color: #666;"><em>(Mã OTP này có hiệu lực trong 5 phút kể từ lúc được gửi đi)</em></span></p>
 
     <p><strong>AgriPro</strong> xin chân thành cảm ơn bạn đã sử dụng hệ thống! Chúc bạn luôn vui khoẻ, may mắn và thành công!</p>
 
