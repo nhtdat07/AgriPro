@@ -14,7 +14,9 @@ function TopCustomerTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.id}</p>
           </TableCell>
           <TableCell dataLabel="Tên khách hàng" showLabel={true}>
-            <p className="font-normal text-sm text-black">{row.name}</p>
+            <p className="font-normal text-sm text-black break-words whitespace-normal">
+              {row.name}
+            </p>
           </TableCell>
           <TableCell dataLabel="Tổng tiền mua hàng" showLabel={true}>
             <p className="font-normal text-sm text-right md:text-center text-black">{row.value}</p>

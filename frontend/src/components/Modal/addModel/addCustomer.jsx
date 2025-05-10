@@ -80,7 +80,7 @@ export default function AddCustomer(props) {
                         <h3 className="text-2xl font-semibold text-center">Thêm khách hàng mới</h3>
                         <form>
                             <div>
-                                <label className="p-2 block text-sm font-medium text-gray-700">Tên khách hàng</label>
+                                <label className="p-2 block text-sm font-medium text-gray-700">Tên khách hàng <span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
                                     name="name"
@@ -91,7 +91,7 @@ export default function AddCustomer(props) {
                                 />
                             </div>
                             <div>
-                                <label className="p-2 block text-sm font-medium text-gray-700">Địa chỉ</label>
+                                <label className="p-2 block text-sm font-medium text-gray-700">Địa chỉ <span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
                                     name="address"
@@ -103,7 +103,7 @@ export default function AddCustomer(props) {
                             </div>
                             <div className="flex gap-4">
                                 <div className="w-1/2">
-                                    <label className="p-2 block text-sm font-medium text-gray-700">Số điện thoại</label>
+                                    <label className="p-2 block text-sm font-medium text-gray-700">Số điện thoại <span className="text-red-500">*</span></label>
                                     <input
                                         type="text"
                                         name="phone"

@@ -77,7 +77,7 @@ const RegisterIndex = () => {
 
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h3 className="text-2xl font-semibold text-center">Đăng ký</h3>
-        <h3 className="text-sm font-medium text-center">Tạo một tài khoản ngay!</h3>
+        <h3 className="text-sm font-medium text-center">Vui lòng điền đầy đủ thông tin dưới đây!</h3>
         <form onSubmit={handleSubmit} className="p-4">
           <div className="mb-4">
             <div className="relative">

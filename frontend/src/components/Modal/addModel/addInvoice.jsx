@@ -438,7 +438,7 @@ export default function AddInvoice(props) {
 
             <div className="flex gap-4 mt-4">
               <div className="w-full">
-                <label className="p-2 block text-sm font-medium text-gray-700">Khách hàng</label>
+                <label className="p-2 block text-sm font-medium text-gray-700">Khách hàng <span className="text-red-500">*</span></label>
                 <select
                   className="w-full p-2 border rounded-lg"
                   value={selectedCustomerId}
@@ -462,9 +462,9 @@ export default function AddInvoice(props) {
                   <thead>
                     <tr className="text-center border-b">
                         <th className="p-2">STT</th>
-                        <th className="p-2 w-1/2">Tên sản phẩm</th>
-                        <th className="p-2 w-32">Số lượng</th>
-                        <th className="p-2 w-48">Giá bán</th>
+                        <th className="p-2 w-1/2">Tên sản phẩm <span className="text-red-500">*</span></th>
+                        <th className="p-2 w-32">Số lượng <span className="text-red-500">*</span></th>
+                        <th className="p-2 w-48">Giá bán <span className="text-red-500">*</span></th>
                         <th className="p-2 w-48">Thành tiền</th>
                         <th className="p-2 w-24 text-white">Xóa</th>
                     </tr>

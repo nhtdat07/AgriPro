@@ -145,7 +145,7 @@ export default function AddOrder(props) {
 
             <div className="flex gap-4 mt-4">
               <div className="w-full">
-                <label className="p-2 block text-sm font-medium text-gray-700">Nhà cung cấp</label>
+                <label className="p-2 block text-sm font-medium text-gray-700">Nhà cung cấp <span className="text-red-500">*</span></label>
                 <select
                   className="w-full p-2 border rounded-lg"
                   value={selectedSupplierId}
@@ -169,10 +169,10 @@ export default function AddOrder(props) {
                   <thead>
                     <tr className="text-center border-b">
                       <th className="p-2">STT</th>
-                      <th className="p-2 w-96">Tên sản phẩm</th>
+                      <th className="p-2 w-96">Tên sản phẩm <span className="text-red-500">*</span></th>
                       <th className="p-2 w-32">Hạn dùng</th>
-                      <th className="p-2 w-32">Số lượng</th>
-                      <th className="p-2 w-48">Giá nhập</th>
+                      <th className="p-2 w-32">Số lượng <span className="text-red-500">*</span></th>
+                      <th className="p-2 w-48">Giá nhập <span className="text-red-500">*</span></th>
                       <th className="p-2 w-48">Thành tiền</th>
                       <th className="p-2 w-24 text-white">Xóa</th>
                     </tr>

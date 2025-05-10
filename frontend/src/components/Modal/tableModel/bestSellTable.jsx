@@ -14,7 +14,9 @@ function BestSellTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.id}</p>
           </TableCell>
           <TableCell dataLabel="Tên sản phẩm" showLabel={true}>
-            <p className="font-normal text-sm text-black">{row.name}</p>
+            <p className="font-normal text-sm text-black break-words whitespace-normal">
+              {row.name}
+            </p>
           </TableCell>
           <TableCell dataLabel="Số lượng bán ra" showLabel={true}>
             <p className="font-normal text-sm text-right md:text-center text-black">{row.quantity}</p>

@@ -158,12 +158,15 @@ function Settings() {
       ];      
   
       const requestBody = { userProfile, settings };
-      
+      if (!editData.agencyName) {
+        alert("Tên đại lý không được để trống!");
+        return;
+      }
       if (!/^\d{8,12}$/.test(editData.phone)) {
         alert("Số điện thoại không hợp lệ!");
         return;
       }
-      if (editData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editData.email)) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editData.email)) {
           alert("Email không hợp lệ!");
           return;
       }
@@ -295,7 +298,7 @@ function Settings() {
                 <h3 className="text-xl font-semibold mb-4">Đổi mật khẩu</h3>
                 <div className="grid grid-cols-1 gap-4">
                   <div className="relative">
-                    <label className="p-2 block text-sm font-medium text-gray-700">Mật khẩu hiện tại</label>
+                    <label className="p-2 block text-sm font-medium text-gray-700">Mật khẩu hiện tại <span className="text-red-500">*</span></label>
                     <input
                       type={showPassword.currentPassword ? "text" : "password"}
                       name="currentPassword"
@@ -313,7 +316,7 @@ function Settings() {
                     </button>
                   </div>
                   <div className="relative">
-                    <label className="p-2 block text-sm font-medium text-gray-700">Mật khẩu mới</label>
+                    <label className="p-2 block text-sm font-medium text-gray-700">Mật khẩu mới <span className="text-red-500">*</span></label>
                     <input
                       type={showPassword.newPassword ? "text" : "password"}
                       name="newPassword"
@@ -331,7 +334,7 @@ function Settings() {
                     </button>
                   </div>
                   <div className="relative">
-                    <label className="p-2 block text-sm font-medium text-gray-700">Xác nhận mật khẩu mới</label>
+                    <label className="p-2 block text-sm font-medium text-gray-700">Xác nhận mật khẩu mới <span className="text-red-500">*</span></label>
                     <input
                       type={showPassword.confirmPassword ? "text" : "password"}
                       name="confirmPassword"
@@ -410,7 +413,14 @@ function Settings() {
                     <div className="grid grid-cols-2 gap-4 flex-1">
                       {fields.slice(0, 6).map(({ key, label }) => (
                         <div key={key}>
-                          <p><strong>{label}</strong></p>
+                          <p>
+                            <strong>
+                              {label}
+                              {isEditing && (key === "agencyName" || key === "email") && (
+                                <span className="text-red-500"> *</span>
+                              )}
+                            </strong>
+                          </p>
                           {isEditing ? (
                             <input
                               type="text"

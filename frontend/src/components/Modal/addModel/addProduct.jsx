@@ -149,7 +149,7 @@ export default function AddProduct(props) {
 
                                 <div className="w-3/4">
                                     <div>
-                                        <label className="p-2 block text-sm font-medium text-gray-700">Tên sản phẩm</label>
+                                        <label className="p-2 block text-sm font-medium text-gray-700">Tên sản phẩm <span className="text-red-500">*</span></label>
                                         <input 
                                             type="text" 
                                             name="productName"
@@ -162,7 +162,7 @@ export default function AddProduct(props) {
 
                                     <div className="flex gap-4">
                                         <div className="w-1/2">
-                                            <label className="p-2 block text-sm font-medium text-gray-700">Nhãn hiệu</label>
+                                            <label className="p-2 block text-sm font-medium text-gray-700">Nhãn hiệu <span className="text-red-500">*</span></label>
                                             <input 
                                                 type="text" 
                                                 name="brand"
@@ -174,14 +174,14 @@ export default function AddProduct(props) {
                                         </div>
 
                                         <div className="w-1/2">
-                                            <label className="p-2 block text-sm font-medium text-gray-700">Phân loại</label>
+                                            <label className="p-2 block text-sm font-medium text-gray-700">Phân loại <span className="text-red-500">*</span></label>
                                             <select 
                                                 name="category"
                                                 value={productData.category}
                                                 onChange={handleChange}
                                                 className="w-full p-2 border rounded-lg min-h-[40px] bg-white"
                                             >
-                                                <option disabled value="">Phân loại</option>
+                                                <option disabled value="">Phân loại <span className="text-red-500">*</span></option>
                                                 <option value="THUỐC BẢO VỆ THỰC VẬT">THUỐC BẢO VỆ THỰC VẬT</option>
                                                 <option value="PHÂN BÓN - ĐẤT TRỒNG">PHÂN BÓN - ĐẤT TRỒNG</option>
                                                 <option value="HẠT GIỐNG - CÂY TRỒNG">HẠT GIỐNG - CÂY TRỒNG</option>
@@ -193,7 +193,7 @@ export default function AddProduct(props) {
 
                                     <div className="flex gap-4">
                                         <div className="w-1/2">
-                                            <label className="p-2 block text-sm font-medium text-gray-700">Nơi sản xuất</label>
+                                            <label className="p-2 block text-sm font-medium text-gray-700">Nơi sản xuất <span className="text-red-500">*</span></label>
                                             <input 
                                                 type="text" 
                                                 name="productionPlace"
@@ -205,7 +205,7 @@ export default function AddProduct(props) {
                                         </div>
 
                                         <div className="w-1/2">
-                                            <label className="p-2 block text-sm font-medium text-gray-700">Giá bán</label>
+                                            <label className="p-2 block text-sm font-medium text-gray-700">Giá bán <span className="text-red-500">*</span></label>
                                             <input 
                                                 type="text" 
                                                 name="outPrice"
@@ -218,7 +218,7 @@ export default function AddProduct(props) {
                                     </div>
 
                                     <div>
-                                        <label className="p-2 block text-sm font-medium text-gray-700">Công dụng</label>
+                                        <label className="p-2 block text-sm font-medium text-gray-700">Công dụng <span className="text-red-500">*</span></label>
                                         <textarea 
                                             name="usage"
                                             value={productData.usage}
@@ -229,7 +229,7 @@ export default function AddProduct(props) {
                                     </div>
 
                                     <div>
-                                        <label className="p-2 block text-sm font-medium text-gray-700">Hướng dẫn sử dụng</label>
+                                        <label className="p-2 block text-sm font-medium text-gray-700">Hướng dẫn sử dụng <span className="text-red-500">*</span></label>
                                         <textarea 
                                             name="guideline"
                                             value={productData.guideline}

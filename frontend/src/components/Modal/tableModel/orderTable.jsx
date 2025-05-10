@@ -18,10 +18,14 @@ function PurchaseTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.purchaseOrderId}</p>
           </TableCell>
           <TableCell dataLabel="Thời gian nhập kho" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.recordedTimestamp}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {row.recordedTimestamp}
+            </p>
           </TableCell>
           <TableCell dataLabel="Nhà cung cấp" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.supplierName}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {row.supplierName}
+            </p>
           </TableCell>
           <TableCell>
             <ViewPurchase code={row.purchaseOrderId} timestamp={row.recordedTimestamp} supplier={row.supplierName}/>

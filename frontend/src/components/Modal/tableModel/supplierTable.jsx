@@ -12,19 +12,29 @@ function SupplierTable({ loading, dataHeader, data, handleDelete, refreshSupplie
           className="bg-white border md:border-b block md:table-row rounded-lg shadow-md md:rounded-none md:shadow-none mb-5"
         >
           <TableCell dataLabel="STT" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{index + 1}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {index + 1}
+            </p>
           </TableCell>
           <TableCell dataLabel="Tên nhà cung cấp" showLabel={true}>
-            <p className="font-normal text-sm text-black">{row.supplierName}</p>
+            <p className="font-normal text-sm text-black break-words whitespace-normal">
+              {row.supplierName}
+            </p>
           </TableCell>
           <TableCell dataLabel="Địa chỉ" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.address}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {row.address}
+            </p>
           </TableCell>
           <TableCell dataLabel="Số điện thoại" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.phoneNumber}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {row.phoneNumber}
+            </p>
           </TableCell>
           <TableCell dataLabel="Email" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.email}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {row.email}
+            </p>
           </TableCell>
           <TableCell>
             <ViewSupplier code={row.supplierId} refreshSuppliers={refreshSuppliers} />

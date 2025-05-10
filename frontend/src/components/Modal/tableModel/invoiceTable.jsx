@@ -18,10 +18,14 @@ function InvoiceTable({ loading, dataHeader, data, handleDelete }) {
             <p className="font-normal text-sm text-right md:text-center text-black">{row.salesInvoiceId}</p>
           </TableCell>
           <TableCell dataLabel="Thời gian bán hàng" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.recordedTimestamp}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {row.recordedTimestamp}
+            </p>
           </TableCell>
           <TableCell dataLabel="Khách hàng" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.customerName}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black break-words whitespace-normal">
+              {row.customerName}
+            </p>
           </TableCell>
           <TableCell>
             <ViewInvoice code={row.salesInvoiceId} timestamp={row.recordedTimestamp} customer={row.customerName}/>
