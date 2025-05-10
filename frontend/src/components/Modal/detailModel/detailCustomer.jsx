@@ -191,7 +191,7 @@ export default function ViewCustomer(props) {
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-md w-[500px] p-6">
-            <h3 className="text-2xl font-semibold text-center">Lưu ý</h3>
+            <h3 className="text-2xl font-semibold text-center">Xác nhận</h3>
             <p className="my-4 text-gray-700 text-lg leading-relaxed text-center">
               Bạn có muốn xóa khách hàng này?
             </p>

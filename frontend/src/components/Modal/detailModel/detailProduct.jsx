@@ -63,7 +63,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
             price < 0 ||
             price > maxSafe
         ) {
-            alert("Giá bán không hợp lệ");
+            alert("Giá bán không hợp lệ!");
             return;
         }
 
@@ -329,7 +329,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                 {showDeleteModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div className="bg-white rounded-lg shadow-md w-[500px] p-6">
-                            <h3 className="text-2xl font-semibold text-center">Lưu ý</h3>
+                            <h3 className="text-2xl font-semibold text-center">Xác nhận</h3>
                             <p className="my-4 text-gray-700 text-lg leading-relaxed text-center">
                                 Bạn có muốn xóa sản phẩm này?
                             </p>

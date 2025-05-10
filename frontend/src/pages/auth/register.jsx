@@ -50,7 +50,7 @@ const RegisterIndex = () => {
           if (status === 409) {
             alert("Email này đã được sử dụng!");
           } else if (status === 400) {
-            alert("Mật khẩu không hợp lệ!");
+            alert("Mật khẩu ít nhất 8 ký tự, bao gồm cả chữ cái viết hoa, viết thường, chữ số và ký tự đặc biệt!");
           }
         }
       }

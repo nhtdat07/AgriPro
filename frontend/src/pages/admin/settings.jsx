@@ -225,7 +225,7 @@ function Settings() {
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert("Mật khẩu không khớp");
+      alert("Mật khẩu không khớp!");
       return;
     }
   
@@ -235,7 +235,7 @@ function Settings() {
         newPassword: passwordData.newPassword,
       });
   
-      alert("Mật khẩu đã được thay đổi thành công");
+      alert("Mật khẩu đã được thay đổi thành công!");
       setPasswordData({
         currentPassword: "",
         newPassword: "",
@@ -246,9 +246,9 @@ function Settings() {
       if (error.response) {
         const { status } = error.response;
         if (status === 400) {
-          alert("Mật khẩu không hợp lệ"); 
+          alert("Mật khẩu ít nhất 8 ký tự, bao gồm cả chữ cái viết hoa, viết thường, chữ số và ký tự đặc biệt!"); 
         } else if (status === 401) {
-          alert("Mật khẩu hiện tại không đúng");
+          alert("Mật khẩu hiện tại không đúng!");
         } else if (status === 500) {
           alert("Vui lòng tải lại trang!");
         }
