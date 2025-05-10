@@ -14,7 +14,9 @@ function ProductCard({ row, onClick }) {
         <p className="text-sm text-black break-words">{row.category}</p>
         <p className="text-sm text-black font-semibold break-words w-full">{row.productName}</p>
       </div>
-      <p className="font-semibold text-black break-words text-right">{row.outPrice}</p>
+      <p className="font-semibold text-black break-words text-right">
+        {Number(row.outPrice).toLocaleString("vi-VN")}
+      </p>
     </div>
   );
 }
