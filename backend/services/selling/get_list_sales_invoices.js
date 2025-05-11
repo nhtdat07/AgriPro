@@ -1,6 +1,6 @@
 import * as errors from '../../errors/error_handler.js';
 import { getNextPagination } from '../../utils/pagination.js';
-import { formatTimestamp } from '../../utils/format.js';
+import { formatTimestampUTC } from '../../utils/format.js';
 import { getSalesInvoices } from '../../db/queries/generated/selling.js';
 
 /**
@@ -30,7 +30,7 @@ export const getListSalesInvoicesService = async (pool, user, query) => {
         result.forEach(invoice => {
             invoiceList.push({
                 salesInvoiceId: invoice.id,
-                recordedTimestamp: formatTimestamp(invoice.recorded_at),
+                recordedTimestamp: formatTimestampUTC(invoice.recorded_at),
                 customerName: invoice.customer_name
             });
         });

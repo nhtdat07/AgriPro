@@ -1,7 +1,7 @@
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
 import { getNextPagination } from '../../utils/pagination.js';
-import { formatTimestamp } from '../../utils/format.js';
+import { formatTimestampUTC } from '../../utils/format.js';
 import { getInventory } from '../../db/queries/generated/inventory.js';
 import { getLastExpiredDateWarning, getMaxQuantityWarning } from '../../utils/config.js';
 
@@ -47,8 +47,8 @@ export const getListInventoryService = async (pool, user, query) => {
                 productId: product.product_id,
                 productName: product.product_name,
                 quantity: product.quantity,
-                importDate: formatTimestamp(product.imported_timestamp).split(consts.SPACE)[consts.FIRST_IDX_ARRAY],
-                expiredDate: formatTimestamp(product.expired_date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY],
+                importDate: formatTimestampUTC(product.imported_timestamp).split(consts.SPACE)[consts.FIRST_IDX_ARRAY],
+                expiredDate: formatTimestampUTC(product.expired_date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY],
                 inPrice: product.in_price
             });
         });

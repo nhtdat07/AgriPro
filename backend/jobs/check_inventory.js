@@ -4,7 +4,7 @@ import { getAllUserAgencyId } from '../db/queries/generated/auth.js';
 import { getProductsAboutToBeOutOfStock, getProductsAboutToExpire } from '../db/queries/generated/inventory.js';
 import { addNotification } from '../db/queries/generated/notification.js';
 import { getLastExpiredDateWarning, getMaxQuantityWarning } from '../utils/config.js';
-import { formatTimestamp } from '../utils/format.js';
+import { formatTimestampUTC } from '../utils/format.js';
 
 export const checkInventory = async (pool) => {
     try {
@@ -41,8 +41,8 @@ const checkExpire = async (pool, userAgencyId, lastExpiredDateWarning) => {
     for (const product of products) {
         notiContent += `
 [${count}] ${product.id} - ${product.name}
-Thời gian nhập hàng: ${formatTimestamp(product.imported_timestamp)}
-Hạn sử dụng: ${formatTimestamp(product.expired_date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY]}
+Thời gian nhập hàng: ${formatTimestampUTC(product.imported_timestamp)}
+Hạn sử dụng: ${formatTimestampUTC(product.expired_date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY]}
 `
     }
 
