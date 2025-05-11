@@ -11,7 +11,7 @@ export default function AddOrder(props) {
   const [suppliersList, setSuppliersList] = useState([]);
   const [selectedSupplierId, setSelectedSupplierId] = useState("");
   const [products, setProducts] = useState([
-    { id: 1, productId: "", expiredDate: "", quantity: 0, inPrice: 0 }
+    { id: 1, productId: "", expiredDate: "", quantity: "", inPrice: "" }
   ]);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function AddOrder(props) {
   const addProduct = () => {
     setProducts([
       ...products,
-      { id: products.length + 1, productId: "", expiredDate: "", quantity: 0, inPrice: 0 }
+      { id: products.length + 1, productId: "", expiredDate: "", quantity: "", inPrice: "" }
     ]);
   };
 
@@ -84,7 +84,7 @@ export default function AddOrder(props) {
 
   const resetForm = () => {
     setSelectedSupplierId("");
-    setProducts([{ id: 1, productId: "", expiredDate: "", quantity: 0, inPrice: 0 }]);
+    setProducts([{ id: 1, productId: "", expiredDate: "", quantity: "", inPrice: "" }]);
   };
 
   const totalAmount = products.reduce(
@@ -205,20 +205,26 @@ export default function AddOrder(props) {
                         </td>
                         <td className="p-2">
                           <input
-                            type="number"
-                            min="0"
+                            type="text"
                             className="w-full p-2 border rounded-lg"
-                            value={product.quantity}
-                            onChange={(e) => handleProductChange(product.id, "quantity", e.target.value)}
+                            value={product.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                            onInput={(e) => {
+                              const formattedValue = e.target.value.replace(/[^\d]/g, '');
+                              const numberValue = parseInt(formattedValue, 10);
+                              handleProductChange(product.id, "quantity", numberValue || 0);
+                            }}
                           />
                         </td>
                         <td className="p-2">
                           <input
-                            type="number"
-                            min="0"
+                            type="text"
                             className="w-full p-2 border rounded-lg"
-                            value={product.inPrice}
-                            onChange={(e) => handleProductChange(product.id, "inPrice", e.target.value)}
+                            value={product.inPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                            onInput={(e) => {
+                              const formattedValue = e.target.value.replace(/[^\d]/g, '');
+                              const numberValue = parseInt(formattedValue, 10);
+                              handleProductChange(product.id, "inPrice", numberValue || 0);
+                            }}
                           />
                         </td>
                         <td className="p-2 text-center">

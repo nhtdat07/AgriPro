@@ -263,17 +263,21 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                                 {isEditing ? (
                                     <input
                                         type="text"
-                                        value={editableProduct.price}
-                                        onChange={(e) => handleInputChange("price", e.target.value)}
+                                        value={editableProduct.price.toLocaleString()}
+                                        onInput={(e) => {
+                                            const formattedValue = e.target.value.replace(/[^\d]/g, '');
+                                            const numberValue = parseInt(formattedValue, 10);
+                                            handleInputChange("price", numberValue || 0);
+                                        }}
                                         className="w-full p-2 border rounded-lg"
                                     />
                                 ) : (
-                                    <p className="w-full p-2 border rounded-lg">{`${editableProduct.price} `}</p>
+                                    <p className="w-full p-2 border rounded-lg">{`${editableProduct.price.toLocaleString()} `}</p>
                                 )}
                             </div>
                             <div className="w-1/4">
                             <label className="p-2 block text-sm font-medium text-gray-700">Số lượng hiện có</label>
-                                <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.quantity}</p>
+                                <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.quantity.toLocaleString()}</p>
                             </div>
                         </div>
                         <div>

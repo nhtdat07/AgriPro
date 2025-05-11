@@ -19,7 +19,7 @@ function InventoryTable({ loading, dataHeader, data, handleDelete }) {
             </p>
           </TableCell>
           <TableCell dataLabel="Số lượng" showLabel={true}>
-            <p className="font-normal text-sm text-right md:text-center text-black">{row.quantity}</p>
+            <p className="font-normal text-sm text-right md:text-center text-black">{row.quantity.toLocaleString()}</p>
           </TableCell>
           <TableCell dataLabel="Ngày nhập kho" showLabel={true}>
             <p className="font-normal text-sm text-right md:text-center text-black">{row.importDate}</p>

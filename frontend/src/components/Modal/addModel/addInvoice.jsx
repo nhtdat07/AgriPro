@@ -16,7 +16,7 @@ export default function AddInvoice(props) {
   const [customersList, setCustomersList] = useState([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState("");
   const [products, setProducts] = useState([
-    { id: 1, productId: "", productName: "", quantity: 0, outPrice: 0 }
+    { id: 1, productId: "", productName: "", quantity: "", outPrice: "" }
   ]);
   const [agencyInfo, setAgencyInfo] = useState({
     agencyName: "",
@@ -153,7 +153,7 @@ export default function AddInvoice(props) {
   const addProduct = () => {
     setProducts([
       ...products,
-      { id: products.length + 1, productId: "", productName: "", quantity: 0, outPrice: 0 }
+      { id: products.length + 1, productId: "", productName: "", quantity: "", outPrice: "" }
     ]);
   };
 
@@ -180,7 +180,7 @@ export default function AddInvoice(props) {
 
   const resetForm = () => {
     setSelectedCustomerId("");
-    setProducts([{ id: 1, productId: "", productName: "", quantity: 0, outPrice: 0 }]);
+    setProducts([{ id: 1, productId: "", productName: "", quantity: "", outPrice: "" }]);
   };
 
   const totalAmount = products.reduce(
@@ -464,7 +464,7 @@ export default function AddInvoice(props) {
                         <th className="p-2">STT</th>
                         <th className="p-2 w-1/2">Tên sản phẩm <span className="text-red-500">*</span></th>
                         <th className="p-2 w-32">Số lượng <span className="text-red-500">*</span></th>
-                        <th className="p-2 w-48">Giá bán <span className="text-red-500">*</span></th>
+                        <th className="p-2 w-48">Giá bán</th>
                         <th className="p-2 w-48">Thành tiền</th>
                         <th className="p-2 w-24 text-white">Xóa</th>
                     </tr>
@@ -489,25 +489,39 @@ export default function AddInvoice(props) {
                         </td>
                         <td className="p-2">
                           <input
-                            type="number"
+                            type="text"
                             min="0"
-                            max={
-                              productsList.find((p) => p.productId === product.productId)?.availableQuantity || 0
-                            }
+                            max={productsList.find((p) => p.productId === product.productId)?.availableQuantity || 0}
                             className="w-full p-2 border rounded-lg"
-                            value={product.quantity}
-                            onChange={(e) => handleProductChange(product.id, "quantity", e.target.value)}
+                            value={product.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                            onChange={(e) => {
+                              let value = e.target.value;
+                              if (value === "") {
+                                handleProductChange(product.id, "quantity", "");
+                                return;
+                              }
+                              value = value.replace(/[^\d.]/g, '');
+                              if ((value.match(/\./g) || []).length > 1) {
+                                return;
+                              }
+                              const numValue = parseFloat(value.replace(/\./g, ''));
+                              const availableQuantity = productsList.find((p) => p.productId === product.productId)?.availableQuantity || 0;
+                              if (!isNaN(numValue) && numValue <= availableQuantity) {
+                                handleProductChange(product.id, "quantity", numValue);
+                              }
+                            }}
                           />
                         </td>
                         <td className="p-2">
                           <input
-                            type="number"
-                            min="0"
-                            className="w-full p-2 border rounded-lg"
-                            value={product.outPrice}
-                            onChange={(e) =>
-                              handleProductChange(product.id, "outPrice", Number(e.target.value))
-                            }
+                            type="text"
+                            className="w-full p-2 text-center"
+                            value={product.outPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                            onInput={(e) => {
+                              const formattedValue = e.target.value.replace(/[^\d]/g, '');
+                              const numberValue = parseInt(formattedValue, 10);
+                              handleProductChange(product.id, "outPrice", numberValue || 0);
+                            }}
                           />
                         </td>
                         <td className="p-2 text-center">
@@ -618,7 +632,7 @@ export default function AddInvoice(props) {
                     <tr key={index} className="text-center">
                       <td className="border p-2"><p id="row">{index + 1}</p></td>
                       <td className="border p-2"><p id="row">{product.productName}</p></td>
-                      <td className="border p-2"><p id="row">{product.quantity}</p></td>
+                      <td className="border p-2"><p id="row">{Number(product.quantity).toLocaleString()}</p></td>
                       <td className="border p-2"><p id="row">{Number(product.outPrice).toLocaleString()}</p></td>
                       <td className="border p-2"><p id="row">{(product.quantity * product.outPrice).toLocaleString()}</p></td>
                     </tr>

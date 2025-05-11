@@ -88,7 +88,7 @@ export default function ViewInvoice(props) {
                       <tr key={product.id} className="text-center">
                         <td className="p-2">{index + 1}</td>
                         <td className="p-2">{product.name}</td>
-                        <td className="p-2">{product.quantity}</td>
+                        <td className="p-2">{product.quantity.toLocaleString()}</td>
                         <td className="p-2">{product.price.toLocaleString()}</td>
                         <td className="p-2">{product.total.toLocaleString()}</td>
                       </tr>

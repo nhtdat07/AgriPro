@@ -94,7 +94,7 @@ export default function ViewOrder(props) {
                         <td className="p-2">{index + 1}</td>
                         <td className="p-2">{product.name}</td>
                         <td className="p-2">{product.exp_date}</td>
-                        <td className="p-2">{product.quantity}</td>
+                        <td className="p-2">{product.quantity.toLocaleString()}</td>
                         <td className="p-2">{product.price.toLocaleString()}</td>
                         <td className="p-2">{product.total.toLocaleString()}</td>
                       </tr>
