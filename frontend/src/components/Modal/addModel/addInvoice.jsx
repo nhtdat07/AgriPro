@@ -514,11 +514,11 @@ export default function AddInvoice(props) {
                         </td>
                         <td className="p-2">
                           <div className="w-full p-2 text-center">
-                            {product.outPrice.toLocaleString()}
+                            {product.outPrice.toLocaleString('vi-VN')}
                           </div>
                         </td>
                         <td className="p-2 text-center">
-                          {(product.quantity * product.outPrice).toLocaleString()}
+                          {(product.quantity * product.outPrice).toLocaleString('vi-VN')}
                         </td>
                         <td className="p-2 text-center">
                             {index === products.length - 1 && (
@@ -541,7 +541,7 @@ export default function AddInvoice(props) {
             </div>
 
             <div className="text-lg font-semibold text-right p-2 mt-5">
-              TỔNG CỘNG: {totalAmount.toLocaleString()}
+              TỔNG CỘNG: {totalAmount.toLocaleString('vi-VN')}
             </div>
 
             <div className="flex justify-center gap-4 p-4">
@@ -625,15 +625,15 @@ export default function AddInvoice(props) {
                     <tr key={index} className="text-center">
                       <td className="border p-2"><p id="row">{index + 1}</p></td>
                       <td className="border p-2"><p id="row">{product.productName}</p></td>
-                      <td className="border p-2"><p id="row">{Number(product.quantity).toLocaleString()}</p></td>
-                      <td className="border p-2"><p id="row">{Number(product.outPrice).toLocaleString()}</p></td>
-                      <td className="border p-2"><p id="row">{(product.quantity * product.outPrice).toLocaleString()}</p></td>
+                      <td className="border p-2"><p id="row">{Number(product.quantity).toLocaleString('vi-VN')}</p></td>
+                      <td className="border p-2"><p id="row">{Number(product.outPrice).toLocaleString('vi-VN')}</p></td>
+                      <td className="border p-2"><p id="row">{(product.quantity * product.outPrice).toLocaleString('vi-VN')}</p></td>
                     </tr>
                   ))}
                     <tr className="text-center font-semibold">
                       <td className="border p-2" colSpan={4}><p id="row">TỔNG CỘNG</p></td>
                       <td className="border p-2">
-                        <p id="row">{savedInvoice.products.reduce((sum, p) => sum + p.quantity * p.outPrice, 0).toLocaleString()}</p>
+                        <p id="row">{savedInvoice.products.reduce((sum, p) => sum + p.quantity * p.outPrice, 0).toLocaleString('vi-VN')}</p>
                       </td>
                     </tr>
                 </tbody>

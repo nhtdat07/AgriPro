@@ -263,7 +263,7 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                                 {isEditing ? (
                                     <input
                                         type="text"
-                                        value={editableProduct.price.toLocaleString()}
+                                        value={editableProduct.price.toLocaleString('vi-VN')}
                                         onInput={(e) => {
                                             const formattedValue = e.target.value.replace(/[^\d]/g, '');
                                             const numberValue = parseInt(formattedValue, 10);
@@ -272,12 +272,12 @@ export default function DetailProduct({ code, onClose, refreshProducts }) {
                                         className="w-full p-2 border rounded-lg"
                                     />
                                 ) : (
-                                    <p className="w-full p-2 border rounded-lg">{`${editableProduct.price.toLocaleString()} `}</p>
+                                    <p className="w-full p-2 border rounded-lg">{`${editableProduct.price.toLocaleString('vi-VN')} `}</p>
                                 )}
                             </div>
                             <div className="w-1/4">
                             <label className="p-2 block text-sm font-medium text-gray-700">Số lượng hiện có</label>
-                                <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.quantity.toLocaleString()}</p>
+                                <p className="w-full p-2 border rounded-lg min-h-[40px]">{editableProduct.quantity.toLocaleString('vi-VN')}</p>
                             </div>
                         </div>
                         <div>

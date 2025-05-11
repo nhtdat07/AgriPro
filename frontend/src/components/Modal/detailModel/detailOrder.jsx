@@ -94,16 +94,16 @@ export default function ViewOrder(props) {
                         <td className="p-2">{index + 1}</td>
                         <td className="p-2">{product.name}</td>
                         <td className="p-2">{product.exp_date}</td>
-                        <td className="p-2">{product.quantity.toLocaleString()}</td>
-                        <td className="p-2">{product.price.toLocaleString()}</td>
-                        <td className="p-2">{product.total.toLocaleString()}</td>
+                        <td className="p-2">{product.quantity.toLocaleString('vi-VN')}</td>
+                        <td className="p-2">{product.price.toLocaleString('vi-VN')}</td>
+                        <td className="p-2">{product.total.toLocaleString('vi-VN')}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             </div>
-            <div className="text-lg font-semibold text-right p-2 mt-5">TỔNG CỘNG: {totalAmount.toLocaleString()}</div>
+            <div className="text-lg font-semibold text-right p-2 mt-5">TỔNG CỘNG: {totalAmount.toLocaleString('vi-VN')}</div>
             <div className="flex justify-center gap-4 p-4">
               <button className="bg-[#2c9e4b] hover:bg-[#0c5c30] text-white px-6 py-2 rounded-lg" onClick={() => setShowModal(false)}>THOÁT</button>
             </div>

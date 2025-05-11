@@ -228,7 +228,7 @@ export default function AddOrder(props) {
                           />
                         </td>
                         <td className="p-2 text-center">
-                          {(product.quantity * product.inPrice).toLocaleString()}
+                          {(product.quantity * product.inPrice).toLocaleString('vi-VN')}
                         </td>
                         <td className="p-2 text-center">
                             {index === products.length - 1 && (
@@ -251,7 +251,7 @@ export default function AddOrder(props) {
             </div>
 
             <div className="text-lg font-semibold text-right p-2 mt-5">
-              TỔNG CỘNG: {totalAmount.toLocaleString()}
+              TỔNG CỘNG: {totalAmount.toLocaleString('vi-VN')}
             </div>
 
             <div className="flex justify-center gap-4 p-4">
