@@ -12,3 +12,9 @@ export const formatTimestamp = (time) => {
     return new Intl.DateTimeFormat(consts.DEFAULT_TIME_FORMAT, consts.TIME_OPTIONS)
         .format(time).replace(consts.COMMA, consts.EMPTY_STRING);
 }
+
+export const formatTimestampUTC = (time) => {
+    if (!time) return consts.EMPTY_STRING;
+    return new Intl.DateTimeFormat(consts.DEFAULT_TIME_FORMAT, consts.TIME_OPTIONS_UTC)
+        .format(time).replace(consts.COMMA, consts.EMPTY_STRING);
+}

@@ -83,6 +83,16 @@ export const TIME_OPTIONS = {
     second: '2-digit',
     hour12: false
 };
+export const TIME_OPTIONS_UTC = {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+};
 export const DEFAULT_TIME_FORMAT = 'en-CA';
 
 // Product types

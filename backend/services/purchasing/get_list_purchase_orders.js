@@ -1,7 +1,7 @@
 import * as errors from '../../errors/error_handler.js';
 import { getNextPagination } from '../../utils/pagination.js';
 import { getPurchaseOrders } from '../../db/queries/generated/purchasing.js';
-import { formatTimestamp } from '../../utils/format.js';
+import { formatTimestampUTC } from '../../utils/format.js';
 
 /**
  * Handles GetListPurchaseOrders logic.
@@ -30,7 +30,7 @@ export const getListPurchaseOrdersService = async (pool, user, query) => {
         result.forEach(order => {
             orderList.push({
                 purchaseOrderId: order.id,
-                recordedTimestamp: formatTimestamp(order.recorded_at),
+                recordedTimestamp: formatTimestampUTC(order.recorded_at),
                 supplierName: order.supplier_name
             });
         });
