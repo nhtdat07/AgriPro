@@ -513,16 +513,9 @@ export default function AddInvoice(props) {
                           />
                         </td>
                         <td className="p-2">
-                          <input
-                            type="text"
-                            className="w-full p-2 text-center"
-                            value={product.outPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-                            onInput={(e) => {
-                              const formattedValue = e.target.value.replace(/[^\d]/g, '');
-                              const numberValue = parseInt(formattedValue, 10);
-                              handleProductChange(product.id, "outPrice", numberValue || 0);
-                            }}
-                          />
+                          <div className="w-full p-2 text-center">
+                            {product.outPrice.toLocaleString()}
+                          </div>
                         </td>
                         <td className="p-2 text-center">
                           {(product.quantity * product.outPrice).toLocaleString()}
