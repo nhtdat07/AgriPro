@@ -84,6 +84,6 @@ test("Bad case: incorrect email", async () => {
 
     const { error } = await resetPasswordService(pool, data);
 
-    expect(error).toBeInstanceOf(errors.ValidationError);
+    expect(error).toBeInstanceOf(errors.UndefinedError);
     expect(error.message).toBe('Email does not exist');
 });

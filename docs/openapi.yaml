@@ -111,6 +111,109 @@ paths:
         "409":
           description: Conflict - Username or email already exists
 
+  /auth/forgot-password:
+    post:
+      tags:
+        - Authentication
+      summary: Handle forgotten password
+      description: Send an email containing the OTP for user to reset password.
+      operationId: HandleForgottenPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "abc@gmail.com"
+              required:
+                - email
+      responses:
+        "200":
+          description: Email of OTP sent successfully
+        "400":
+          description: Bad Request - Missing or invalid parameters
+        "404":
+          description: Email not found
+
+  /auth/verify-otp:
+    post:
+      tags:
+        - Authentication
+      summary: Verify OTP
+      description: Verify OTP and return a reset token to reset password.
+      operationId: VerifyOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "abc@gmail.com"
+                inputOtp:
+                  type: string
+                  format: number
+                  example: "123456"
+              required:
+                - email
+                - inputOtp
+      responses:
+        "200":
+          description: OTP verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resetToken:
+                    type: string
+                    description: Reset token for password reset
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        "400":
+          description: Bad Request - Missing or invalid parameters
+        "404":
+          description: Email not sent any email of OTP
+
+  /auth/reset-password:
+    patch:
+      tags:
+        - Authentication
+      summary: Reset password
+      description: Reset password after OTP verification.
+      operationId: ResetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "abc@gmail.com"
+                resetToken:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                newPassword:
+                  type: string
+                  example: "@Example1"
+              required:
+                - email
+                - resetToken
+                - newPassword
+      responses:
+        "200":
+          description: Password reset successfully
+        "400":
+          description: Bad Request - Missing or invalid parameters
+        "404":
+          description: Email not found
+
   /inventory:
     get:
       tags:
@@ -355,7 +458,6 @@ paths:
                         example: 9000
                     required:
                       - productId
-                      - expiredDate
                       - quantity
                       - inPrice
               required:

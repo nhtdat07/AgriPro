@@ -46,7 +46,7 @@ export const resetPasswordService = async (pool, data) => {
             throw new errors.InternalError('Failed to store new password into the database');
         }
         if (result.length == consts.ZERO_LENGTH) {
-            throw new errors.ValidationError('Email does not exist');
+            throw new errors.UndefinedError('Email does not exist');
         }
 
         return { message: 'Reset password successfully' };
