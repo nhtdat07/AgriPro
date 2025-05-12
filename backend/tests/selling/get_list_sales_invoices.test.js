@@ -142,10 +142,10 @@ test("Happy case: should return sales invoices successfully with query of record
     expect(result).toMatchObject(expectedResponse);
 });
 
-test("Happy case: should return sales invoices successfully with query of customerId", async () => {
+test("Happy case: should return sales invoices successfully with query of customerName", async () => {
     const user = { userAgencyId: 'UA0001' };
     const query = {
-        customerId: 'CU0002',
+        customerName: 'Thị B',
         limit: 20,
         offset: 0
     };

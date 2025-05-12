@@ -142,10 +142,10 @@ test("Happy case: should return purchase orders successfully with query of recor
     expect(result).toMatchObject(expectedResponse);
 });
 
-test("Happy case: should return purchase orders successfully with query of supplierId", async () => {
+test("Happy case: should return purchase orders successfully with query of supplierName", async () => {
     const user = { userAgencyId: 'UA0001' };
     const query = {
-        supplierId: 'SU0002',
+        supplierName: 'Thị B',
         limit: 20,
         offset: 0
     };
