@@ -2,6 +2,7 @@ import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
 import { getNextPagination } from '../../utils/pagination.js';
 import { getActiveCustomers } from '../../db/queries/generated/statistics.js';
+import { transformToPatternQueryLike } from '../../utils/format.js';
 
 /**
  * Handles GetListActiveCustomers logic.
@@ -10,12 +11,15 @@ import { getActiveCustomers } from '../../db/queries/generated/statistics.js';
  * @returns {Object} - Success message + data or error.
  */
 export const getListActiveCustomersService = async (pool, user, query) => {
-    let { startDate, endDate, customerId, limit, offset } = query;
+    let { startDate, endDate, customerName, limit, offset } = query;
     try {
+        // Transform to pattern
+        customerName = transformToPatternQueryLike(customerName);
+
         // Get list active customers from the database
         const result = await getActiveCustomers(pool, {
             agency_id: user.userAgencyId,
-            id: customerId,
+            name: customerName,
             start_date: startDate,
             end_date: endDate,
             limit,

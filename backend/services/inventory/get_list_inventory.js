@@ -1,7 +1,7 @@
 import * as errors from '../../errors/error_handler.js';
 import * as consts from '../../consts/consts.js';
 import { getNextPagination } from '../../utils/pagination.js';
-import { formatTimestampUTC } from '../../utils/format.js';
+import { formatTimestampUTC, transformToPatternQueryLike } from '../../utils/format.js';
 import { getInventory } from '../../db/queries/generated/inventory.js';
 import { getLastExpiredDateWarning, getMaxQuantityWarning } from '../../utils/config.js';
 
@@ -12,7 +12,7 @@ import { getLastExpiredDateWarning, getMaxQuantityWarning } from '../../utils/co
  * @returns {Object} - Success message + data or error.
  */
 export const getListInventoryService = async (pool, user, query) => {
-    let { productId, importDate, expiredDate, isAboutToExpire, isAboutToBeOutOfStock, limit, offset } = query;
+    let { productName, importDate, expiredDate, isAboutToExpire, isAboutToBeOutOfStock, limit, offset } = query;
     try {
         const userAgencyId = user.userAgencyId;
         let lastExpiredDateWarning;
@@ -26,9 +26,12 @@ export const getListInventoryService = async (pool, user, query) => {
             maxQuantityWarning = await getMaxQuantityWarning(pool, userAgencyId);
         }
 
+        // Transform to pattern
+        productName = transformToPatternQueryLike(productName);
+
         const result = await getInventory(pool, {
             agency_id: userAgencyId,
-            product_id: productId,
+            product_name: productName,
             imported_date: importDate,
             expired_date: expiredDate,
             warning_expired: lastExpiredDateWarning,

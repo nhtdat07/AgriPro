@@ -17,7 +17,7 @@ FROM inventory_product
         GROUP BY product_id
     ) quantities ON inventory_product.product_id = quantities.product_id
 WHERE inventory_product.agency_id = $1 AND inventory_product.quantity > 0
-    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN inventory_product.product_id = $2::VARCHAR ELSE true END
+    AND CASE WHEN $2::VARCHAR IS NOT NULL THEN product.name ILIKE $2::VARCHAR ELSE true END
     AND CASE WHEN $3::DATE IS NOT NULL THEN DATE(inventory_product.imported_timestamp) = $3::DATE ELSE true END
     AND CASE WHEN $4::DATE IS NOT NULL THEN DATE(inventory_product.expired_date) = $4::DATE ELSE true END
     AND CASE WHEN $5::DATE IS NOT NULL THEN DATE(inventory_product.expired_date) <= $5::DATE ELSE true END

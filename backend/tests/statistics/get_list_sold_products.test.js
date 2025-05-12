@@ -113,12 +113,12 @@ test("Happy case: should return sold products successfully with offset + limit",
     expect(result).toEqual(expectedResponse);
 });
 
-test("Happy case: should return sold products successfully with query of productId", async () => {
+test("Happy case: should return sold products successfully with query of productName", async () => {
     const user = { userAgencyId: 'UA0001' };
     const query = {
         startDate: '2025-04-01',
         endDate: '2025-04-30',
-        productId: 'PR0002',
+        productName: 'bọ trĩ',
         limit: 20,
         offset: 0
     };

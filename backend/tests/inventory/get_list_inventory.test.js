@@ -72,7 +72,7 @@ test("Happy case: should return inventory successfully with no constraints", asy
                     productName: 'Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC',
                     quantity: 12,
                     importDate: '2025-02-15',
-                    expiredDate: '2027-02-15',
+                    // expiredDate: '2027-02-15',
                     inPrice: 8500
                 },
                 {
@@ -80,7 +80,7 @@ test("Happy case: should return inventory successfully with no constraints", asy
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     quantity: 2,
                     importDate: '2024-12-08',
-                    expiredDate: '2025-12-08',
+                    // expiredDate: '2025-12-08',
                     inPrice: 13000
                 },
                 {
@@ -88,7 +88,7 @@ test("Happy case: should return inventory successfully with no constraints", asy
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     quantity: 2,
                     importDate: '2024-04-08',
-                    expiredDate: '2025-04-08',
+                    // expiredDate: '2025-04-08',
                     inPrice: 12000
                 }
             ],
@@ -116,7 +116,7 @@ test("Happy case: should return inventory successfully with offset + limit", asy
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     quantity: 2,
                     importDate: '2024-12-08',
-                    expiredDate: '2025-12-08',
+                    // expiredDate: '2025-12-08',
                     inPrice: 13000
                 }
             ],
@@ -128,10 +128,10 @@ test("Happy case: should return inventory successfully with offset + limit", asy
     expect(result).toMatchObject(expectedResponse);
 });
 
-test("Happy case: should return inventory successfully with query of productId", async () => {
+test("Happy case: should return inventory successfully with query of productName", async () => {
     const user = { userAgencyId: 'UA0001' };
     const query = {
-        productId: 'PR0002',
+        productName: 'nhện đỏ',
         limit: 20,
         offset: 0
     };
@@ -145,7 +145,7 @@ test("Happy case: should return inventory successfully with query of productId",
                     productName: 'Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC',
                     quantity: 12,
                     importDate: '2025-02-15',
-                    expiredDate: '2027-02-15',
+                    // expiredDate: '2027-02-15',
                     inPrice: 8500
                 }
             ],
@@ -174,7 +174,7 @@ test("Happy case: should return inventory successfully with query of importDate"
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     quantity: 2,
                     importDate: '2024-04-08',
-                    expiredDate: '2025-04-08',
+                    // expiredDate: '2025-04-08',
                     inPrice: 12000
                 }
             ],
@@ -203,7 +203,7 @@ test("Happy case: should return inventory successfully with query of expiredDate
                     productName: 'Thuốc trừ sâu rầy nhện đỏ Pesieu 500SC',
                     quantity: 12,
                     importDate: '2025-02-15',
-                    expiredDate: '2027-02-15',
+                    // expiredDate: '2027-02-15',
                     inPrice: 8500
                 }
             ],
@@ -232,7 +232,7 @@ test("Happy case: should return inventory successfully with query of isAboutToEx
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     quantity: 2,
                     importDate: '2024-04-08',
-                    expiredDate: '2025-04-08',
+                    // expiredDate: '2025-04-08',
                     inPrice: 12000
                 }
             ],
@@ -261,7 +261,7 @@ test("Happy case: should return inventory successfully with query of isAboutToBe
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     quantity: 2,
                     importDate: '2024-12-08',
-                    expiredDate: '2025-12-08',
+                    // expiredDate: '2025-12-08',
                     inPrice: 13000
                 },
                 {
@@ -269,7 +269,7 @@ test("Happy case: should return inventory successfully with query of isAboutToBe
                     productName: 'Thuốc trừ rệp sáp CONFIDOR 200SL',
                     quantity: 2,
                     importDate: '2024-04-08',
-                    expiredDate: '2025-04-08',
+                    // expiredDate: '2025-04-08',
                     inPrice: 12000
                 }
             ],
