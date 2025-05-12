@@ -101,10 +101,10 @@ test("Happy case: should return products successfully with offset + limit", asyn
     expect(result).toEqual(expectedResponse);
 });
 
-test("Happy case: should return products successfully with query of productId", async () => {
+test("Happy case: should return products successfully with query of productName", async () => {
     const user = { userAgencyId: 'UA0001' };
     const query = {
-        productId: 'PR0001',
+        productName: 'rệp sáp',
         limit: 20,
         offset: 0
     };

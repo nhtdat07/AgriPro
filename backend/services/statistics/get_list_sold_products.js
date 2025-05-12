@@ -1,6 +1,7 @@
 import * as errors from '../../errors/error_handler.js';
 import { getNextPagination } from '../../utils/pagination.js';
 import { getSoldProducts } from '../../db/queries/generated/statistics.js';
+import { transformToPatternQueryLike } from '../../utils/format.js';
 
 /**
  * Handles GetListSoldProducts logic.
@@ -9,12 +10,15 @@ import { getSoldProducts } from '../../db/queries/generated/statistics.js';
  * @returns {Object} - Success message + data or error.
  */
 export const getListSoldProductsService = async (pool, user, query) => {
-    let { startDate, endDate, productId, limit, offset } = query;
+    let { startDate, endDate, productName, limit, offset } = query;
     try {
+        // Transform to pattern
+        productName = transformToPatternQueryLike(productName);
+
         // Get list sold products from the database
         const result = await getSoldProducts(pool, {
             agency_id: user.userAgencyId,
-            id: productId,
+            name: productName,
             start_date: startDate,
             end_date: endDate,
             limit,

@@ -105,12 +105,12 @@ test("Happy case: should return active customers successfully with offset + limi
     expect(result).toEqual(expectedResponse);
 });
 
-test("Happy case: should return active customers successfully with query of customerId", async () => {
+test("Happy case: should return active customers successfully with query of customerName", async () => {
     const user = { userAgencyId: 'UA0001' };
     const query = {
         startDate: '2025-04-01',
         endDate: '2025-04-30',
-        customerId: 'CU0003',
+        customerName: 'C',
         limit: 20,
         offset: 0
     };

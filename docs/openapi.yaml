@@ -222,9 +222,9 @@ paths:
       description: Retrieves a list of inventory items, with optional search and filtering capabilities.
       operationId: GetListInventory
       parameters:
-        - name: productId
+        - name: productName
           in: query
-          description: Product ID for searching if not empty
+          description: Product name, used for 'like' searching if not empty
           required: false
           schema:
             type: string
@@ -537,9 +537,9 @@ paths:
       description: Retrieves a list of products, optionally filtered by category, name, or other criteria.
       operationId: GetListProducts
       parameters:
-        - name: productId
+        - name: productName
           in: query
-          description: Product ID, used for searching if not empty
+          description: Product name, used for 'like' searching if not empty
           required: false
           schema:
             type: string
@@ -1763,10 +1763,10 @@ paths:
             type: string
             format: date
           example: "2025-02-04"
-        - name: productId
+        - name: productName
           in: query
           required: false
-          description: Product ID, used for searching if not empty
+          description: Product name, used for 'like' searching if not empty
           schema:
             type: string
           example: "PR0001"
@@ -1850,10 +1850,10 @@ paths:
             type: string
             format: date
           example: "2025-02-04"
-        - name: customerId
+        - name: customerName
           in: query
           required: false
-          description: Customer ID, used for searching if not empty
+          description: Customer name, used for 'like' searching if not empty
           schema:
             type: string
           example: "CU0001"

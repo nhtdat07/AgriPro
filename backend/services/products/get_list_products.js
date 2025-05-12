@@ -11,20 +11,21 @@ import { transformToPatternQueryLike } from '../../utils/format.js';
  * @returns {Object} - Success message + data or error.
  */
 export const getListProductsService = async (pool, user, query) => {
-    let { productId, category, usage, limit, offset } = query;
+    let { productName, category, usage, limit, offset } = query;
     try {
         // Validate product category
         if (category && !consts.PRODUCT_TYPES.includes(category)) {
             throw new errors.ValidationError('Invalid product category');
         }
 
-        // Transform usage to pattern
+        // Transform to pattern
         usage = transformToPatternQueryLike(usage);
+        productName = transformToPatternQueryLike(productName);
 
         // Get list products from the database
         const result = await getProducts(pool, {
             agency_id: user.userAgencyId,
-            id: productId,
+            name: productName,
             category,
             usages: usage,
             limit,
