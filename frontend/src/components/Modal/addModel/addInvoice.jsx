@@ -597,17 +597,18 @@ export default function AddInvoice(props) {
               <br/>
               <h2 className="text-xxl font-bold text-center">HÓA ĐƠN BÁN HÀNG</h2>
               <hr className="mx-auto mt-5 mb-2 w-1/2 border-t border-black" />
-              <div id="info" style={{ display: 'flex', gap: '150px' }}>
+              <div id="info" style={{ display: 'flex', gap: '120px' }}>
                 <div>
                   <p><strong>Mã số:</strong> {dataInvoice.codeInvoice}</p>
                   <p><strong>Tên khách hàng:</strong> {detailCustomer.customerName}</p>
-                  <p><strong>Địa chỉ:</strong> {detailCustomer.addressCustomer}</p>
                 </div>
                 <div>
-                  <p><br></br></p>
                   <p><strong>Thời gian:</strong> {dataInvoice.timestamp}</p>
-                  <p><strong>Số điên thoại:</strong> {detailCustomer.phoneCustomer}</p>
+                  <p><strong>Số điện thoại:</strong> {detailCustomer.phoneCustomer}</p>
                 </div>
+              </div>
+              <div id="info">
+                <p><strong>Địa chỉ:</strong> {detailCustomer.addressCustomer}</p>  
               </div>
 
               <table className="w-full border-collapse border mt-4">

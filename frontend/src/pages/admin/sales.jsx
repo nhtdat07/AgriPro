@@ -48,6 +48,8 @@ function Sales() {
   const [hasMoreInvoices, setHasMoreInvoices] = useState(true);
   const [customerOffset, setCustomerOffset] = useState(0);
   const [hasMoreCustomers, setHasMoreCustomers] = useState(true);
+  const [isSearchingInvoice, setIsSearchingInvoice] = useState(false);
+  const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
   const invoiceContainerRef = useRef(null);
   const customerContainerRef = useRef(null);
 
@@ -106,7 +108,7 @@ function Sales() {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
-      if (isBottom && hasMoreInvoices) {
+      if (isBottom && hasMoreInvoices && !isSearchingInvoice) {
         const newOffset = invoiceOffset + 20;
         fetchInvoices(newOffset, true);
         setInvoiceOffset(newOffset);
@@ -115,7 +117,7 @@ function Sales() {
   
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [invoiceOffset, hasMoreInvoices]);
+  }, [invoiceOffset, hasMoreInvoices, isSearchingInvoice]);
 
   const fetchCustomers = async (offset = 0, append = false) => {
     try {
@@ -149,19 +151,21 @@ function Sales() {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
-      if (isBottom && hasMoreCustomers) {
+      if (isBottom && hasMoreCustomers && !isSearchingCustomer) {
         const newOffset = customerOffset + 20;
         fetchCustomers(newOffset, true);
         setCustomerOffset(newOffset);
-      }
+      }      
     };
   
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [activeTab, customerOffset, hasMoreCustomers]);
+  }, [activeTab, customerOffset, hasMoreCustomers, isSearchingCustomer]);
   
   const handleSearchInvoice = async () => {
     try {
+      setIsSearchingInvoice(true);
+      setInvoiceOffset(0);
       const res = await axiosInstance.get("/sales-invoices", {
         params: {
           salesInvoiceId: invoiceSearch.code || undefined,
@@ -171,8 +175,8 @@ function Sales() {
           offset: 0
         },
       });
-      const results = res.data.data.salesInvoices;
-      setFilteredInvoices(results);
+      setFilteredInvoices(res.data.data.salesInvoices);
+      setHasMoreInvoices(false);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -185,6 +189,8 @@ function Sales() {
   
   const handleSearchCustomer = async () => {
     try {
+      setIsSearchingCustomer(true);
+      setCustomerOffset(0);
       const res = await axiosInstance.get("/customers", {
         params: {
           customerName: customerSearch.name || undefined,
@@ -194,8 +200,8 @@ function Sales() {
           offset: 0,
         },
       });
-      const results = res.data.data.customers;
-      setFilteredCustomers(results);
+      setFilteredCustomers(res.data.data.customers);
+      setHasMoreCustomers(false);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;

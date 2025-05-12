@@ -20,17 +20,15 @@ function Landing() {
       </header>
 
       <main className="bg-[#efffef] text-center px-4 md:px-16 py-12">
-        <div className="flex flex-col items-center mb-8">
-          <div className="flex items-center justify-center mb-6">
-            <div>
-              <img src={logo} alt="AgriPro logo" className="mr-4" />
-              <h1 className="text-4xl font-bold text-black mb-4">Hãy đến với AgriPro!</h1>
-              <p className="text-gray-600 text-lg mb-4">
-                Chúng tôi cung cấp cho bạn một giải pháp quản lý đại lý vật tư nông nghiệp hiệu quả.
-              </p>
-            </div>
-            <img src={cards} alt="Cards" className="w-full max-w-2xl" />
+        <div className="flex flex-col md:flex-row items-center justify-center mb-6 gap-6">
+          <div className="text-center">
+            <img src={logo} alt="AgriPro logo" className="mx-auto md:mx-0 mb-4" />
+            <h1 className="text-4xl font-bold text-black mb-4">Hãy đến với AgriPro!</h1>
+            <p className="text-gray-600 text-lg mb-4">
+              Chúng tôi cung cấp cho bạn một giải pháp quản lý đại lý vật tư nông nghiệp hiệu quả.
+            </p>
           </div>
+          <img src={cards} alt="Cards" className="w-full max-w-sm md:max-w-2xl" />
         </div>
       </main>
 

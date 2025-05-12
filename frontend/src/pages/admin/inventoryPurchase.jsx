@@ -83,7 +83,10 @@ function InventoryPurchase() {
   const [productOffset, setProductOffset] = useState(0);
   const [hasMoreProducts, setHasMoreProducts] = useState(true);
   const [supplierOffset, setSupplierOffset] = useState(0);
-  const [hasMoreSuppliers, setHasMoreSuppliers] = useState(true);
+  const [hasMoreSuppliers, setHasMoreSuppliers] = useState(true); 
+  const [isSearchingPurchase, setIsSearchingPurchase] = useState(false);
+  const [isSearchingProduct, setIsSearchingProduct] = useState(false);   
+  const [isSearchingSupplier, setIsSearchingSupplier] = useState(false);
   const inventoryContainerRef = useRef(null);
   const purchaseContainerRef = useRef(null);
   const productContainerRef = useRef(null);
@@ -203,7 +206,7 @@ function InventoryPurchase() {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
-        if (isBottom && hasMorePurchases) {
+        if (isBottom && hasMorePurchases && !isSearchingPurchase) {
           const newOffset = purchaseOffset + 20;
           fetchOrders(newOffset, true);
           setPurchaseOffset(newOffset);
@@ -212,7 +215,7 @@ function InventoryPurchase() {
     
       container.addEventListener("scroll", handleScroll);
       return () => container.removeEventListener("scroll", handleScroll);
-    }, [activeTab, purchaseOffset, hasMorePurchases]);
+    }, [activeTab, purchaseOffset, hasMorePurchases, isSearchingPurchase]);
 
   const fetchProducts = async (offset = 0, append = false) => {
     try {
@@ -250,7 +253,7 @@ function InventoryPurchase() {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
-        if (isBottom && hasMoreProducts) {
+        if (isBottom && hasMoreProducts && !isSearchingProduct) {
           const newOffset = productOffset + 20;
           fetchProducts(newOffset, true);
           setProductOffset(newOffset);
@@ -259,7 +262,7 @@ function InventoryPurchase() {
     
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [activeTab, productOffset, hasMoreProducts]);
+  }, [activeTab, productOffset, hasMoreProducts, isSearchingProduct]);
 
   const fetchSuppliers = async (offset = 0, append = false) => {
     try {
@@ -297,7 +300,7 @@ function InventoryPurchase() {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
-        if (isBottom && hasMoreSuppliers) {
+        if (isBottom && hasMoreSuppliers && !isSearchingSupplier) {
           const newOffset = supplierOffset + 20;
           fetchSuppliers(newOffset, true);
           setSupplierOffset(newOffset);
@@ -306,7 +309,7 @@ function InventoryPurchase() {
     
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [activeTab, supplierOffset, hasMoreSuppliers]);
+  }, [activeTab, supplierOffset, hasMoreSuppliers, isSearchingSupplier]);
 
   const [dayExpired, setDayExpired] = useState(null);
   const [dayOutOfStock, setDayOutOfStock] = useState(null);
@@ -356,35 +359,12 @@ function InventoryPurchase() {
       return nameMatch && importDateMatch && expiredDateMatch && warningExpiredMatch && warningStockMatch;
     });
     setFilteredInventory(result);
-  };
-  
-  // const handleSearchInventory = async () => {
-  //   try {  
-  //     const res = await axiosInstance.get("/inventory", {
-  //       params: {
-  //         productName: inventorySearch.name || undefined,
-  //         importDate: inventorySearch.importDate || undefined,
-  //         expiredDate: inventorySearch.expiredDate || undefined,
-  //         isAboutToExpire: inventorySearch.warningExpired || undefined,
-  //         isAboutToBeOutOfStock: inventorySearch.warningStock || undefined,
-  //         limit: Number.MAX_SAFE_INTEGER,
-  //         offset: 0,
-  //       },
-  //     });
-  //     const results = res.data.data.inventory;
-  //     setFilteredInventory(results);
-  //   } catch (error) {
-  //     if (error.response) {
-  //       const { status } = error.response;
-  //       if (status === 400) alert("Tải thông tin thất bại!");
-  //       else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
-  //       else if (status === 500) alert("Vui lòng tải lại trang!");
-  //     }
-  //   }
-  // };  
+  };  
   
   const handleSearchPurchase = async () => {
     try {
+      setIsSearchingPurchase(true);
+      setPurchaseOffset(0);
       const res = await axiosInstance.get("/purchase-orders", {
         params: {
           purchaseOrderId: purchaseSearch.code || undefined,
@@ -394,8 +374,8 @@ function InventoryPurchase() {
           offset: 0
         },
       });
-      const results = res.data.data.purchaseOrders;
-      setFilteredPurchases(results);
+      setFilteredPurchases(res.data.data.purchaseOrders);
+      setHasMorePurchases(false);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -408,6 +388,8 @@ function InventoryPurchase() {
   
   const handleSearchProduct = async () => {
     try {
+      setIsSearchingProduct(true);
+      setProductOffset(0);
       const res = await axiosInstance.get("/products", {
         params: {
           productName: productSearch.name || undefined,
@@ -417,8 +399,8 @@ function InventoryPurchase() {
           offset: 0
         },
       });
-      const results = res.data.data.products;
-      setFilteredProducts(results);
+      setFilteredProducts(res.data.data.products);
+      setHasMoreProducts(false);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
@@ -431,6 +413,8 @@ function InventoryPurchase() {
   
   const handleSearchSupplier = async () => {
     try {
+      setIsSearchingSupplier(true);
+      setSupplierOffset(0);
       const res = await axiosInstance.get("/suppliers", {
         params: {
           supplierName: supplierSearch.name || undefined,
@@ -440,8 +424,8 @@ function InventoryPurchase() {
           offset: 0,
         },
       });
-      const results = res.data.data.suppliers;
-      setFilteredSuppliers(results);
+      setFilteredSuppliers(res.data.data.suppliers);
+      setHasMoreSuppliers(false);
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
