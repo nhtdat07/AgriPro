@@ -49,9 +49,6 @@ function InventoryPurchase() {
     {key: "action", label: ""},
   ];
   const [inventoryData, setInventoryData] = useState([]);
-  const [purchasesData, setPurchasesData] = useState([]);
-  const [productsData, setProductsData] = useState([]);
-  const [suppliersData, setSuppliersData] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [inventorySearch, setInventorySearch] = useState({
     name: "",
@@ -107,11 +104,8 @@ function InventoryPurchase() {
   
         setInventoryData(inventoryArray);
         setFilteredInventory(inventoryArray);
-        setPurchasesData(purchasesArray);
         setFilteredPurchases(purchasesArray);
-        setProductsData(productsArray);
         setFilteredProducts(productsArray);
-        setSuppliersData(suppliersArray);
         setFilteredSuppliers(suppliersArray);
       } catch (error) {
         if (error.response) {
@@ -179,7 +173,6 @@ function InventoryPurchase() {
         params: { offset, limit: 20 }
       });
       const newData = res.data.data.purchaseOrders;
-      setPurchasesData(prev => append ? [...prev, ...newData] : newData);
       setFilteredPurchases(prev => append ? [...prev, ...newData] : newData);
       setRefreshTrigger(prev => prev + 1);
       
@@ -227,7 +220,6 @@ function InventoryPurchase() {
         params: { offset, limit: 20 }
       });
       const newData = res.data.data.products;
-      setProductsData(prev => append ? [...prev, ...newData] : newData);
       setFilteredProducts(prev => append ? [...prev, ...newData] : newData);
       setRefreshTrigger(prev => prev + 1);
         
@@ -275,7 +267,6 @@ function InventoryPurchase() {
         params: { offset, limit: 20 }
       });
       const newData = res.data.data.suppliers;
-      setSuppliersData(prev => append ? [...prev, ...newData] : newData);
       setFilteredSuppliers(prev => append ? [...prev, ...newData] : newData);
       setRefreshTrigger(prev => prev + 1);
           
@@ -365,36 +356,100 @@ function InventoryPurchase() {
       return nameMatch && importDateMatch && expiredDateMatch && warningExpiredMatch && warningStockMatch;
     });
     setFilteredInventory(result);
-  };  
-
-  const handleSearchPurchase = () => {
-    const result = purchasesData.filter((item) => {
-      const codeMatch = item.purchaseOrderId && item.purchaseOrderId.toLowerCase().includes(purchaseSearch.code ? purchaseSearch.code.toLowerCase() : "");
-      const dateMatch = item.recordedTimestamp.slice(0, 10).includes(purchaseSearch.date ? purchaseSearch.date : "");
-      const supplierMatch = item.supplierName && item.supplierName.toLowerCase().includes(purchaseSearch.supplier ? purchaseSearch.supplier.toLowerCase() : "");
-      return codeMatch && dateMatch && supplierMatch;
-    });
-    setFilteredPurchases(result);
-  };  
-
-  const handleSearchProduct = () => {
-    const result = productsData.filter((item) => {
-      const nameMatch = item.productName && item.productName.toLowerCase().includes(productSearch.name ? productSearch.name.toLowerCase() : "");
-      const categoryMatch = item.category && item.category.toLowerCase().includes(productSearch.category ? productSearch.category.toLowerCase() : "");
-      const usageMatch = item.usage && item.usage.toLowerCase().includes(productSearch.usage ? productSearch.usage.toLowerCase() : "");
-      return nameMatch && categoryMatch && usageMatch;
-    });
-    setFilteredProducts(result);
-  };  
-
-  const handleSearchSupplier = () => {
-    const result = suppliersData.filter((item) => {
-      const nameMatch = item.supplierName && item.supplierName.toLowerCase().includes(supplierSearch.name ? supplierSearch.name.toLowerCase() : "");
-      const phoneMatch = item.phoneNumber && item.phoneNumber.includes(supplierSearch.phone ? supplierSearch.phone : "");
-      const addressMatch = item.address && item.address.toLowerCase().includes(supplierSearch.address ? supplierSearch.address.toLowerCase() : "");
-      return nameMatch && phoneMatch && addressMatch;
-    });
-    setFilteredSuppliers(result);
+  };
+  
+  // const handleSearchInventory = async () => {
+  //   try {  
+  //     const res = await axiosInstance.get("/inventory", {
+  //       params: {
+  //         productName: inventorySearch.name || undefined,
+  //         importDate: inventorySearch.importDate || undefined,
+  //         expiredDate: inventorySearch.expiredDate || undefined,
+  //         isAboutToExpire: inventorySearch.warningExpired || undefined,
+  //         isAboutToBeOutOfStock: inventorySearch.warningStock || undefined,
+  //         limit: Number.MAX_SAFE_INTEGER,
+  //         offset: 0,
+  //       },
+  //     });
+  //     const results = res.data.data.inventory;
+  //     setFilteredInventory(results);
+  //   } catch (error) {
+  //     if (error.response) {
+  //       const { status } = error.response;
+  //       if (status === 400) alert("Tải thông tin thất bại!");
+  //       else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+  //       else if (status === 500) alert("Vui lòng tải lại trang!");
+  //     }
+  //   }
+  // };  
+  
+  const handleSearchPurchase = async () => {
+    try {
+      const res = await axiosInstance.get("/purchase-orders", {
+        params: {
+          purchaseOrderId: purchaseSearch.code || undefined,
+          recordedDate: purchaseSearch.date || undefined,
+          supplierName: purchaseSearch.supplier || undefined,
+          limit: Number.MAX_SAFE_INTEGER,
+          offset: 0
+        },
+      });
+      const results = res.data.data.purchaseOrders;
+      setFilteredPurchases(results);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
+  };
+  
+  const handleSearchProduct = async () => {
+    try {
+      const res = await axiosInstance.get("/products", {
+        params: {
+          productName: productSearch.name || undefined,
+          category: productSearch.category || undefined,
+          usage: productSearch.usage || undefined,
+          limit: Number.MAX_SAFE_INTEGER,
+          offset: 0
+        },
+      });
+      const results = res.data.data.products;
+      setFilteredProducts(results);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
+  };
+  
+  const handleSearchSupplier = async () => {
+    try {
+      const res = await axiosInstance.get("/suppliers", {
+        params: {
+          supplierName: supplierSearch.name || undefined,
+          phoneNumber: supplierSearch.phone || undefined,
+          address: supplierSearch.address || undefined,
+          limit: Number.MAX_SAFE_INTEGER,
+          offset: 0,
+        },
+      });
+      const results = res.data.data.suppliers;
+      setFilteredSuppliers(results);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
   };  
 
   const handleDelete = () => { };

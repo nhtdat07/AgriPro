@@ -31,8 +31,6 @@ function Sales() {
     {key: "email", label: "Email"},
     {key: "action", label: ""},
   ];
-  const [invoicesData, setInvoicesData] = useState([]);
-  const [customersData, setCustomersData] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [invoiceSearch, setInvoiceSearch] = useState({
     code: "",
@@ -62,9 +60,7 @@ function Sales() {
         const invoicesArray = invoicesRes.data.data.salesInvoices;
         const customersArray = customersRes.data.data.customers;
 
-        setInvoicesData(invoicesArray);
         setFilteredInvoices(invoicesArray);
-        setCustomersData(customersArray);
         setFilteredCustomers(customersArray);
       } catch (error) {
         if (error.response) {
@@ -85,7 +81,6 @@ function Sales() {
         params: { offset, limit: 20 }
       });
       const newData = res.data.data.salesInvoices;
-      setInvoicesData(prev => append ? [...prev, ...newData] : newData);
       setFilteredInvoices(prev => append ? [...prev, ...newData] : newData);
       setRefreshTrigger(prev => prev + 1);
   
@@ -128,7 +123,6 @@ function Sales() {
         params: { offset, limit: 20 }
       });
       const newData = res.data.data.customers;
-      setCustomersData(prev => append ? [...prev, ...newData] : newData);
       setFilteredCustomers(prev => append ? [...prev, ...newData] : newData);
       setRefreshTrigger(prev => prev + 1);
       
@@ -165,25 +159,51 @@ function Sales() {
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [activeTab, customerOffset, hasMoreCustomers]);
-
-  const handleSearchInvoice = () => {
-    const result = invoicesData.filter((item) => {
-      const codeMatch = item.salesInvoiceId && item.salesInvoiceId.toLowerCase().includes(invoiceSearch.code ? invoiceSearch.code.toLowerCase() : "");
-      const dateMatch = item.recordedTimestamp.slice(0, 10).includes(invoiceSearch.date ? invoiceSearch.date : "");
-      const customerMatch = item.customerName && item.customerName.toLowerCase().includes(invoiceSearch.customer ? invoiceSearch.customer.toLowerCase() : "");
-      return codeMatch && dateMatch && customerMatch;
-    });
-    setFilteredInvoices(result);
-  };  
-
-  const handleSearchCustomer = () => {
-    const result = customersData.filter((item) => {
-      const nameMatch = item.customerName && item.customerName.toLowerCase().includes(customerSearch.name ? customerSearch.name.toLowerCase() : "");
-      const phoneMatch = item.phoneNumber && item.phoneNumber.includes(customerSearch.phone ? customerSearch.phone : "");
-      const addressMatch = item.address && item.address.toLowerCase().includes(customerSearch.address ? customerSearch.address.toLowerCase() : "");
-      return nameMatch && phoneMatch && addressMatch;
-    });
-    setFilteredCustomers(result);
+  
+  const handleSearchInvoice = async () => {
+    try {
+      const res = await axiosInstance.get("/sales-invoices", {
+        params: {
+          salesInvoiceId: invoiceSearch.code || undefined,
+          recordedDate: invoiceSearch.date || undefined,
+          customerName: invoiceSearch.customer || undefined,
+          limit: Number.MAX_SAFE_INTEGER,
+          offset: 0
+        },
+      });
+      const results = res.data.data.salesInvoices;
+      setFilteredInvoices(results);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
+  };
+  
+  const handleSearchCustomer = async () => {
+    try {
+      const res = await axiosInstance.get("/customers", {
+        params: {
+          customerName: customerSearch.name || undefined,
+          phoneNumber: customerSearch.phone || undefined,
+          address: customerSearch.address || undefined,
+          limit: Number.MAX_SAFE_INTEGER,
+          offset: 0,
+        },
+      });
+      const results = res.data.data.customers;
+      setFilteredCustomers(results);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
   };  
 
   const handleDelete = () => { };
