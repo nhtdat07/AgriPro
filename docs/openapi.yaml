@@ -352,13 +352,13 @@ paths:
             type: string
             format: date
           example: "2025-01-04"
-        - name: supplierId
+        - name: supplierName
           in: query
-          description: Supplier ID, used for searching if not empty
+          description: Supplier name, used for 'like' searching if not empty
           required: false
           schema:
             type: string
-          example: "SU0001"
+          example: "Văn A"
         - name: limit
           in: query
           description: The number of items to fetch (default is 20)
@@ -1123,13 +1123,13 @@ paths:
             type: string
             format: date
           example: "2025-01-04"
-        - name: customerId
+        - name: customerName
           in: query
-          description: Customer ID, used for searching if not empty
+          description: Customer name, used for 'like' searching if not empty
           required: false
           schema:
             type: string
-          example: "CU0001"
+          example: "Văn A"
         - name: limit
           in: query
           description: The number of items to fetch (default is 20)

@@ -1,7 +1,7 @@
 import * as errors from '../../errors/error_handler.js';
 import { getNextPagination } from '../../utils/pagination.js';
 import { getPurchaseOrders } from '../../db/queries/generated/purchasing.js';
-import { formatTimestampUTC } from '../../utils/format.js';
+import { formatTimestampUTC, transformToPatternQueryLike } from '../../utils/format.js';
 
 /**
  * Handles GetListPurchaseOrders logic.
@@ -10,14 +10,17 @@ import { formatTimestampUTC } from '../../utils/format.js';
  * @returns {Object} - Success message + data or error.
  */
 export const getListPurchaseOrdersService = async (pool, user, query) => {
-    let { purchaseOrderId, recordedDate, supplierId, limit, offset } = query;
+    let { purchaseOrderId, recordedDate, supplierName, limit, offset } = query;
     try {
+        // Transform to pattern
+        supplierName = transformToPatternQueryLike(supplierName);
+
         // Get list purchase orders from the database
         const result = await getPurchaseOrders(pool, {
             agency_id: user.userAgencyId,
             id: purchaseOrderId,
             recorded_at: recordedDate,
-            supplier_id: supplierId,
+            supplier_name: supplierName,
             limit,
             offset
         });

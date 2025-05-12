@@ -1,6 +1,6 @@
 import * as errors from '../../errors/error_handler.js';
 import { getNextPagination } from '../../utils/pagination.js';
-import { formatTimestampUTC } from '../../utils/format.js';
+import { formatTimestampUTC, transformToPatternQueryLike } from '../../utils/format.js';
 import { getSalesInvoices } from '../../db/queries/generated/selling.js';
 
 /**
@@ -10,14 +10,17 @@ import { getSalesInvoices } from '../../db/queries/generated/selling.js';
  * @returns {Object} - Success message + data or error.
  */
 export const getListSalesInvoicesService = async (pool, user, query) => {
-    let { salesInvoiceId, recordedDate, customerId, limit, offset } = query;
+    let { salesInvoiceId, recordedDate, customerName, limit, offset } = query;
     try {
+        // Transform to pattern
+        customerName = transformToPatternQueryLike(customerName);
+
         // Get list sales invoices from the database
         const result = await getSalesInvoices(pool, {
             agency_id: user.userAgencyId,
             id: salesInvoiceId,
             recorded_at: recordedDate,
-            customer_id: customerId,
+            customer_name: customerName,
             limit,
             offset
         });
