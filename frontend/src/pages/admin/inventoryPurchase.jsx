@@ -83,7 +83,8 @@ function InventoryPurchase() {
   const [productOffset, setProductOffset] = useState(0);
   const [hasMoreProducts, setHasMoreProducts] = useState(true);
   const [supplierOffset, setSupplierOffset] = useState(0);
-  const [hasMoreSuppliers, setHasMoreSuppliers] = useState(true); 
+  const [hasMoreSuppliers, setHasMoreSuppliers] = useState(true);
+  const [isSearchingInventory, setIsSearchingInventory] = useState(false);
   const [isSearchingPurchase, setIsSearchingPurchase] = useState(false);
   const [isSearchingProduct, setIsSearchingProduct] = useState(false);   
   const [isSearchingSupplier, setIsSearchingSupplier] = useState(false);
@@ -159,7 +160,7 @@ function InventoryPurchase() {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
-        if (isBottom && hasMoreInventory) {
+        if (isBottom && hasMoreInventory && !isSearchingInventory) {
           const newOffset = inventoryOffset + 20;
           fetchInventory(newOffset, true);
           setInventoryOffset(newOffset);
@@ -168,7 +169,7 @@ function InventoryPurchase() {
     
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [inventoryOffset, hasMoreInventory]);
+  }, [inventoryOffset, hasMoreInventory, isSearchingInventory]);
 
   const fetchOrders = async (offset = 0, append = false) => {
     try {
