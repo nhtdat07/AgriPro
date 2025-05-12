@@ -228,7 +228,7 @@ paths:
           required: false
           schema:
             type: string
-          example: "PR0001"
+          example: "thuốc trừ sâu"
         - name: importDate
           in: query
           description: The imported date of the products, used for searching if not empty
@@ -543,7 +543,7 @@ paths:
           required: false
           schema:
             type: string
-          example: "PR0001"
+          example: "thuốc trừ sâu"
         - name: category
           in: query
           description: Product category, used for searching if not empty
@@ -1769,7 +1769,7 @@ paths:
           description: Product name, used for 'like' searching if not empty
           schema:
             type: string
-          example: "PR0001"
+          example: "thuốc trừ sâu"
         - name: limit
           in: query
           description: The number of items to fetch (default is 20)
@@ -1856,7 +1856,7 @@ paths:
           description: Customer name, used for 'like' searching if not empty
           schema:
             type: string
-          example: "CU0001"
+          example: "Văn A"
         - name: limit
           in: query
           description: The number of items to fetch (default is 20)
