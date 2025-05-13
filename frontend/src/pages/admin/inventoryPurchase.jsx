@@ -308,70 +308,28 @@ function InventoryPurchase() {
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [activeTab, supplierOffset, hasMoreSuppliers, isSearchingSupplier]);
-
-  const [dayExpired, setDayExpired] = useState(null);
-  const [dayOutOfStock, setDayOutOfStock] = useState(null);
-
-  const fetchInventoryWarnings = async () => {
-    try {
-      const res = await axiosInstance.get("/settings");
-      const settings = res.data.data.settings;
-
-      settings.forEach((item) => {
-        if (item.category === "INVENTORY_PARAMS") {
-          if (item.key === "warning_expired") {
-            setDayExpired(parseInt(item.value, 10));
-          } else if (item.key === "warning_out_of_stock") {
-            setDayOutOfStock(parseInt(item.value, 10));
-          }
-        }
-      });
-    } catch (error) {
-      if (error.response) {
-        const { status } = error.response;
-        if (status === 401) {
-          alert("Bạn không có quyền truy cập vào trang này!");
-        } else if (status === 500) {
-          alert("Vui lòng tải lại trang!");
-        }
-      }  
-    }
-  };
-
-  useEffect(() => {
-    fetchInventoryWarnings();
-  }, []);
-
-  // const handleSearchInventory = () => {
-  //   const result = inventoryData.filter((item) => {
-  //     const nameMatch = item.productName && item.productName.toLowerCase().includes(inventorySearch.name ? inventorySearch.name.toLowerCase() : "");
-  //     const importDateMatch = item.importDate.slice(0, 10).includes(inventorySearch.importDate ? inventorySearch.importDate : "");
-  //     const expiredDateMatch = item.expiredDate.slice(0, 10).includes(inventorySearch.expiredDate ? inventorySearch.expiredDate : "");
-  //     const now = new Date();
-  //     const warningExpiredMatch = !inventorySearch.warningExpired || (() => {
-  //       const expDate = new Date(item.expiredDate);
-  //       const daysToExpire = (expDate - now) / (1000 * 60 * 60 * 24);
-  //       return daysToExpire >= 0 && daysToExpire <= dayExpired;
-  //     })();
-  //     const warningStockMatch = !inventorySearch.warningStock || item.quantity <= dayOutOfStock;
-  //     return nameMatch && importDateMatch && expiredDateMatch && warningExpiredMatch && warningStockMatch;
-  //   });
-  //   setFilteredInventory(result);
-  // };
   
   const handleSearchInventory = async () => {
     try {
       setIsSearchingInventory(true);
       setInventoryOffset(0);
-      const res = await axiosInstance.get("/inventory", {
-        params: {
-          productName: inventorySearch.name || undefined,
-          importDate: inventorySearch.importDate || undefined,
-          expiredDate: inventorySearch.expiredDate || undefined,
-          limit: Number.MAX_SAFE_INTEGER,
-          offset: 0
-        },
-      });
+      const params = {
+        productName: inventorySearch.name || undefined,
+        importDate: inventorySearch.importDate || undefined,
+        expiredDate: inventorySearch.expiredDate || undefined,
+        limit: Number.MAX_SAFE_INTEGER,
+        offset: 0
+      };
+  
+      if (inventorySearch.warningExpired === true) {
+        params.isAboutToExpire = true;
+      }
+      if (inventorySearch.warningStock === true) {
+        params.isAboutToBeOutOfStock = true;
+      }
+  
+      const res = await axiosInstance.get("/inventory", { params });
+  
       setFilteredInventory(res.data.data.inventory);
       setHasMoreInventory(false);
     } catch (error) {
@@ -382,7 +340,7 @@ function InventoryPurchase() {
         else if (status === 500) alert("Vui lòng tải lại trang!");
       }
     }
-  };
+  };  
   
   const handleSearchPurchase = async () => {
     try {
