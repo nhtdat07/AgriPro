@@ -48,7 +48,6 @@ function InventoryPurchase() {
     {key: "email", label: "Email"},
     {key: "action", label: ""},
   ];
-  const [inventoryData, setInventoryData] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [inventorySearch, setInventorySearch] = useState({
     name: "",
@@ -105,8 +104,7 @@ function InventoryPurchase() {
         const purchasesArray = purchasesRes.data.data.purchaseOrders;
         const productsArray = productsRes.data.data.products;
         const suppliersArray = suppliersRes.data.data.suppliers;
-  
-        setInventoryData(inventoryArray);
+
         setFilteredInventory(inventoryArray);
         setFilteredPurchases(purchasesArray);
         setFilteredProducts(productsArray);
@@ -130,7 +128,6 @@ function InventoryPurchase() {
         params: { offset, limit: 20 }
       });
       const newData = res.data.data.inventory;
-      setInventoryData(prev => append ? [...prev, ...newData] : newData);
       setFilteredInventory(prev => append ? [...prev, ...newData] : newData);
       setRefreshTrigger(prev => prev + 1);
   
@@ -345,22 +342,47 @@ function InventoryPurchase() {
     fetchInventoryWarnings();
   }, []);
 
-  const handleSearchInventory = () => {
-    const result = inventoryData.filter((item) => {
-      const nameMatch = item.productName && item.productName.toLowerCase().includes(inventorySearch.name ? inventorySearch.name.toLowerCase() : "");
-      const importDateMatch = item.importDate.slice(0, 10).includes(inventorySearch.importDate ? inventorySearch.importDate : "");
-      const expiredDateMatch = item.expiredDate.slice(0, 10).includes(inventorySearch.expiredDate ? inventorySearch.expiredDate : "");
-      const now = new Date();
-      const warningExpiredMatch = !inventorySearch.warningExpired || (() => {
-        const expDate = new Date(item.expiredDate);
-        const daysToExpire = (expDate - now) / (1000 * 60 * 60 * 24);
-        return daysToExpire >= 0 && daysToExpire <= dayExpired;
-      })();
-      const warningStockMatch = !inventorySearch.warningStock || item.quantity <= dayOutOfStock;
-      return nameMatch && importDateMatch && expiredDateMatch && warningExpiredMatch && warningStockMatch;
-    });
-    setFilteredInventory(result);
-  };  
+  // const handleSearchInventory = () => {
+  //   const result = inventoryData.filter((item) => {
+  //     const nameMatch = item.productName && item.productName.toLowerCase().includes(inventorySearch.name ? inventorySearch.name.toLowerCase() : "");
+  //     const importDateMatch = item.importDate.slice(0, 10).includes(inventorySearch.importDate ? inventorySearch.importDate : "");
+  //     const expiredDateMatch = item.expiredDate.slice(0, 10).includes(inventorySearch.expiredDate ? inventorySearch.expiredDate : "");
+  //     const now = new Date();
+  //     const warningExpiredMatch = !inventorySearch.warningExpired || (() => {
+  //       const expDate = new Date(item.expiredDate);
+  //       const daysToExpire = (expDate - now) / (1000 * 60 * 60 * 24);
+  //       return daysToExpire >= 0 && daysToExpire <= dayExpired;
+  //     })();
+  //     const warningStockMatch = !inventorySearch.warningStock || item.quantity <= dayOutOfStock;
+  //     return nameMatch && importDateMatch && expiredDateMatch && warningExpiredMatch && warningStockMatch;
+  //   });
+  //   setFilteredInventory(result);
+  // };
+  
+  const handleSearchInventory = async () => {
+    try {
+      setIsSearchingInventory(true);
+      setInventoryOffset(0);
+      const res = await axiosInstance.get("/inventory", {
+        params: {
+          productName: inventorySearch.name || undefined,
+          importDate: inventorySearch.importDate || undefined,
+          expiredDate: inventorySearch.expiredDate || undefined,
+          limit: Number.MAX_SAFE_INTEGER,
+          offset: 0
+        },
+      });
+      setFilteredInventory(res.data.data.inventory);
+      setHasMoreInventory(false);
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
+    }
+  };
   
   const handleSearchPurchase = async () => {
     try {

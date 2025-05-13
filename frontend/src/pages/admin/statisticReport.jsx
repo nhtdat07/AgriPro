@@ -84,8 +84,12 @@ function StatisticReport() {
         },
       ]);
     } catch (error) {
-      console.error("Error fetching summary data:", error);
-      alert("Lỗi khi tải dữ liệu!");
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
     } finally {
       setLoadingSummary(false);
     }
@@ -125,8 +129,12 @@ function StatisticReport() {
       }
 
     } catch (error) {
-      console.error("Error fetching best sellers:", error);
-      alert("Lỗi khi tải danh sách sản phẩm bán chạy!");
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
       setHasMoreBestSell(false);
     } finally {
       setLoadingBestSell(false);
@@ -167,8 +175,12 @@ function StatisticReport() {
       }
 
     } catch (error) {
-      console.error("Error fetching top customers:", error);
-      alert("Lỗi khi tải danh sách khách hàng mua nhiều!");
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) alert("Tải thông tin thất bại!");
+        else if (status === 401) alert("Bạn không có quyền truy cập vào trang này!");
+        else if (status === 500) alert("Vui lòng tải lại trang!");
+      }
       setHasMoreTopCustomer(false);
     } finally {
       setLoadingTopCustomer(false);
@@ -195,7 +207,6 @@ function StatisticReport() {
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
 
       if (isBottom && hasMoreBestSell && !isSearchingBestSell && !loadingBestSell) {
-        console.log("Fetching more best sellers...");
         const newOffset = bestSellOffset + 20;
         fetchBestSellers(newOffset, true);
         setBestSellOffset(newOffset);
@@ -216,7 +227,6 @@ function StatisticReport() {
       const isBottom = scrollTop + clientHeight >= scrollHeight - 50;
 
       if (isBottom && hasMoreTopCustomer && !isSearchingTopCustomer && !loadingTopCustomer) {
-        console.log("Fetching more top customers...");
         const newOffset = topCustomerOffset + 20;
         fetchTopCustomers(newOffset, true);
         setTopCustomerOffset(newOffset);
@@ -259,9 +269,7 @@ function StatisticReport() {
     fetchTopCustomers(0, false, true, searchCustomer);
   };
 
-  const handleDelete = () => {
-    console.log("Delete action triggered");
-   };
+  const handleDelete = () => {};
 
   const formatCurrency = (number) => {
     if (number === null || number === undefined) return "0";
