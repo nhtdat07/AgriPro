@@ -43,7 +43,8 @@ const checkExpire = async (pool, userAgencyId, lastExpiredDateWarning) => {
 [${count}] ${product.id} - ${product.name}
 Thời gian nhập hàng: ${formatTimestampUTC(product.imported_timestamp)}
 Hạn sử dụng: ${formatTimestampUTC(product.expired_date).split(consts.SPACE)[consts.FIRST_IDX_ARRAY]}
-`
+`;
+        count += consts.INC;
     }
 
     const result = await addNotification(pool, {
@@ -71,7 +72,8 @@ const checkOutOfStock = async (pool, userAgencyId, maxQuantityWarning) => {
         notiContent += `
 [${count}] ${product.id} - ${product.name}
 Số lượng còn lại: ${product.total_quantity}
-`
+`;
+        count += consts.INC;
     }
 
     const result = await addNotification(pool, {
