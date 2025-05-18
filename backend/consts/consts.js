@@ -60,6 +60,7 @@ export const DECIMAL_BASE = 10;
 export const PATTERN_LIKE_SIGN = '%';
 export const COMMA = ',';
 export const DEFAULT_START_COUNT = 1;
+export const INC = 1;
 
 export const MIN_LIMIT = 1;
 export const DEFAULT_LIMIT = 20;
